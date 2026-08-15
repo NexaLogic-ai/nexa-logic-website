@@ -83,9 +83,9 @@ function sendChatMessage() {
     if (lower.includes('crm') || lower.includes('ghl') || lower.includes('hubspot')) {
       botBubble.innerText = "Yes! Our agents connect seamlessly via API/Webhooks into GoHighLevel, HubSpot, Salesforce, Airtable, or Google Sheets with zero manual data entry needed.";
     } else if (lower.includes('demo') || lower.includes('book') || lower.includes('call')) {
-      botBubble.innerText = "Awesome! You can scroll right down to our booking form below to reserve your 1-on-1 strategy call with our team.";
+      botBubble.innerText = "Awesome! You can scroll right down to our booking calendar below to reserve your 1-on-1 strategy call with our team.";
     } else {
-      botBubble.innerText = "Our autonomous agents are custom-trained on your exact company FAQs, services, and pricing rules. Scroll down to book a 15-min demo to see it live!";
+      botBubble.innerText = "Our autonomous agents are custom-trained on your exact company FAQs, services, and pricing rules. Scroll down to choose a time on our live calendar!";
     }
 
     chatWindow.appendChild(botBubble);
@@ -110,25 +110,14 @@ function calculateROI() {
   document.getElementById('recovered-rev').innerText = `$${recoveredRevenue.toLocaleString()} / mo`;
 }
 
-// 5. Booking Form Submission
-function submitAuditForm(event) {
-  event.preventDefault();
+// ================= 5. FLOATING AI AUTO-AGENT (GUIDED LEAD INTAKE) =================
+let leadStage = 'ASK_NAME'; // 'ASK_NAME' -> 'ASK_EMAIL' -> 'QUALIFIED'
+let visitorData = {
+  name: '',
+  email: '',
+  query: ''
+};
 
-  const name = document.getElementById('leadName').value;
-  const email = document.getElementById('leadEmail').value;
-  const phone = document.getElementById('leadPhone').value;
-  const industry = document.getElementById('leadIndustry').value;
-  const revenue = document.getElementById('leadRev').value;
-
-  console.log('Lead Submission:', { name, email, phone, industry, revenue });
-
-  document.getElementById('audit-form').style.display = 'none';
-  document.getElementById('booking-success').style.display = 'block';
-
-  document.getElementById('booking-success').scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-
-// ================= 6. FLOATING AI AUTO-AGENT WIDGET LOGIC =================
 function toggleFloatingAgent() {
   const drawer = document.getElementById('ai-chat-drawer');
   if (drawer.style.display === 'none' || drawer.style.display === '') {
@@ -155,20 +144,42 @@ function sendDrawerMessage() {
 
   msgContainer.scrollTop = msgContainer.scrollHeight;
 
-  // Bot Typing & Response
+  // Bot Intake Progression
   setTimeout(() => {
     const botBubble = document.createElement('div');
     botBubble.className = 'drawer-bubble bot';
 
-    const lower = text.toLowerCase();
-    if (lower.includes('voice') || lower.includes('call') || lower.includes('phone')) {
-      botBubble.innerText = "Our Voice AI agents sound 100% human with sub-second latency (<600ms). They answer inbound calls 24/7, handle FAQs, qualify callers, and book appointments directly on your team's calendar.";
-    } else if (lower.includes('crm') || lower.includes('integrate') || lower.includes('tools')) {
-      botBubble.innerText = "We build turnkey integrations with GoHighLevel, HubSpot, Airtable, Notion, Salesforce, and Cal.com/Calendly. Leads and transcripts sync immediately.";
-    } else if (lower.includes('book') || lower.includes('strategy') || lower.includes('audit')) {
-      botBubble.innerHTML = "You can book your 15-minute AI strategy call right now! <a href='#booking' onclick='toggleFloatingAgent()' style='color:#00f0ff; text-decoration:underline;'>Click here to jump to the scheduler</a>.";
-    } else {
-      botBubble.innerText = "Nexa Logic builds custom autonomous AI systems for your specific business workflows. Would you like to schedule a quick 15-minute live audit to see a custom demo?";
+    if (leadStage === 'ASK_NAME') {
+      visitorData.name = text;
+      leadStage = 'ASK_EMAIL';
+      botBubble.innerText = `Great to meet you, ${visitorData.name}! What is the best Business Email to send your AI demo notes to?`;
+      document.getElementById('drawer-input').placeholder = "Enter your business email...";
+    } 
+    else if (leadStage === 'ASK_EMAIL') {
+      visitorData.email = text;
+      leadStage = 'QUALIFIED';
+      
+      // Save lead locally
+      console.log('⚡ New Lead Captured by Bot:', visitorData);
+      try {
+        localStorage.setItem('nexa_lead_' + Date.now(), JSON.stringify(visitorData));
+      } catch(e) {}
+
+      botBubble.innerHTML = `Thanks, ${visitorData.name}! ✅ I've saved your info. How can Nexa Logic help your business today? You can ask me any question, or <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">click here to pick a time on our live calendar</a>.`;
+      document.getElementById('drawer-input').placeholder = "Ask Nexa AI anything...";
+    } 
+    else {
+      // General Q&A after qualification
+      const lower = text.toLowerCase();
+      if (lower.includes('voice') || lower.includes('call') || lower.includes('phone')) {
+        botBubble.innerHTML = `Our Voice AI agents sound 100% human with &lt;600ms latency. They answer inbound calls 24/7 and book appointments on your calendar. Ready to see a live prototype? <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline;">Click to book a call</a>.`;
+      } else if (lower.includes('crm') || lower.includes('integrate') || lower.includes('tools')) {
+        botBubble.innerText = "We build turnkey integrations with GoHighLevel, HubSpot, Airtable, Notion, and Google Sheets. All call transcripts and leads sync in real time.";
+      } else if (lower.includes('book') || lower.includes('strategy') || lower.includes('audit')) {
+        botBubble.innerHTML = `You can pick a time on our live calendar right now! <a href='#booking' onclick='toggleFloatingAgent()' style='color:#00f0ff; text-decoration:underline; font-weight:700;'>Click here to jump to the scheduler</a>.`;
+      } else {
+        botBubble.innerHTML = `Nexa Logic builds custom autonomous AI systems for your specific business workflows. Would you like to <a href='#booking' onclick='toggleFloatingAgent()' style='color:#00f0ff; text-decoration:underline;'>schedule a quick 15-minute live demo</a>?`;
+      }
     }
 
     msgContainer.appendChild(botBubble);

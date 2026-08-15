@@ -13,6 +13,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
+  
+  <!-- Calendly Widget Script -->
+  <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </head>
 <body>
 
@@ -386,76 +389,38 @@
     </div>
   </section>
 
-  <!-- Primary Booking & Strategy Session Section -->
+  <!-- Primary Booking & Live Calendly Embed Section -->
   <section id="booking" class="booking-section">
     <div class="container">
-      <div class="booking-card-wrapper">
-        <div class="booking-left">
-          <div class="section-badge cyan-badge">
-            <span class="cyan-dot"></span>
-            <span>1-on-1 AI Strategy Session</span>
-          </div>
-          <h2>Schedule Your 15-Minute AI Architecture Session</h2>
-          <p>On this private strategy call, we will map out an exact AI blueprint for your business, demonstrate a live custom voice/chat prototype, and calculate your exact ROI potential.</p>
-          
-          <div class="audit-points">
-            <div class="point-item">✓ Live interactive voice & chat demo tailored to your company</div>
-            <div class="point-item">✓ Full pipeline review & CRM automation roadmap</div>
-            <div class="point-item">✓ 100% focused on strategy — zero high-pressure sales pitch</div>
-          </div>
+      <div class="booking-header text-center">
+        <div class="section-badge cyan-badge">
+          <span class="cyan-dot"></span>
+          <span>Live Booking Calendar</span>
         </div>
+        <h2 class="section-title">Schedule Your 15-Minute AI Architecture Session</h2>
+        <p class="section-subtitle center-margin">Select a day and time below that works best for you to speak with our AI engineering team.</p>
+      </div>
 
-        <div class="booking-right">
-          <form id="audit-form" onsubmit="submitAuditForm(event)">
-            <div class="form-row">
-              <div class="field-group">
-                <label>Full Name</label>
-                <input type="text" id="leadName" placeholder="e.g. John Doe" required>
-              </div>
-              <div class="field-group">
-                <label>Business Email</label>
-                <input type="email" id="leadEmail" placeholder="john@company.com" required>
-              </div>
-            </div>
+      <div class="calendly-embed-container">
+        <!-- Live Dark-Mode Calendly Inline Widget -->
+        <div class="calendly-inline-widget" 
+             data-url="https://calendly.com/nomenakhan14/new-meeting?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0e1620&text_color=f8fafc&primary_color=00f0ff" 
+             style="min-width:320px;height:720px;border-radius:24px;overflow:hidden;">
+        </div>
+      </div>
 
-            <div class="form-row">
-              <div class="field-group">
-                <label>Phone Number (For SMS confirmation)</label>
-                <input type="tel" id="leadPhone" placeholder="+1 (555) 000-0000" required>
-              </div>
-              <div class="field-group">
-                <label>Industry / Niche</label>
-                <select id="leadIndustry" required>
-                  <option value="" disabled selected>Select industry</option>
-                  <option value="medspa">Med Spa & Aesthetics Clinic</option>
-                  <option value="realestate">Real Estate / Property Management</option>
-                  <option value="homeservices">Home Services (Roofing, HVAC, Solar)</option>
-                  <option value="b2b">B2B Agency / Professional Services</option>
-                  <option value="other">Other High-Ticket Business</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="field-group">
-              <label>Current Monthly Revenue</label>
-              <select id="leadRev" required>
-                <option value="" disabled selected>Select revenue range</option>
-                <option value="starter">&lt; $10,000 / mo</option>
-                <option value="growth">$10,000 – $50,000 / mo</option>
-                <option value="scale">$50,000+ / mo</option>
-              </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-large btn-glow full-width">
-              Lock In My 15-Minute Strategy Call →
-            </button>
-          </form>
-
-          <div id="booking-success" class="booking-success" style="display:none;">
-            <div class="success-check">✓</div>
-            <h3>Strategy Session Reserved!</h3>
-            <p>We've received your details. Check your email for calendar invite instructions and demo prep notes.</p>
-          </div>
+      <div class="booking-guarantee-strip">
+        <div class="guarantee-item">
+          <span class="g-icon">🔒</span>
+          <span>100% Free Strategy Session</span>
+        </div>
+        <div class="guarantee-item">
+          <span class="g-icon">⚡</span>
+          <span>Custom Niche Prototype Included</span>
+        </div>
+        <div class="guarantee-item">
+          <span class="g-icon">📅</span>
+          <span>Instant Google Meet & Calendar Confirmation</span>
         </div>
       </div>
     </div>
@@ -520,7 +485,7 @@
 
       <div id="drawer-messages" class="drawer-messages">
         <div class="drawer-bubble bot">
-          👋 Hey! I'm the Nexa Logic Auto-Agent. How can I help you automate your business today?
+          👋 Hey there! I'm the Nexa Logic Auto-Agent. Before we get started, what is your <strong>Full Name</strong>?
         </div>
       </div>
 
