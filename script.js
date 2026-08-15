@@ -1,5 +1,8 @@
 // Nexa Logic — Interactive Client Experience Scripts
 
+// Formspree Lead Notification Webhook Endpoint
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xrpzaqpa';
+
 // 1. Switch Demo Tabs (Voice vs Chat)
 function switchDemo(type) {
   const tabs = document.querySelectorAll('.demo-tab');
@@ -110,12 +113,12 @@ function calculateROI() {
   document.getElementById('recovered-rev').innerText = `$${recoveredRevenue.toLocaleString()} / mo`;
 }
 
-// ================= 5. FLOATING AI AUTO-AGENT (GUIDED LEAD INTAKE) =================
+// ================= 5. FLOATING AI AUTO-AGENT (WITH INSTANT FORMSPREE EMAIL ALERTS) =================
 let leadStage = 'ASK_NAME'; // 'ASK_NAME' -> 'ASK_EMAIL' -> 'QUALIFIED'
 let visitorData = {
   name: '',
   email: '',
-  query: ''
+  source: 'Nexa Website Floating AI Agent'
 };
 
 function toggleFloatingAgent() {
@@ -159,13 +162,33 @@ function sendDrawerMessage() {
       visitorData.email = text;
       leadStage = 'QUALIFIED';
       
-      // Save lead locally
-      console.log('⚡ New Lead Captured by Bot:', visitorData);
+      // Dispatch Instant Email Notification via Formspree Webhook
+      fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          lead_name: visitorData.name,
+          lead_email: visitorData.email,
+          lead_source: visitorData.source,
+          submitted_at: new Date().toLocaleString()
+        })
+      })
+      .then(response => {
+        console.log('⚡ Lead successfully dispatched to Formspree email!');
+      })
+      .catch(err => {
+        console.error('Error sending lead to Formspree:', err);
+      });
+
+      // Save lead locally as well
       try {
         localStorage.setItem('nexa_lead_' + Date.now(), JSON.stringify(visitorData));
       } catch(e) {}
 
-      botBubble.innerHTML = `Thanks, ${visitorData.name}! ✅ I've saved your info. How can Nexa Logic help your business today? You can ask me any question, or <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">click here to pick a time on our live calendar</a>.`;
+      botBubble.innerHTML = `Thanks, ${visitorData.name}! ✅ I've saved your info and notified our team. How can Nexa Logic help your business today? You can ask me any question, or <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">click here to pick a time on our live calendar</a>.`;
       document.getElementById('drawer-input').placeholder = "Ask Nexa AI anything...";
     } 
     else {
