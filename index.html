@@ -258,7 +258,7 @@
         <!-- Voice Demo View -->
         <div id="voice-demo-view" class="demo-view active">
           <div class="voice-sim-box">
-            <div class="pulse-visualizer">
+            <div id="voice-pulse" class="pulse-visualizer">
               <div class="ring r1"></div>
               <div class="ring r2"></div>
               <div class="ring r3"></div>
@@ -267,13 +267,25 @@
 
             <div class="voice-controls">
               <button id="btn-call-sim" class="btn btn-primary btn-glow" onclick="runVoiceSim()">
-                <span>▶ Start Live Voice Call Demo</span>
+                <span>▶ Call Nexa Voice AI (Live Audio Demo)</span>
               </button>
+            </div>
+
+            <div id="voice-audio-status" class="voice-audio-badge">
+              <span class="pulse-dot"></span> Click to initiate live audio call simulation with real voice playback
+            </div>
+
+            <div id="voice-quick-prompts" class="voice-quick-prompts" style="display: none;">
+              <span class="prompt-label">Ask the AI Voice Agent:</span>
+              <button class="voice-prompt-btn" onclick="askVoiceQuestion('How does your AI integrate with our clinic or law firm calendar?')">📅 "How do you connect with calendars?"</button>
+              <button class="voice-prompt-btn" onclick="askVoiceQuestion('Can your AI route callers to different specialists or doctors?')">👥 "Can you route to multiple specialists?"</button>
+              <button class="voice-prompt-btn" onclick="askVoiceQuestion('What happens if a customer calls at 2 AM or on the weekend?')">🌙 "What happens with late-night calls?"</button>
+              <button class="voice-prompt-btn" onclick="askVoiceQuestion('I would like to schedule a 1-on-1 strategy consultation.')">🚀 "Let's book a consultation!"</button>
             </div>
 
             <div id="voice-transcript" class="transcript-box">
               <div class="msg ai-msg">
-                <strong>Nexa Voice AI:</strong> "Hello! Thanks for calling Nexa Logic. I can help answer questions or get you scheduled for a 1-on-1 strategy call with our engineering team. What questions do you have about deploying AI in your business?"
+                <strong>Nexa Voice AI:</strong> "Hello! Click the button above to start a live audio voice call. I am programmed to converse out loud, answer questions, and demonstrate 24/7 calendar booking!"
               </div>
             </div>
           </div>

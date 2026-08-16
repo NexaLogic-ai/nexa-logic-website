@@ -20,44 +20,150 @@ function switchDemo(type) {
   }
 }
 
-// 2. Voice Call Simulator
+// 2. Audio & Speech Synthesis Voice Engine
 let isCallActive = false;
+let audioCtx = null;
+
+// Sound Effects for Phone Dialing / Connection
+function playPhoneChime() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    if (!audioCtx) audioCtx = new AudioContext();
+    
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, now);
+    osc.frequency.exponentialRampToValueAtTime(880, now + 0.15);
+    
+    gain.gain.setValueAtTime(0.08, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start(now);
+    osc.stop(now + 0.15);
+  } catch (e) {
+    console.log('Audio chime not available');
+  }
+}
+
+// Speak AI Response with Natural Speech Synthesis
+function speakAI(text, onComplete) {
+  if (!('speechSynthesis' in window)) {
+    if (onComplete) onComplete();
+    return;
+  }
+
+  window.speechSynthesis.cancel(); // Stop previous speech
+  
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 1.05; // Natural conversational tempo
+  utterance.pitch = 1.0;
+  
+  // Pick natural voice if available
+  const voices = window.speechSynthesis.getVoices();
+  const naturalVoice = voices.find(v => (v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Natural') || v.name.includes('Karen') || v.name.includes('Ava') || v.lang.startsWith('en')));
+  if (naturalVoice) utterance.voice = naturalVoice;
+
+  const pulse = document.getElementById('voice-pulse');
+  if (pulse) pulse.classList.add('speaking');
+
+  utterance.onend = () => {
+    if (pulse) pulse.classList.remove('speaking');
+    if (onComplete) onComplete();
+  };
+
+  utterance.onerror = () => {
+    if (pulse) pulse.classList.remove('speaking');
+    if (onComplete) onComplete();
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
+// Run / Toggle Live Voice Call
 function runVoiceSim() {
   const btn = document.getElementById('btn-call-sim');
   const transcript = document.getElementById('voice-transcript');
+  const prompts = document.getElementById('voice-quick-prompts');
+  const status = document.getElementById('voice-audio-status');
 
   if (!isCallActive) {
     isCallActive = true;
+    playPhoneChime();
+
     btn.innerHTML = '<span>🔴 End Voice Call</span>';
     btn.classList.add('active-call');
+    if (prompts) prompts.style.display = 'flex';
+    if (status) status.innerHTML = '<span class="pulse-dot" style="background:#22c55e;"></span> <strong>Call Connected:</strong> Speaking with Nexa Voice AI... (Turn your sound on!)';
+
+    const greeting = "Hi there! Thanks for calling Nexa Logic. I am your 24/7 AI voice receptionist. I can answer questions about our automation systems or check open slots on our team's calendar. What questions do you have?";
 
     transcript.innerHTML = `
       <div class="msg ai-msg">
-        <strong>Nexa Voice AI:</strong> "Hi there! Thanks for calling Nexa Logic. I am an autonomous conversational receptionist. I can answer questions about our AI systems or check availability on our team's calendar. What questions do you have?"
+        <strong>Nexa Voice AI:</strong> "${greeting}"
       </div>
     `;
 
-    setTimeout(() => {
-      transcript.innerHTML += `
-        <div class="msg" style="color: #94a3b8; margin-top: 12px; font-style: italic;">
-          <strong>Caller:</strong> "Can you tell me how your AI voice receptionist integrates with our clinic's calendar?"
-        </div>
-      `;
-    }, 2500);
-
-    setTimeout(() => {
-      transcript.innerHTML += `
-        <div class="msg ai-msg" style="margin-top: 12px;">
-          <strong>Nexa Voice AI:</strong> "We connect directly with Calendly, Google Calendar, or your EHR/CRM. When callers speak with me, I check real-time open slots and lock in confirmed appointments instantly. Would you like to reserve a 15-minute strategy call to see a live demo for your business?"
-        </div>
-      `;
-    }, 5500);
+    speakAI(greeting);
 
   } else {
     isCallActive = false;
-    btn.innerHTML = '<span>▶ Start Live Voice Call Demo</span>';
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    const pulse = document.getElementById('voice-pulse');
+    if (pulse) pulse.classList.remove('speaking');
+
+    btn.innerHTML = '<span>▶ Call Nexa Voice AI (Live Audio Demo)</span>';
     btn.classList.remove('active-call');
+    if (prompts) prompts.style.display = 'none';
+    if (status) status.innerHTML = '<span class="pulse-dot"></span> Call ended. Click above to call again.';
   }
+}
+
+// Handle Interactive Voice Questions
+function askVoiceQuestion(question) {
+  if (!isCallActive) return;
+
+  const transcript = document.getElementById('voice-transcript');
+  transcript.innerHTML += `
+    <div class="msg" style="color: #94a3b8; margin-top: 14px; font-style: italic;">
+      <strong>You (Caller):</strong> "${question}"
+    </div>
+  `;
+  transcript.scrollTop = transcript.scrollHeight;
+
+  let response = "";
+  const q = question.toLowerCase();
+
+  if (q.includes('calendar') || q.includes('integrate')) {
+    response = "We connect directly with Calendly, Google Calendar, and your CRM. When callers speak with me, I check real-time open slots and lock in confirmed appointments instantly.";
+  } else if (q.includes('specialist') || q.includes('doctor') || q.includes('route')) {
+    response = "Yes, absolutely! I use semantic intent matching to route callers to specific doctors, attorneys, or sales specialists based on their requested service and location.";
+  } else if (q.includes('2 am') || q.includes('night') || q.includes('weekend')) {
+    response = "78% of customers book with the first company that answers. I respond in under 5 seconds, 24 hours a day, 365 days a year—even when your office is closed!";
+  } else if (q.includes('consultation') || q.includes('schedule') || q.includes('book')) {
+    response = "I'd love to get that scheduled! Scroll down to the calendar below to pick a 15-minute slot directly with our engineering team.";
+    setTimeout(() => {
+      document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+    }, 3500);
+  } else {
+    response = "That is a great question. Our systems are custom built for your business to eliminate missed calls and follow up on leads in seconds. Would you like to see a custom live demo?";
+  }
+
+  setTimeout(() => {
+    transcript.innerHTML += `
+      <div class="msg ai-msg" style="margin-top: 14px;">
+        <strong>Nexa Voice AI:</strong> "${response}"
+      </div>
+    `;
+    transcript.scrollTop = transcript.scrollHeight;
+    speakAI(response);
+  }, 400);
 }
 
 // 3. Interactive In-Page Chat Simulator
