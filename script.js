@@ -389,7 +389,7 @@ function resetShowroomChat() {
   }
 }
 
-// 4. Multi-Staff Routing Niche Matrix Switcher
+// 4. Multi-Staff Routing Niche Matrix Switcher with Live Interactive Booking
 function selectRoutingNiche(niche) {
   const btnMed = document.getElementById('btn-niche-medspa');
   const btnLeg = document.getElementById('btn-niche-legal');
@@ -402,100 +402,144 @@ function selectRoutingNiche(niche) {
   if (niche === 'medspa') {
     if (btnMed) btnMed.classList.add('active-niche', 'btn-primary');
     card.innerHTML = `
-      <div style="font-size: 0.9rem; margin-bottom: 14px; color: var(--cyan); font-weight: 700;">💉 AESTHETICS CLINIC SPECIALIST MATRIX</div>
+      <div style="font-size: 0.9rem; margin-bottom: 14px; color: var(--cyan); font-weight: 700;">💉 AESTHETICS CLINIC SPECIALIST MATRIX (CLICK TO TEST ROUTING)</div>
       <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left;">
         <tr style="border-bottom: 1px solid var(--border); color: var(--text-dim);">
           <th style="padding: 8px;">Specialist</th>
           <th style="padding: 8px;">Service / Treatment</th>
           <th style="padding: 8px;">Duration</th>
-          <th style="padding: 8px;">Calendly Event Slug</th>
+          <th style="padding: 8px;">Action</th>
         </tr>
         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
           <td style="padding: 10px; color: #fff;"><strong>Dr. Sarah Jenkins</strong></td>
           <td style="padding: 10px; color: var(--cyan);">Botox & Dermal Fillers</td>
           <td style="padding: 10px;">45 mins</td>
-          <td style="padding: 10px;"><code>dr-sarah-injectables</code></td>
+          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--cyan); color:var(--cyan);" onclick="simulateSpecialistRouting('Dr. Sarah Jenkins', 'Botox & Dermal Fillers', 'dr-sarah-injectables', '45 mins')">⚡ Book with Dr. Sarah</button></td>
         </tr>
         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
           <td style="padding: 10px; color: #fff;"><strong>Jessica Miller, LE</strong></td>
           <td style="padding: 10px; color: var(--purple);">Laser Resurfacing & Peels</td>
           <td style="padding: 10px;">60 mins</td>
-          <td style="padding: 10px;"><code>jessica-laser-skin</code></td>
+          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--purple); color:var(--purple);" onclick="simulateSpecialistRouting('Jessica Miller, LE', 'Laser Resurfacing & Peels', 'jessica-laser-skin', '60 mins')">⚡ Book with Jessica</button></td>
         </tr>
         <tr>
           <td style="padding: 10px; color: #fff;"><strong>Nurse Elena</strong></td>
           <td style="padding: 10px; color: var(--emerald);">IV Hydration Therapy</td>
           <td style="padding: 10px;">30 mins</td>
-          <td style="padding: 10px;"><code>elena-iv-therapy</code></td>
+          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--emerald); color:var(--emerald);" onclick="simulateSpecialistRouting('Nurse Elena', 'IV Hydration Therapy', 'elena-iv-therapy', '30 mins')">⚡ Book with Elena</button></td>
         </tr>
       </table>
-      <div style="margin-top: 14px; font-size: 0.84rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
-        💡 <em>Routing Logic:</em> When a caller says <code>"I want to book Botox"</code>, the AI bypasses front-desk triage and queries <code>dr-sarah-injectables</code> availability directly!
-      </div>
+      
+      <!-- Interactive Live Routing Sandbox Box -->
+      <div id="specialist-live-sandbox" style="margin-top: 16px; display: none; background: #070c12; border: 1px solid var(--border); border-radius: 12px; padding: 16px;"></div>
     `;
   } else if (niche === 'legal') {
     if (btnLeg) btnLeg.classList.add('active-niche', 'btn-primary');
     card.innerHTML = `
-      <div style="font-size: 0.9rem; margin-bottom: 14px; color: var(--cyan); font-weight: 700;">⚖️ LAW FIRM PRACTICE AREA MATRIX</div>
+      <div style="font-size: 0.9rem; margin-bottom: 14px; color: var(--cyan); font-weight: 700;">⚖️ LAW FIRM PRACTICE AREA MATRIX (CLICK TO TEST ROUTING)</div>
       <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left;">
         <tr style="border-bottom: 1px solid var(--border); color: var(--text-dim);">
           <th style="padding: 8px;">Attorney</th>
           <th style="padding: 8px;">Practice Area</th>
           <th style="padding: 8px;">Consult Fee</th>
-          <th style="padding: 8px;">Calendly Event Slug</th>
+          <th style="padding: 8px;">Action</th>
         </tr>
         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
           <td style="padding: 10px; color: #fff;"><strong>David Vance, Esq.</strong></td>
           <td style="padding: 10px; color: var(--cyan);">Personal Injury & Accidents</td>
           <td style="padding: 10px;">Free Consult</td>
-          <td style="padding: 10px;"><code>vance-pi-consult</code></td>
+          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--cyan); color:var(--cyan);" onclick="simulateSpecialistRouting('David Vance, Esq.', 'Personal Injury Consult', 'vance-pi-consult', '30 mins')">⚡ Route to Vance</button></td>
         </tr>
         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
           <td style="padding: 10px; color: #fff;"><strong>Marcus Reed, Esq.</strong></td>
           <td style="padding: 10px; color: var(--purple);">Criminal Defense & DUI</td>
           <td style="padding: 10px;">$250 Consult</td>
-          <td style="padding: 10px;"><code>reed-criminal-defense</code></td>
+          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--purple); color:var(--purple);" onclick="simulateSpecialistRouting('Marcus Reed, Esq.', 'Criminal Defense Intake', 'reed-criminal-defense', '45 mins')">⚡ Route to Reed</button></td>
         </tr>
         <tr>
           <td style="padding: 10px; color: #fff;"><strong>Sarah Sterling, Esq.</strong></td>
           <td style="padding: 10px; color: var(--emerald);">Estate Planning & Trusts</td>
           <td style="padding: 10px;">Free 15-Min</td>
-          <td style="padding: 10px;"><code>sterling-estate-planning</code></td>
+          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--emerald); color:var(--emerald);" onclick="simulateSpecialistRouting('Sarah Sterling, Esq.', 'Estate Planning Consult', 'sterling-estate-planning', '15 mins')">⚡ Route to Sterling</button></td>
         </tr>
       </table>
-      <div style="margin-top: 14px; font-size: 0.84rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
-        💡 <em>Routing Logic:</em> Accident victims are instantly routed to <code>vance-pi-consult</code> with 0 hold time, preventing lost retainers!
-      </div>
+
+      <!-- Interactive Live Routing Sandbox Box -->
+      <div id="specialist-live-sandbox" style="margin-top: 16px; display: none; background: #070c12; border: 1px solid var(--border); border-radius: 12px; padding: 16px;"></div>
     `;
   } else if (niche === 'realestate') {
     if (btnRe) btnRe.classList.add('active-niche', 'btn-primary');
     card.innerHTML = `
-      <div style="font-size: 0.9rem; margin-bottom: 14px; color: var(--cyan); font-weight: 700;">🏡 REAL ESTATE BROKERAGE MATRIX</div>
+      <div style="font-size: 0.9rem; margin-bottom: 14px; color: var(--cyan); font-weight: 700;">🏡 REAL ESTATE BROKERAGE MATRIX (CLICK TO TEST ROUTING)</div>
       <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left;">
         <tr style="border-bottom: 1px solid var(--border); color: var(--text-dim);">
-          <th style="padding: 8px;">Agent / Specialist</th>
-          <th style="padding: 8px;">Role</th>
+          <th style="padding: 8px;">Agent</th>
+          <th style="padding: 8px;">Specialty / Role</th>
           <th style="padding: 8px;">Territory</th>
-          <th style="padding: 8px;">Calendly Event Slug</th>
+          <th style="padding: 8px;">Action</th>
         </tr>
         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
           <td style="padding: 10px; color: #fff;"><strong>Brandon Hayes</strong></td>
           <td style="padding: 10px; color: var(--cyan);">Luxury Listing Specialist</td>
           <td style="padding: 10px;">Downtown & Waterfront</td>
-          <td style="padding: 10px;"><code>brandon-luxury-listings</code></td>
+          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--cyan); color:var(--cyan);" onclick="simulateSpecialistRouting('Brandon Hayes', 'Luxury Listing Valuation', 'brandon-luxury-listings', '45 mins')">⚡ Route to Brandon</button></td>
         </tr>
         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
           <td style="padding: 10px; color: #fff;"><strong>Chloe Bennett</strong></td>
           <td style="padding: 10px; color: var(--purple);">First-Time Home Buyers</td>
           <td style="padding: 10px;">Suburbs & North County</td>
-          <td style="padding: 10px;"><code>chloe-buyer-consult</code></td>
+          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--purple); color:var(--purple);" onclick="simulateSpecialistRouting('Chloe Bennett', 'First-Time Buyer Consult', 'chloe-buyer-consult', '30 mins')">⚡ Route to Chloe</button></td>
         </tr>
       </table>
-      <div style="margin-top: 14px; font-size: 0.84rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
-        💡 <em>Routing Logic:</em> High-net-worth home sellers are routed directly to Brandon Hayes for instant valuation calls!
-      </div>
+
+      <!-- Interactive Live Routing Sandbox Box -->
+      <div id="specialist-live-sandbox" style="margin-top: 16px; display: none; background: #070c12; border: 1px solid var(--border); border-radius: 12px; padding: 16px;"></div>
     `;
   }
+}
+
+// Live Specialist Routing Simulator Handler
+function simulateSpecialistRouting(name, service, slug, duration) {
+  const box = document.getElementById('specialist-live-sandbox');
+  if (!box) return;
+  box.style.display = 'block';
+
+  box.innerHTML = `
+    <div style="font-size: 0.84rem; color: var(--cyan); margin-bottom: 8px;">
+      🤖 <strong>AI Semantic Intent Analyzer:</strong> Inbound inquiry for <em>"${service}"</em> detected!
+    </div>
+    <div style="background: rgba(18,28,42,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 0.88rem; line-height: 1.5; color: #fff;">
+      ⚙️ <em>Executing tool: <code>getCalendlyAvailability(specialist="${slug}", duration="${duration}")</code></em><br><br>
+      "I have routed you to <strong>${name}</strong>'s personal calendar. Here are their soonest available appointments:"
+      
+      <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
+        <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="finalizeSpecialistBooking('${name}', '${service}', '${slug}', 'Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
+        <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="finalizeSpecialistBooking('${name}', '${service}', '${slug}', 'Thursday at 2:00 PM')">📅 Thu, 2:00 PM</div>
+        <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="finalizeSpecialistBooking('${name}', '${service}', '${slug}', 'Friday at 11:00 AM')">📅 Fri, 11:00 AM</div>
+      </div>
+      <div style="margin-top: 8px; font-size: 0.76rem; color: var(--text-dim);">Click any slot above to test instant specialist booking!</div>
+    </div>
+  `;
+}
+
+function finalizeSpecialistBooking(name, service, slug, slot) {
+  const box = document.getElementById('specialist-live-sandbox');
+  if (!box) return;
+
+  box.innerHTML = `
+    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 8px; padding: 16px; font-size: 0.88rem; color: #fff;">
+      <div style="font-weight: 700; color: var(--emerald); font-size: 0.95rem; margin-bottom: 6px;">
+        ✅ Confirmed Appointment with ${name}!
+      </div>
+      ⚙️ <em>Executed tool: <code>createCalendlyContactMeeting(event_type="${slug}", time="${slot}")</code></em><br><br>
+      • 👨‍⚕️ <strong>Assigned Specialist:</strong> ${name}<br>
+      • 📋 <strong>Service:</strong> ${service}<br>
+      • 🕒 <strong>Confirmed Slot:</strong> ${slot}<br>
+      • 📅 <strong>Direct Calendar Sync:</strong> Synced to ${name}'s private calendar with 0 front-desk friction!
+      <br><br>
+      <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.76rem;" onclick="selectRoutingNiche('medspa')">⟳ Test Another Specialist</button>
+    </div>
+  `;
 }
 
 // 4. Interactive ROI Calculator
