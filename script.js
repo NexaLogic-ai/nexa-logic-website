@@ -568,13 +568,14 @@ function submitSpecialistBooking(name, service, slug, slot) {
       </div>
       ⚙️ <em>Executed tool: <code>createCalendlyContactMeeting(specialist="${slug}", name="${clientName}", email="${clientEmail}", phone="${clientPhone}", time="${slot}", format="E.164")</code></em><br><br>
       
-      <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; margin: 10px 0; line-height: 1.6;">
+      <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; margin: 12px 0; line-height: 1.65;">
         • 👤 <strong>Patient / Client:</strong> ${clientName}<br>
-        • ✉️ <strong>Contact:</strong> ${clientEmail} | ${clientPhone}<br>
-        • 👨‍⚕️ <strong>Assigned Specialist:</strong> ${name}<br>
-        • 📋 <strong>Service:</strong> ${service}<br>
-        • 🕒 <strong>Confirmed Time:</strong> ${slot}<br>
-        • 📅 <strong>Calendar Sync:</strong> Direct invite sent to ${clientEmail} and ${name}'s private calendar!
+        • 👨‍⚕️ <strong>Assigned Specialist:</strong> ${name} (<em>${service}</em>)<br>
+        • 🕒 <strong>Confirmed Time:</strong> ${slot}<br><br>
+        <span style="color: var(--cyan); font-weight: 600;">📬 Multi-Channel Dispatch Actions:</span><br>
+        • ✉️ <strong>Email Invite:</strong> Google Calendar invite & video link sent to <code>${clientEmail}</code><br>
+        • 📱 <strong>SMS Text Alert:</strong> Instant confirmation SMS + automated 24-hour reminder queued for <code>${clientPhone}</code><br>
+        • 🔄 <strong>CRM Sync:</strong> Contact deal card created in pipeline with 0 manual data entry!
       </div>
 
       <button class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; margin-top: 6px;" onclick="selectRoutingNiche('medspa')">⟳ Test Another Specialist or Practice</button>
