@@ -498,7 +498,7 @@ function selectRoutingNiche(niche) {
   }
 }
 
-// Live Specialist Routing Simulator Handler
+// Live Specialist Routing Simulator Handler (Step 1: Choose Slot)
 function simulateSpecialistRouting(name, service, slug, duration) {
   const box = document.getElementById('specialist-live-sandbox');
   if (!box) return;
@@ -508,36 +508,76 @@ function simulateSpecialistRouting(name, service, slug, duration) {
     <div style="font-size: 0.84rem; color: var(--cyan); margin-bottom: 8px;">
       🤖 <strong>AI Semantic Intent Analyzer:</strong> Inbound inquiry for <em>"${service}"</em> detected!
     </div>
-    <div style="background: rgba(18,28,42,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 0.88rem; line-height: 1.5; color: #fff;">
+    <div style="background: rgba(18,28,42,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 0.88rem; line-height: 1.5; color: #fff;">
       ⚙️ <em>Executing tool: <code>getCalendlyAvailability(specialist="${slug}", duration="${duration}")</code></em><br><br>
       "I have routed you to <strong>${name}</strong>'s personal calendar. Here are their soonest available appointments:"
       
       <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
-        <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="finalizeSpecialistBooking('${name}', '${service}', '${slug}', 'Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
-        <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="finalizeSpecialistBooking('${name}', '${service}', '${slug}', 'Thursday at 2:00 PM')">📅 Thu, 2:00 PM</div>
-        <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="finalizeSpecialistBooking('${name}', '${service}', '${slug}', 'Friday at 11:00 AM')">📅 Fri, 11:00 AM</div>
+        <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="promptSpecialistDetails('${name}', '${service}', '${slug}', 'Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
+        <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="promptSpecialistDetails('${name}', '${service}', '${slug}', 'Thursday at 2:00 PM')">📅 Thu, 2:00 PM</div>
+        <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="promptSpecialistDetails('${name}', '${service}', '${slug}', 'Friday at 11:00 AM')">📅 Fri, 11:00 AM</div>
       </div>
-      <div style="margin-top: 8px; font-size: 0.76rem; color: var(--text-dim);">Click any slot above to test instant specialist booking!</div>
+      <div style="margin-top: 10px; font-size: 0.78rem; color: var(--text-dim);">Step 1 of 2: Click an available time slot above.</div>
     </div>
   `;
 }
 
-function finalizeSpecialistBooking(name, service, slug, slot) {
+// Step 2: Intake Details (Full Name, Business Email, Phone)
+function promptSpecialistDetails(name, service, slug, slot) {
   const box = document.getElementById('specialist-live-sandbox');
   if (!box) return;
 
   box.innerHTML = `
-    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 8px; padding: 16px; font-size: 0.88rem; color: #fff;">
-      <div style="font-weight: 700; color: var(--emerald); font-size: 0.95rem; margin-bottom: 6px;">
-        ✅ Confirmed Appointment with ${name}!
+    <div style="background: rgba(18,28,42,0.9); border: 1px solid var(--border); border-radius: 8px; padding: 18px; font-size: 0.88rem; color: #fff;">
+      <div style="font-size: 0.84rem; color: var(--cyan); margin-bottom: 6px;">
+        📝 <strong>Step 2: Caller Intake & Verification</strong>
       </div>
-      ⚙️ <em>Executed tool: <code>createCalendlyContactMeeting(event_type="${slug}", time="${slot}")</code></em><br><br>
-      • 👨‍⚕️ <strong>Assigned Specialist:</strong> ${name}<br>
-      • 📋 <strong>Service:</strong> ${service}<br>
-      • 🕒 <strong>Confirmed Slot:</strong> ${slot}<br>
-      • 📅 <strong>Direct Calendar Sync:</strong> Synced to ${name}'s private calendar with 0 front-desk friction!
-      <br><br>
-      <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.76rem;" onclick="selectRoutingNiche('medspa')">⟳ Test Another Specialist</button>
+      <p style="margin-bottom: 12px;">You selected <strong>${slot}</strong> for <strong>${service}</strong> with <strong>${name}</strong>.</p>
+      
+      <div style="display: flex; flex-direction: column; gap: 10px; max-width: 420px; margin-bottom: 14px;">
+        <input type="text" id="spec-client-name" placeholder="Full Name (e.g. Sarah Jenkins)" style="background: rgba(5,8,11,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 0.88rem; outline: none;">
+        <input type="email" id="spec-client-email" placeholder="Business Email (e.g. sarah@example.com)" style="background: rgba(5,8,11,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 0.88rem; outline: none;">
+        <input type="tel" id="spec-client-phone" placeholder="Phone Number (e.g. +1 415 555 0199)" style="background: rgba(5,8,11,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 0.88rem; outline: none;">
+      </div>
+
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <button class="btn btn-primary btn-glow" style="padding: 8px 18px; font-size: 0.84rem;" onclick="submitSpecialistBooking('${name}', '${service}', '${slug}', '${slot}')">
+          Confirm Appointment with ${name.split(' ')[0]} →
+        </button>
+        <button class="btn btn-secondary" style="padding: 8px 14px; font-size: 0.8rem;" onclick="simulateSpecialistRouting('${name}', '${service}', '${slug}', '45 mins')">
+          ← Back to Slots
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// Step 3: Final Execution & Live Confirmation
+function submitSpecialistBooking(name, service, slug, slot) {
+  const box = document.getElementById('specialist-live-sandbox');
+  if (!box) return;
+
+  const clientName = (document.getElementById('spec-client-name')?.value.trim()) || 'Sarah Jenkins';
+  const clientEmail = (document.getElementById('spec-client-email')?.value.trim()) || 'sarah.j@example.com';
+  const clientPhone = (document.getElementById('spec-client-phone')?.value.trim()) || '+1 (415) 555-0199';
+
+  box.innerHTML = `
+    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 8px; padding: 18px; font-size: 0.88rem; color: #fff;">
+      <div style="font-weight: 700; color: var(--emerald); font-size: 1rem; margin-bottom: 8px;">
+        ✅ Appointment Confirmed & Synced!
+      </div>
+      ⚙️ <em>Executed tool: <code>createCalendlyContactMeeting(specialist="${slug}", name="${clientName}", email="${clientEmail}", phone="${clientPhone}", time="${slot}", format="E.164")</code></em><br><br>
+      
+      <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; margin: 10px 0; line-height: 1.6;">
+        • 👤 <strong>Patient / Client:</strong> ${clientName}<br>
+        • ✉️ <strong>Contact:</strong> ${clientEmail} | ${clientPhone}<br>
+        • 👨‍⚕️ <strong>Assigned Specialist:</strong> ${name}<br>
+        • 📋 <strong>Service:</strong> ${service}<br>
+        • 🕒 <strong>Confirmed Time:</strong> ${slot}<br>
+        • 📅 <strong>Calendar Sync:</strong> Direct invite sent to ${clientEmail} and ${name}'s private calendar!
+      </div>
+
+      <button class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; margin-top: 6px;" onclick="selectRoutingNiche('medspa')">⟳ Test Another Specialist or Practice</button>
     </div>
   `;
 }
