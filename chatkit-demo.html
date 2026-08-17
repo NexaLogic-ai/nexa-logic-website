@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexa AI Chatbot Playground — ChatKit Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- OpenAI ChatKit SDK Script (Official CDN) -->
+  <script src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js" async></script>
+
+  <style>
+    .demo-page-container {
+      padding: 120px 0 80px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .demo-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .demo-header h1 {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+    .demo-header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+    .chatkit-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-l);
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+    .key-info-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 9999px;
+      padding: 6px 16px;
+      font-size: 0.82rem;
+      color: var(--cyan);
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="brand-logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">Nexa<span class="logo-accent">Logic</span></span>
+      </a>
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-secondary">← Back to Home</a>
+        <a href="index.html#booking" class="btn btn-primary">Book Call</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container demo-page-container">
+    <div class="demo-header">
+      <div class="key-info-badge">
+        <span class="pulse-dot"></span> OpenAI ChatKit + Second Brain OS 2-Way Sync
+      </div>
+      <h1>Live AI Receptionist <span class="gradient-text">Chat Playground</span></h1>
+      <p>Test real-time availability checks, booking creation, reschedules, and cancellations.</p>
+    </div>
+
+    <div class="chatkit-wrapper">
+      <!-- ChatKit Custom Element -->
+      <openai-chatkit
+        style="width: 100%; height: 560px; border-radius: 12px; display: block;"
+      ></openai-chatkit>
+    </div>
+  </div>
+
+  <!-- ChatKit Initialization Script -->
+  <script>
+    // Paste your Public Domain Key from Second Brain OS here:
+    const DOMAIN_KEY = 'domain_pk_demo_mode'; 
+    const API_URL = 'https://openai.secondbrainos.com/chatkit';
+
+    const customFetch = (url, options = {}) => {
+      return fetch(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+          'X-Domain-Key': DOMAIN_KEY,
+        },
+      });
+    };
+
+    function initChatKit() {
+      const kit = document.querySelector('openai-chatkit');
+      if (kit && kit.setOptions) {
+        kit.setOptions({
+          api: {
+            url: API_URL,
+            domainKey: DOMAIN_KEY,
+            fetch: customFetch,
+          },
+          theme: {
+            colorScheme: 'dark',
+            color: {
+              accent: { primary: '#00f0ff', level: 2 },
+            },
+            radius: 'round',
+            density: 'spacious',
+          },
+          startScreen: {
+            greeting: 'Hi there! I am your 24/7 AI Receptionist. I can check live schedule openings, book confirmed consults, or answer questions about our automation systems.',
+            prompts: [
+              { label: '📅 Book a Consultation', prompt: 'I would like to book an appointment', icon: 'calendar' },
+              { label: '🕒 Check Available Times', prompt: 'What times are available this week?', icon: 'clock' },
+              { label: '🔄 Reschedule Meeting', prompt: 'I need to reschedule my meeting', icon: 'reload' }
+            ]
+          },
+          composer: {
+            placeholder: 'Ask about booking or services...'
+          }
+        });
+      } else {
+        setTimeout(initChatKit, 50);
+      }
+    }
+
+    initChatKit();
+  </script>
+
+</body>
+</html>
