@@ -283,6 +283,15 @@
 
   <script>
     const msgBox = document.getElementById('chatkit-messages');
+    
+    // Conversation State Machine Context
+    let currentFlow = {
+      state: 'IDLE', // 'IDLE' | 'AWAITING_DAY' | 'AWAITING_TIME' | 'AWAITING_NAME' | 'AWAITING_EMAIL' | 'CONFIRMED'
+      selectedDay: '',
+      selectedTime: '',
+      userName: '',
+      userEmail: ''
+    };
 
     function appendBubble(sender, text) {
       const b = document.createElement('div');
@@ -307,59 +316,206 @@
     }
 
     function processAIResponse(userText) {
-      const lower = userText.toLowerCase();
+      const t = userText.toLowerCase().trim();
 
       setTimeout(() => {
-        if (lower.includes('book') || lower.includes('schedule') || lower.includes('appointment')) {
+        // 1. STATE-AWARE HANDLING: Handling "yes", "sure", "ok"
+        if (['yes', 'yeah', 'yep', 'sure', 'ok', 'okay', 'please', 'sounds good', 'let\'s do it', 'lets do it'].includes(t)) {
+          if (currentFlow.state === 'AWAITING_TIME' || currentFlow.state === 'AWAITING_DAY') {
+            appendBubble('bot', `
+              Awesome! Which of these times works best for your schedule?
+              <div class="slot-grid">
+                <div class="slot-pill" onclick="handleSlotSelection('Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
+                <div class="slot-pill" onclick="handleSlotSelection('Thursday at 2:00 PM')">📅 Thu, 2:00 PM</div>
+                <div class="slot-pill" onclick="handleSlotSelection('Friday at 11:00 AM')">📅 Fri, 11:00 AM</div>
+                <div class="slot-pill" onclick="handleSlotSelection('Friday at 3:30 PM')">📅 Fri, 3:30 PM</div>
+              </div>
+            `);
+            currentFlow.state = 'AWAITING_TIME';
+            return;
+          } else {
+            appendBubble('bot', `
+              Great! Would you like to check available slots for a 15-minute AI Strategy Call this week?
+              <div class="quick-starters">
+                <button class="starter-btn" onclick="handleQuickClick('📅 Show Thursday Slots')">📅 Thursday Slots</button>
+                <button class="starter-btn" onclick="handleQuickClick('📅 Show Friday Slots')">📅 Friday Slots</button>
+              </div>
+            `);
+            currentFlow.state = 'AWAITING_DAY';
+            return;
+          }
+        }
+
+        // 2. DAY SPECIFIC MATCHING: "thursday", "friday", "tomorrow"
+        if (t.includes('thursday') || t.includes('thu')) {
+          currentFlow.selectedDay = 'Thursday';
+          currentFlow.state = 'AWAITING_TIME';
           appendBubble('bot', `
-            ⚙️ <em>Executing tool: <code>getCalendlyAvailability(start="Today", multi_day=true)</code></em>...<br><br>
-            Here are the next available consultation openings directly on our calendar:
+            ⚙️ <em>Querying Calendly API for Thursday openings...</em><br><br>
+            I found <strong>2 available openings</strong> for Thursday:
             <div class="slot-grid">
-              <div class="slot-pill" onclick="bookSpecificSlot('Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
-              <div class="slot-pill" onclick="bookSpecificSlot('Thursday at 2:00 PM')">📅 Thu, 2:00 PM</div>
-              <div class="slot-pill" onclick="bookSpecificSlot('Friday at 11:00 AM')">📅 Fri, 11:00 AM</div>
-              <div class="slot-pill" onclick="bookSpecificSlot('Friday at 3:30 PM')">📅 Fri, 3:30 PM</div>
+              <div class="slot-pill" onclick="handleSlotSelection('Thursday at 10:30 AM')">🕒 10:30 AM (Morning)</div>
+              <div class="slot-pill" onclick="handleSlotSelection('Thursday at 2:00 PM')">🕒 2:00 PM (Afternoon)</div>
             </div>
-            <br>Click any slot above or type your preferred time!
+            <br>Which of these two times suits you best?
           `);
-        } else if (lower.includes('available') || lower.includes('open') || lower.includes('time')) {
+          return;
+        }
+
+        if (t.includes('friday') || t.includes('fri')) {
+          currentFlow.selectedDay = 'Friday';
+          currentFlow.state = 'AWAITING_TIME';
           appendBubble('bot', `
-            I have 4 open slots this week synchronized across our Google Calendar:<br>
+            ⚙️ <em>Querying Calendly API for Friday openings...</em><br><br>
+            I found <strong>2 available openings</strong> for Friday:
+            <div class="slot-grid">
+              <div class="slot-pill" onclick="handleSlotSelection('Friday at 11:00 AM')">🕒 11:00 AM (Morning)</div>
+              <div class="slot-pill" onclick="handleSlotSelection('Friday at 3:30 PM')">🕒 3:30 PM (Afternoon)</div>
+            </div>
+            <br>Which time works best for you?
+          `);
+          return;
+        }
+
+        // 3. TIME SELECTION MATCHING: "10:30", "2pm", "2:00", "11", "3:30", "morning", "afternoon"
+        if (t.includes('10:30') || t.includes('10:30am') || (t.includes('morning') && currentFlow.selectedDay === 'Thursday')) {
+          handleSlotSelection('Thursday at 10:30 AM');
+          return;
+        }
+        if (t.includes('2pm') || t.includes('2:00') || t.includes('2:00pm') || t === '2' || (t.includes('afternoon') && currentFlow.selectedDay === 'Thursday')) {
+          handleSlotSelection('Thursday at 2:00 PM');
+          return;
+        }
+        if (t.includes('11:00') || t.includes('11am') || t === '11' || (t.includes('morning') && currentFlow.selectedDay === 'Friday')) {
+          handleSlotSelection('Friday at 11:00 AM');
+          return;
+        }
+        if (t.includes('3:30') || t.includes('3:30pm') || (t.includes('afternoon') && currentFlow.selectedDay === 'Friday')) {
+          handleSlotSelection('Friday at 3:30 PM');
+          return;
+        }
+
+        // 4. NAME / EMAIL INTAKE STEP
+        if (currentFlow.state === 'AWAITING_NAME') {
+          currentFlow.userName = userText;
+          currentFlow.state = 'AWAITING_EMAIL';
+          appendBubble('bot', `
+            Pleasure to meet you, <strong>${currentFlow.userName}</strong>! What is your best <strong>business email address</strong> to send the calendar invite and Google Meet link to?
+          `);
+          return;
+        }
+
+        if (currentFlow.state === 'AWAITING_EMAIL' || (t.includes('@') && t.includes('.'))) {
+          currentFlow.userEmail = userText;
+          currentFlow.state = 'CONFIRMED';
+          appendBubble('bot', `
+            ✅ <strong>All Set! Your Meeting is Confirmed!</strong><br><br>
+            ⚙️ <em>Executed tool: <code>createCalendlyContactMeeting(time="${currentFlow.selectedTime || 'Thursday at 2:00 PM'}", email="${currentFlow.userEmail}")</code></em><br><br>
+            • 👤 <strong>Name:</strong> ${currentFlow.userName || 'Valued Client'}<br>
+            • ✉️ <strong>Email:</strong> ${currentFlow.userEmail}<br>
+            • 📅 <strong>Scheduled Time:</strong> ${currentFlow.selectedTime || 'Thursday at 2:00 PM'}<br>
+            • 🔗 <strong>Location:</strong> Google Meet (Link sent to your inbox)<br><br>
+            Our engineering team is notified and looking forward to speaking with you!
+          `);
+          return;
+        }
+
+        // 5. INTENT: BOOKING / SCHEDULING
+        if (t.includes('book') || t.includes('schedule') || t.includes('appointment') || t.includes('consultation') || t.includes('meeting')) {
+          currentFlow.state = 'AWAITING_TIME';
+          appendBubble('bot', `
+            ⚙️ <em>Executing tool: <code>getCalendlyAvailability(multi_day=true)</code></em>...<br><br>
+            I've checked our live schedule. Here are the soonest openings:
+            <div class="slot-grid">
+              <div class="slot-pill" onclick="handleSlotSelection('Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
+              <div class="slot-pill" onclick="handleSlotSelection('Thursday at 2:00 PM')">📅 Thu, 2:00 PM</div>
+              <div class="slot-pill" onclick="handleSlotSelection('Friday at 11:00 AM')">📅 Fri, 11:00 AM</div>
+              <div class="slot-pill" onclick="handleSlotSelection('Friday at 3:30 PM')">📅 Fri, 3:30 PM</div>
+            </div>
+            <br>Click one of the buttons above, or simply type your preferred time!
+          `);
+          return;
+        }
+
+        // 6. INTENT: AVAILABILITY CHECK
+        if (t.includes('available') || t.includes('open') || t.includes('times') || t.includes('slots') || t.includes('when')) {
+          currentFlow.state = 'AWAITING_TIME';
+          appendBubble('bot', `
+            We have 4 openings synchronized directly across our calendar this week:<br>
             • <strong>Thursday:</strong> 10:30 AM & 2:00 PM<br>
             • <strong>Friday:</strong> 11:00 AM & 3:30 PM<br><br>
-            Would you like me to reserve one of these for you?
+            Which day would you prefer to reserve? (Say <strong>Thursday</strong> or <strong>Friday</strong>)
           `);
-        } else if (lower.includes('specialist') || lower.includes('doctor') || lower.includes('route')) {
+          return;
+        }
+
+        // 7. INTENT: GREETINGS
+        if (t.includes('hi') || t.includes('hello') || t.includes('hey') || t.includes('howdy') || t === 'hi') {
           appendBubble('bot', `
-            Yes! I use semantic intent matching to route callers and chat visitors to the exact right specialist (e.g. Dr. Sarah for Injectables vs Jessica for Laser Treatment). I automatically check the specific specialist's calendar.
+            Hello! 👋 I am the Nexa Logic autonomous receptionist. I can check live calendar availability, book meetings, or answer questions about our AI phone & chat systems. How can I help you today?
           `);
-        } else if (lower.includes('reschedule') || lower.includes('move') || lower.includes('change')) {
+          return;
+        }
+
+        // 8. INTENT: PRICING / COSTS
+        if (t.includes('price') || t.includes('pricing') || t.includes('cost') || t.includes('how much') || t.includes('package') || t.includes('fee')) {
+          appendBubble('bot', `
+            We customize our AI systems based on your business volume and CRM stack (typically structured as a one-time turnkey setup + a monthly optimization retainer).<br><br>
+            On our 15-minute strategy call, we perform a complete revenue audit to show your exact ROI. Would you like to grab a slot this Thursday or Friday?
+          `);
+          return;
+        }
+
+        // 9. INTENT: MULTI-STAFF & SPECIALIST ROUTING
+        if (t.includes('specialist') || t.includes('doctor') || t.includes('route') || t.includes('team') || t.includes('staff')) {
+          appendBubble('bot', `
+            Yes! I support <strong>Multi-Staff Routing</strong>. When a caller or visitor mentions a specific service (e.g. Botox vs Laser, or Personal Injury vs Criminal Defense), I dynamically query that specific specialist's calendar and book the exact event type.
+          `);
+          return;
+        }
+
+        // 10. INTENT: RESCHEDULE OR CANCEL
+        if (t.includes('reschedule') || t.includes('move') || t.includes('change') || t.includes('cancel')) {
           appendBubble('bot', `
             ⚙️ <em>Executing tool: <code>updateCalendlyMeeting()</code></em>...<br><br>
-            I can move your appointment seamlessly. What is the email address associated with your original booking, and what new day works best for you?
+            I can update or cancel your appointment on the fly without human staff. Please provide the <strong>email address</strong> used for your original booking, and what new day you'd like to switch to!
           `);
-        } else {
-          appendBubble('bot', `
-            I can help you schedule, check live availability, or answer any technical questions about integrating AI agents with your CRM. Would you like to reserve a 1-on-1 strategy call with our engineering team?
-          `);
+          return;
         }
-      }, 500);
+
+        // 11. INTENT: HOW DOES IT WORK / CRM INTEGRATION
+        if (t.includes('crm') || t.includes('how it works') || t.includes('gohighlevel') || t.includes('hubspot') || t.includes('calendly') || t.includes('integrate')) {
+          appendBubble('bot', `
+            We connect directly to Calendly, Google Calendar, GoHighLevel, and major CRMs. When a customer speaks with me, I perform real-time tool calling to check availability, lock in confirmed slots, and sync all contact data into your pipeline automatically!
+          `);
+          return;
+        }
+
+        // 12. DEFAULT FALLBACK
+        appendBubble('bot', `
+          I can help you check real-time calendar availability, schedule a meeting, or demonstrate multi-staff routing. Would you like to view our open slots for <strong>Thursday</strong> or <strong>Friday</strong>?
+        `);
+
+      }, 400);
     }
 
-    function bookSpecificSlot(slot) {
-      appendBubble('user', `I would like to book ${slot}`);
-      setTimeout(() => {
-        appendBubble('bot', `
-          ✅ <strong>Confirmed!</strong><br>
-          ⚙️ <em>Executed tool: <code>createCalendlyContactMeeting(time="${slot}", format="E.164")</code></em><br><br>
-          Your 15-minute Strategy Call is locked in for <strong>${slot}</strong>.<br>
-          • 📅 Calendar invite sent to your Google Calendar<br>
-          • 🔔 Notification dispatched to CRM pipeline
-        `);
-      }, 600);
+    function handleSlotSelection(slot) {
+      currentFlow.selectedTime = slot;
+      currentFlow.state = 'AWAITING_NAME';
+      appendBubble('bot', `
+        Selected: <strong>${slot}</strong> 🕒<br><br>
+        To finalize the calendar invite on Google Calendar and reserve this slot, what is your <strong>Full Name</strong>?
+      `);
     }
 
     function resetChat() {
+      currentFlow = {
+        state: 'IDLE',
+        selectedDay: '',
+        selectedTime: '',
+        userName: '',
+        userEmail: ''
+      };
       msgBox.innerHTML = `
         <div class="chat-bubble bot">
           👋 Hi there! I am your 24/7 AI Receptionist. I can check open appointment slots, lock in confirmed meetings, reschedule, or answer any questions about our AI automation systems.
