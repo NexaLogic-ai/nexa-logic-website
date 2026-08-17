@@ -3,7 +3,7 @@
 // Formspree Lead Notification Webhook Endpoint
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xrpzaqpa';
 
-// 1. Switch Demo Tabs (Voice vs Chat)
+// 1. Switch Showroom Tabs (Voice, Chat, Routing, Reviews)
 function switchDemo(type) {
   const tabs = document.querySelectorAll('.demo-tab');
   const views = document.querySelectorAll('.demo-view');
@@ -14,9 +14,18 @@ function switchDemo(type) {
   if (type === 'voice') {
     tabs[0].classList.add('active');
     document.getElementById('voice-demo-view').classList.add('active');
-  } else {
+  } else if (type === 'chat') {
     tabs[1].classList.add('active');
     document.getElementById('chat-demo-view').classList.add('active');
+  } else if (type === 'routing') {
+    tabs[2].classList.add('active');
+    document.getElementById('routing-demo-view').classList.add('active');
+    if (!document.getElementById('routing-matrix-card').innerHTML.trim()) {
+      selectRoutingNiche('medspa');
+    }
+  } else if (type === 'reviews') {
+    tabs[3].classList.add('active');
+    document.getElementById('reviews-demo-view').classList.add('active');
   }
 }
 
@@ -166,40 +175,327 @@ function askVoiceQuestion(question) {
   }, 400);
 }
 
-// 3. Interactive In-Page Chat Simulator
-function sendChatMessage() {
-  const input = document.getElementById('chat-input');
+// 3. Showroom 2-Way Chatbot State Machine
+let showroomFlow = {
+  state: 'IDLE',
+  selectedDay: '',
+  selectedTime: '',
+  userName: '',
+  userEmail: ''
+};
+
+function appendShowroomBubble(sender, text) {
+  const box = document.getElementById('showroom-chat-window');
+  if (!box) return;
+  const b = document.createElement('div');
+  b.className = `chat-bubble ${sender}`;
+  b.innerHTML = text;
+  box.appendChild(b);
+  box.scrollTop = box.scrollHeight;
+}
+
+function handleShowroomQuickClick(text) {
+  appendShowroomBubble('user', text);
+  processShowroomAIResponse(text);
+}
+
+function sendShowroomChat() {
+  const input = document.getElementById('showroom-chat-input');
+  if (!input) return;
   const text = input.value.trim();
   if (!text) return;
-
-  const chatWindow = document.getElementById('chat-window');
-
-  // Append user message
-  const userBubble = document.createElement('div');
-  userBubble.className = 'chat-bubble user';
-  userBubble.innerText = text;
-  chatWindow.appendChild(userBubble);
   input.value = '';
+  appendShowroomBubble('user', text);
+  processShowroomAIResponse(text);
+}
 
-  chatWindow.scrollTop = chatWindow.scrollHeight;
+function processShowroomAIResponse(userText) {
+  const t = userText.toLowerCase().trim();
 
-  // AI Response Simulation
   setTimeout(() => {
-    const botBubble = document.createElement('div');
-    botBubble.className = 'chat-bubble bot';
-    
-    const lower = text.toLowerCase();
-    if (lower.includes('crm') || lower.includes('ghl') || lower.includes('hubspot')) {
-      botBubble.innerText = "Yes! Our agents connect seamlessly via API/Webhooks into GoHighLevel, HubSpot, Salesforce, Airtable, or Google Sheets with zero manual data entry needed.";
-    } else if (lower.includes('demo') || lower.includes('book') || lower.includes('call')) {
-      botBubble.innerText = "Awesome! You can scroll right down to our booking calendar below to reserve your 1-on-1 strategy call with our team.";
-    } else {
-      botBubble.innerText = "Our autonomous agents are custom-trained on your exact company FAQs, services, and pricing rules. Scroll down to choose a time on our live calendar!";
+    // 1. Handling "yes", "sure", "ok"
+    if (['yes', 'yeah', 'yep', 'sure', 'ok', 'okay', 'please', 'sounds good', 'let\'s do it', 'lets do it'].includes(t)) {
+      appendShowroomBubble('bot', `
+        Awesome! Which of these available slots works best for your schedule?
+        <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
+          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
+          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 2:00 PM')">📅 Thu, 2:00 PM</div>
+          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 11:00 AM')">📅 Fri, 11:00 AM</div>
+          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 3:30 PM')">📅 Fri, 3:30 PM</div>
+        </div>
+      `);
+      showroomFlow.state = 'AWAITING_TIME';
+      return;
     }
 
-    chatWindow.appendChild(botBubble);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  }, 800);
+    // 2. Day choices: Thursday vs Friday
+    if (t.includes('thursday') || t.includes('thu')) {
+      showroomFlow.selectedDay = 'Thursday';
+      showroomFlow.state = 'AWAITING_TIME';
+      appendShowroomBubble('bot', `
+        ⚙️ <em>Querying Calendly API for Thursday openings...</em><br><br>
+        I found <strong>2 available openings</strong> for Thursday:
+        <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
+          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 10:30 AM')">🕒 10:30 AM (Morning)</div>
+          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 2:00 PM')">🕒 2:00 PM (Afternoon)</div>
+        </div>
+        <br>Which of these two times suits you best?
+      `);
+      return;
+    }
+
+    if (t.includes('friday') || t.includes('fri')) {
+      showroomFlow.selectedDay = 'Friday';
+      showroomFlow.state = 'AWAITING_TIME';
+      appendShowroomBubble('bot', `
+        ⚙️ <em>Querying Calendly API for Friday openings...</em><br><br>
+        I found <strong>2 available openings</strong> for Friday:
+        <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
+          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 11:00 AM')">🕒 11:00 AM (Morning)</div>
+          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 3:30 PM')">🕒 3:30 PM (Afternoon)</div>
+        </div>
+        <br>Which time works best for you?
+      `);
+      return;
+    }
+
+    // 3. Time specific matching
+    if (t.includes('10:30') || t.includes('10:30am') || (t.includes('morning') && showroomFlow.selectedDay === 'Thursday')) {
+      handleShowroomSlotSelection('Thursday at 10:30 AM');
+      return;
+    }
+    if (t.includes('2pm') || t.includes('2:00') || t.includes('2:00pm') || t === '2' || (t.includes('afternoon') && showroomFlow.selectedDay === 'Thursday')) {
+      handleShowroomSlotSelection('Thursday at 2:00 PM');
+      return;
+    }
+    if (t.includes('11:00') || t.includes('11am') || t === '11' || (t.includes('morning') && showroomFlow.selectedDay === 'Friday')) {
+      handleShowroomSlotSelection('Friday at 11:00 AM');
+      return;
+    }
+    if (t.includes('3:30') || t.includes('3:30pm') || (t.includes('afternoon') && showroomFlow.selectedDay === 'Friday')) {
+      handleShowroomSlotSelection('Friday at 3:30 PM');
+      return;
+    }
+
+    // 4. Name / Email intake
+    if (showroomFlow.state === 'AWAITING_NAME') {
+      showroomFlow.userName = userText;
+      showroomFlow.state = 'AWAITING_EMAIL';
+      appendShowroomBubble('bot', `
+        Pleasure to meet you, <strong>${showroomFlow.userName}</strong>! What is your best <strong>business email address</strong> to send the calendar invite and Google Meet link to?
+      `);
+      return;
+    }
+
+    if (showroomFlow.state === 'AWAITING_EMAIL' || (t.includes('@') && t.includes('.'))) {
+      showroomFlow.userEmail = userText;
+      showroomFlow.state = 'CONFIRMED';
+      appendShowroomBubble('bot', `
+        ✅ <strong>All Set! Your Meeting is Confirmed!</strong><br><br>
+        ⚙️ <em>Executed tool: <code>createCalendlyContactMeeting(time="${showroomFlow.selectedTime || 'Thursday at 2:00 PM'}", email="${showroomFlow.userEmail}")</code></em><br><br>
+        • 👤 <strong>Name:</strong> ${showroomFlow.userName || 'Valued Client'}<br>
+        • ✉️ <strong>Email:</strong> ${showroomFlow.userEmail}<br>
+        • 📅 <strong>Scheduled Time:</strong> ${showroomFlow.selectedTime || 'Thursday at 2:00 PM'}<br>
+        • 🔗 <strong>Location:</strong> Google Meet (Invite sent to your email)<br><br>
+        Our engineering team is notified and ready to meet with you!
+      `);
+      return;
+    }
+
+    // 5. Booking / General Slots
+    if (t.includes('book') || t.includes('schedule') || t.includes('appointment') || t.includes('consultation')) {
+      showroomFlow.state = 'AWAITING_TIME';
+      appendShowroomBubble('bot', `
+        ⚙️ <em>Executing tool: <code>getCalendlyAvailability(multi_day=true)</code></em>...<br><br>
+        I've checked our live schedule. Here are our soonest openings:
+        <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
+          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
+          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 2:00 PM')">📅 Thu, 2:00 PM</div>
+          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 11:00 AM')">📅 Fri, 11:00 AM</div>
+          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 3:30 PM')">📅 Fri, 3:30 PM</div>
+        </div>
+        <br>Click any slot above or type your preferred time!
+      `);
+      return;
+    }
+
+    if (t.includes('available') || t.includes('open') || t.includes('times') || t.includes('when')) {
+      showroomFlow.state = 'AWAITING_TIME';
+      appendShowroomBubble('bot', `
+        We have 4 openings synchronized directly across our calendar this week:<br>
+        • <strong>Thursday:</strong> 10:30 AM & 2:00 PM<br>
+        • <strong>Friday:</strong> 11:00 AM & 3:30 PM<br><br>
+        Which day would you prefer to reserve? (Say <strong>Thursday</strong> or <strong>Friday</strong>)
+      `);
+      return;
+    }
+
+    // 6. Greetings
+    if (t.includes('hi') || t.includes('hello') || t.includes('hey') || t === 'hi') {
+      appendShowroomBubble('bot', `
+        Hello! 👋 I am the Nexa Logic autonomous receptionist. I can check live calendar availability, book meetings, or answer questions about our AI phone & chat systems. How can I help you today?
+      `);
+      return;
+    }
+
+    // 7. Pricing
+    if (t.includes('price') || t.includes('cost') || t.includes('package') || t.includes('fee')) {
+      appendShowroomBubble('bot', `
+        We customize our AI systems based on your business volume and CRM stack (typically structured as a one-time turnkey setup + a monthly retainer).<br><br>
+        On our 15-minute strategy call, we perform a complete revenue audit to show your exact ROI. Would you like to view our open slots for <strong>Thursday</strong> or <strong>Friday</strong>?
+      `);
+      return;
+    }
+
+    // 8. Default fallback
+    appendShowroomBubble('bot', `
+      I can help you check real-time calendar availability, schedule a meeting, or demonstrate multi-staff routing. Would you like to view our open slots for <strong>Thursday</strong> or <strong>Friday</strong>?
+    `);
+
+  }, 400);
+}
+
+function handleShowroomSlotSelection(slot) {
+  showroomFlow.selectedTime = slot;
+  showroomFlow.state = 'AWAITING_NAME';
+  appendShowroomBubble('bot', `
+    Selected: <strong>${slot}</strong> 🕒<br><br>
+    To finalize the calendar invite on Google Calendar and reserve this slot, what is your <strong>Full Name</strong>?
+  `);
+}
+
+function resetShowroomChat() {
+  showroomFlow = {
+    state: 'IDLE',
+    selectedDay: '',
+    selectedTime: '',
+    userName: '',
+    userEmail: ''
+  };
+  const box = document.getElementById('showroom-chat-window');
+  if (box) {
+    box.innerHTML = `
+      <div class="chat-bubble bot">
+        👋 Hi there! I am your 24/7 AI Receptionist. I can check open appointment slots, lock in confirmed meetings, reschedule, or answer any questions about our systems.
+        
+        <div class="quick-starters" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;">
+          <button class="starter-btn" onclick="handleShowroomQuickClick('📅 Book an appointment')">📅 Book an appointment</button>
+          <button class="starter-btn" onclick="handleShowroomQuickClick('🕒 What times are available this week?')">🕒 Check open slots</button>
+          <button class="starter-btn" onclick="handleShowroomQuickClick('👥 Can you route to multiple doctors/specialists?')">👥 Multi-staff routing</button>
+          <button class="starter-btn" onclick="handleShowroomQuickClick('🔄 I need to reschedule my meeting')">🔄 Reschedule</button>
+        </div>
+      </div>
+    `;
+  }
+}
+
+// 4. Multi-Staff Routing Niche Matrix Switcher
+function selectRoutingNiche(niche) {
+  const btnMed = document.getElementById('btn-niche-medspa');
+  const btnLeg = document.getElementById('btn-niche-legal');
+  const btnRe = document.getElementById('btn-niche-realestate');
+  const card = document.getElementById('routing-matrix-card');
+  if (!card) return;
+
+  [btnMed, btnLeg, btnRe].forEach(b => { if (b) b.classList.remove('active-niche', 'btn-primary'); });
+
+  if (niche === 'medspa') {
+    if (btnMed) btnMed.classList.add('active-niche', 'btn-primary');
+    card.innerHTML = `
+      <div style="font-size: 0.9rem; margin-bottom: 14px; color: var(--cyan); font-weight: 700;">💉 AESTHETICS CLINIC SPECIALIST MATRIX</div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left;">
+        <tr style="border-bottom: 1px solid var(--border); color: var(--text-dim);">
+          <th style="padding: 8px;">Specialist</th>
+          <th style="padding: 8px;">Service / Treatment</th>
+          <th style="padding: 8px;">Duration</th>
+          <th style="padding: 8px;">Calendly Event Slug</th>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <td style="padding: 10px; color: #fff;"><strong>Dr. Sarah Jenkins</strong></td>
+          <td style="padding: 10px; color: var(--cyan);">Botox & Dermal Fillers</td>
+          <td style="padding: 10px;">45 mins</td>
+          <td style="padding: 10px;"><code>dr-sarah-injectables</code></td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <td style="padding: 10px; color: #fff;"><strong>Jessica Miller, LE</strong></td>
+          <td style="padding: 10px; color: var(--purple);">Laser Resurfacing & Peels</td>
+          <td style="padding: 10px;">60 mins</td>
+          <td style="padding: 10px;"><code>jessica-laser-skin</code></td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; color: #fff;"><strong>Nurse Elena</strong></td>
+          <td style="padding: 10px; color: var(--emerald);">IV Hydration Therapy</td>
+          <td style="padding: 10px;">30 mins</td>
+          <td style="padding: 10px;"><code>elena-iv-therapy</code></td>
+        </tr>
+      </table>
+      <div style="margin-top: 14px; font-size: 0.84rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+        💡 <em>Routing Logic:</em> When a caller says <code>"I want to book Botox"</code>, the AI bypasses front-desk triage and queries <code>dr-sarah-injectables</code> availability directly!
+      </div>
+    `;
+  } else if (niche === 'legal') {
+    if (btnLeg) btnLeg.classList.add('active-niche', 'btn-primary');
+    card.innerHTML = `
+      <div style="font-size: 0.9rem; margin-bottom: 14px; color: var(--cyan); font-weight: 700;">⚖️ LAW FIRM PRACTICE AREA MATRIX</div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left;">
+        <tr style="border-bottom: 1px solid var(--border); color: var(--text-dim);">
+          <th style="padding: 8px;">Attorney</th>
+          <th style="padding: 8px;">Practice Area</th>
+          <th style="padding: 8px;">Consult Fee</th>
+          <th style="padding: 8px;">Calendly Event Slug</th>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <td style="padding: 10px; color: #fff;"><strong>David Vance, Esq.</strong></td>
+          <td style="padding: 10px; color: var(--cyan);">Personal Injury & Accidents</td>
+          <td style="padding: 10px;">Free Consult</td>
+          <td style="padding: 10px;"><code>vance-pi-consult</code></td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <td style="padding: 10px; color: #fff;"><strong>Marcus Reed, Esq.</strong></td>
+          <td style="padding: 10px; color: var(--purple);">Criminal Defense & DUI</td>
+          <td style="padding: 10px;">$250 Consult</td>
+          <td style="padding: 10px;"><code>reed-criminal-defense</code></td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; color: #fff;"><strong>Sarah Sterling, Esq.</strong></td>
+          <td style="padding: 10px; color: var(--emerald);">Estate Planning & Trusts</td>
+          <td style="padding: 10px;">Free 15-Min</td>
+          <td style="padding: 10px;"><code>sterling-estate-planning</code></td>
+        </tr>
+      </table>
+      <div style="margin-top: 14px; font-size: 0.84rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+        💡 <em>Routing Logic:</em> Accident victims are instantly routed to <code>vance-pi-consult</code> with 0 hold time, preventing lost retainers!
+      </div>
+    `;
+  } else if (niche === 'realestate') {
+    if (btnRe) btnRe.classList.add('active-niche', 'btn-primary');
+    card.innerHTML = `
+      <div style="font-size: 0.9rem; margin-bottom: 14px; color: var(--cyan); font-weight: 700;">🏡 REAL ESTATE BROKERAGE MATRIX</div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left;">
+        <tr style="border-bottom: 1px solid var(--border); color: var(--text-dim);">
+          <th style="padding: 8px;">Agent / Specialist</th>
+          <th style="padding: 8px;">Role</th>
+          <th style="padding: 8px;">Territory</th>
+          <th style="padding: 8px;">Calendly Event Slug</th>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <td style="padding: 10px; color: #fff;"><strong>Brandon Hayes</strong></td>
+          <td style="padding: 10px; color: var(--cyan);">Luxury Listing Specialist</td>
+          <td style="padding: 10px;">Downtown & Waterfront</td>
+          <td style="padding: 10px;"><code>brandon-luxury-listings</code></td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <td style="padding: 10px; color: #fff;"><strong>Chloe Bennett</strong></td>
+          <td style="padding: 10px; color: var(--purple);">First-Time Home Buyers</td>
+          <td style="padding: 10px;">Suburbs & North County</td>
+          <td style="padding: 10px;"><code>chloe-buyer-consult</code></td>
+        </tr>
+      </table>
+      <div style="margin-top: 14px; font-size: 0.84rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+        💡 <em>Routing Logic:</em> High-net-worth home sellers are routed directly to Brandon Hayes for instant valuation calls!
+      </div>
+    `;
+  }
 }
 
 // 4. Interactive ROI Calculator

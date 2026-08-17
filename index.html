@@ -238,25 +238,28 @@
     </div>
   </section>
 
-  <!-- Interactive Live Demo Section -->
+  <!-- Unified Interactive AI Agent Showroom -->
   <section id="demo" class="demo-section">
     <div class="container">
       <div class="section-badge purple-badge">
         <span class="purple-dot"></span>
-        <span>Interactive Voice & Chat Demo</span>
+        <span>Interactive AI Agent Showroom</span>
       </div>
 
-      <h2 class="section-title">Test the Nexa Logic AI Agent in Real Time</h2>
-      <p class="section-subtitle">Click below to test how our AI answers customer questions, handles objections, and schedules meetings.</p>
+      <h2 class="section-title">Test Our Autonomous AI Workforce <span class="gradient-text">In Action</span></h2>
+      <p class="section-subtitle">Experience live simulations of our 4 core agency systems: Voice Phone Receptionist, 2-Way Web ChatKit Bot, Multi-Staff Router, and 5-Star Review Collector.</p>
 
       <div class="demo-widget-card">
         
+        <!-- 4 Switchable Showroom Tabs -->
         <div class="demo-tabs">
-          <button class="demo-tab active" onclick="switchDemo('voice')">🎙️ AI Voice Agent Simulation</button>
-          <button class="demo-tab" onclick="switchDemo('chat')">💬 24/7 Web Chat Simulation</button>
+          <button class="demo-tab active" onclick="switchDemo('voice')">🎙️ Voice Receptionist</button>
+          <button class="demo-tab" onclick="switchDemo('chat')">💬 Web ChatKit Bot</button>
+          <button class="demo-tab" onclick="switchDemo('routing')">👥 Multi-Staff Router</button>
+          <button class="demo-tab" onclick="switchDemo('reviews')">⭐ Review Collector</button>
         </div>
 
-        <!-- Voice Demo View -->
+        <!-- 1. Voice Demo View -->
         <div id="voice-demo-view" class="demo-view active">
           <div class="voice-sim-box">
             <div id="voice-pulse" class="pulse-visualizer">
@@ -292,18 +295,86 @@
           </div>
         </div>
 
-        <!-- Chat Demo View -->
+        <!-- 2. Web ChatKit Booking Bot View -->
         <div id="chat-demo-view" class="demo-view">
           <div class="chat-sim-box">
-            <div id="chat-window" class="chat-window">
+            <div class="chatkit-topbar" style="background: rgba(10, 16, 26, 0.9); border-bottom: 1px solid var(--border); padding: 12px 18px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.3rem;">🤖</span>
+                <div>
+                  <div style="font-size: 0.88rem; font-weight: 700; color: #fff;">Nexa 2-Way Booking Agent</div>
+                  <div style="font-size: 0.74rem; color: var(--emerald); display: flex; align-items: center; gap: 4px;"><span class="pulse-dot" style="background:#22c55e;"></span> Synced with Calendly & Google Calendar</div>
+                </div>
+              </div>
+              <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.74rem;" onclick="resetShowroomChat()">Reset ⟳</button>
+            </div>
+
+            <div id="showroom-chat-window" class="chat-window" style="height: 320px;">
               <div class="chat-bubble bot">
-                👋 Hi there! I'm the Nexa Logic assistant. Looking to automate your inbound calls, chat, or CRM follow-ups?
+                👋 Hi there! I am your 24/7 AI Receptionist. I can check open appointment slots, lock in confirmed meetings, reschedule, or answer any questions about our systems.
+                
+                <div class="quick-starters" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;">
+                  <button class="starter-btn" onclick="handleShowroomQuickClick('📅 Book an appointment')">📅 Book an appointment</button>
+                  <button class="starter-btn" onclick="handleShowroomQuickClick('🕒 What times are available this week?')">🕒 Check open slots</button>
+                  <button class="starter-btn" onclick="handleShowroomQuickClick('👥 Can you route to multiple doctors/specialists?')">👥 Multi-staff routing</button>
+                  <button class="starter-btn" onclick="handleShowroomQuickClick('🔄 I need to reschedule my meeting')">🔄 Reschedule</button>
+                </div>
               </div>
             </div>
 
             <div class="chat-input-bar">
-              <input type="text" id="chat-input" placeholder="Type a message (e.g. 'Can you connect to our HubSpot CRM?')..." onkeydown="if(event.key==='Enter') sendChatMessage()">
-              <button class="btn-send" onclick="sendChatMessage()">Send →</button>
+              <input type="text" id="showroom-chat-input" placeholder="Type a message (e.g. 'thursday', 'book 2pm', or 'pricing')..." onkeydown="if(event.key==='Enter') sendShowroomChat()">
+              <button class="btn-send" onclick="sendShowroomChat()">Send →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Multi-Staff Specialist Routing View -->
+        <div id="routing-demo-view" class="demo-view">
+          <div class="routing-sim-box" style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="text-align: center; max-width: 640px; margin: 0 auto;">
+              <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 8px;">Semantic Specialist & Multi-Calendar Router</h3>
+              <p style="font-size: 0.92rem; color: var(--text-muted);">Select a practice niche below to see how our AI listens to caller requirements and routes directly to the correct team member's personal calendar.</p>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+              <button class="btn btn-secondary active-niche" id="btn-niche-medspa" onclick="selectRoutingNiche('medspa')">💉 Med Spa / Aesthetics</button>
+              <button class="btn btn-secondary" id="btn-niche-legal" onclick="selectRoutingNiche('legal')">⚖️ Law Firm / Legal Intake</button>
+              <button class="btn btn-secondary" id="btn-niche-realestate" onclick="selectRoutingNiche('realestate')">🏡 Real Estate Brokerage</button>
+            </div>
+
+            <div id="routing-matrix-card" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 20px;">
+              <!-- Dynamic Niche Content Loaded by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Review Collector & Reactivation View -->
+        <div id="reviews-demo-view" class="demo-view">
+          <div class="reviews-sim-box" style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
+            <div style="text-align: center; max-width: 640px;">
+              <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 8px;">Automated 5-Star Google Review Engine</h3>
+              <p style="font-size: 0.92rem; color: var(--text-muted);">1 hour after an appointment ends, our AI automatically texts the client to collect 5-star reviews on Google Maps, boosting local search SEO.</p>
+            </div>
+
+            <div style="width: 100%; max-width: 480px; background: #0b1118; border: 2px solid var(--border); border-radius: 24px; padding: 20px; box-shadow: 0 16px 40px rgba(0,0,0,0.6);">
+              <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 16px;">
+                <div style="font-weight: 700; font-size: 0.9rem; color: #fff;">📱 SMS Notification Simulator</div>
+                <span class="badge" style="background: rgba(34, 197, 94, 0.15); color: var(--emerald); font-size: 0.72rem; padding: 4px 8px; border-radius: 9999px;">● Automated Flow</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.88rem;">
+                <div style="background: #1e293b; padding: 12px 16px; border-radius: 16px 16px 16px 4px; color: #fff; line-height: 1.5;">
+                  "Hi Sarah! 🌟 Thank you for visiting Nexa Aesthetics today. How was your treatment with Dr. Sarah?"
+                </div>
+                <div style="background: rgba(0, 240, 255, 0.15); border: 1px solid rgba(0, 240, 255, 0.3); padding: 10px 14px; border-radius: 16px 16px 4px 16px; color: #fff; align-self: flex-end;">
+                  "It was fantastic! Dr. Sarah was amazing."
+                </div>
+                <div style="background: #1e293b; padding: 12px 16px; border-radius: 16px 16px 16px 4px; color: #fff; line-height: 1.5;">
+                  "That makes our day! 🙌 Would you mind taking 30 seconds to share your feedback on Google? It means the world to our team:<br><br>
+                  <a href="#" style="color: var(--cyan); text-decoration: underline;">⭐️ g.page/review/nexa-demo</a>"
+                </div>
+              </div>
             </div>
           </div>
         </div>
