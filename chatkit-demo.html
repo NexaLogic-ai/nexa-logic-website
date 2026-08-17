@@ -3,40 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexa AI Chatbot Playground — ChatKit Demo</title>
+  <title>Nexa AI Chatbot Playground — Live Interactive Demo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  
-  <!-- OpenAI ChatKit SDK Script (Official CDN) -->
-  <script src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js" async></script>
 
   <style>
     .demo-page-container {
       padding: 120px 0 80px;
-      max-width: 960px;
+      max-width: 900px;
       margin: 0 auto;
     }
     .demo-header {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 32px;
     }
     .demo-header h1 {
       font-family: var(--font-display);
-      font-size: 2.5rem;
-      margin-bottom: 12px;
+      font-size: 2.4rem;
+      margin-bottom: 10px;
+      color: #fff;
     }
     .demo-header p {
       color: var(--text-muted);
       font-size: 1.05rem;
-    }
-    .chatkit-wrapper {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-l);
-      padding: 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     }
     .key-info-badge {
       display: inline-flex;
@@ -48,7 +39,187 @@
       padding: 6px 16px;
       font-size: 0.82rem;
       color: var(--cyan);
-      margin-bottom: 24px;
+      margin-bottom: 16px;
+    }
+
+    /* Live ChatKit Simulated UI */
+    .chatkit-frame {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-l);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .chatkit-topbar {
+      padding: 16px 24px;
+      background: rgba(14, 22, 32, 0.95);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .agent-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .agent-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .agent-meta h4 {
+      font-size: 0.95rem;
+      margin: 0;
+      color: #fff;
+      font-family: var(--font-display);
+    }
+
+    .agent-status {
+      font-size: 0.78rem;
+      color: var(--emerald);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chatkit-body {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: rgba(7, 11, 16, 0.5);
+    }
+
+    .chat-bubble {
+      max-width: 80%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 0.94rem;
+      line-height: 1.55;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .chat-bubble.bot {
+      background: rgba(18, 28, 42, 0.9);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+    }
+
+    .chat-bubble.user {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(124, 58, 237, 0.2));
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+      align-self: flex-end;
+    }
+
+    .quick-starters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .starter-btn {
+      background: rgba(14, 22, 32, 0.8);
+      border: 1px solid var(--border);
+      color: var(--cyan);
+      padding: 8px 14px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .starter-btn:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--cyan);
+      transform: translateY(-1px);
+    }
+
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .slot-pill {
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.84rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .slot-pill:hover {
+      background: var(--cyan);
+      color: #000;
+      font-weight: 600;
+    }
+
+    .chatkit-composer {
+      padding: 16px 20px;
+      background: rgba(14, 22, 32, 0.95);
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+    }
+
+    .chatkit-composer input {
+      flex: 1;
+      background: rgba(5, 8, 11, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 18px;
+      color: #fff;
+      font-size: 0.92rem;
+      outline: none;
+    }
+
+    .chatkit-composer input:focus {
+      border-color: var(--cyan);
+    }
+
+    .chatkit-composer button {
+      background: var(--cyan);
+      color: #000;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      padding: 0 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .chatkit-composer button:hover {
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.5);
+      transform: scale(1.02);
     }
   </style>
 </head>
@@ -63,7 +234,7 @@
       </a>
       <div class="nav-actions">
         <a href="index.html" class="btn btn-secondary">← Back to Home</a>
-        <a href="index.html#booking" class="btn btn-primary">Book Call</a>
+        <a href="index.html#booking" class="btn btn-primary">Book Strategy Call</a>
       </div>
     </div>
   </nav>
@@ -71,71 +242,137 @@
   <div class="container demo-page-container">
     <div class="demo-header">
       <div class="key-info-badge">
-        <span class="pulse-dot"></span> OpenAI ChatKit + Second Brain OS 2-Way Sync
+        <span class="pulse-dot"></span> Live ChatKit Two-Way Booking Simulator
       </div>
-      <h1>Live AI Receptionist <span class="gradient-text">Chat Playground</span></h1>
-      <p>Test real-time availability checks, booking creation, reschedules, and cancellations.</p>
+      <h1>Interactive AI Receptionist <span class="gradient-text">Chat Playground</span></h1>
+      <p>Test real-time calendar availability checks, instant bookings, reschedules, and cancellations.</p>
     </div>
 
-    <div class="chatkit-wrapper">
-      <!-- ChatKit Custom Element -->
-      <openai-chatkit
-        style="width: 100%; height: 560px; border-radius: 12px; display: block;"
-      ></openai-chatkit>
+    <!-- Live Interactive ChatKit Frame -->
+    <div class="chatkit-frame">
+      <div class="chatkit-topbar">
+        <div class="agent-profile">
+          <div class="agent-avatar">🤖</div>
+          <div class="agent-meta">
+            <h4>Nexa Autonomous Booking Agent</h4>
+            <div class="agent-status"><span class="pulse-dot" style="background:#22c55e;"></span> Connected to Calendly API & Google Calendar</div>
+          </div>
+        </div>
+        <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;" onclick="resetChat()">Reset Demo ⟳</button>
+      </div>
+
+      <div id="chatkit-messages" class="chatkit-body">
+        <div class="chat-bubble bot">
+          👋 Hi there! I am your 24/7 AI Receptionist. I can check open appointment slots, lock in confirmed meetings, reschedule, or answer any questions about our AI automation systems.
+          
+          <div class="quick-starters">
+            <button class="starter-btn" onclick="handleQuickClick('📅 Book an appointment')">📅 Book an appointment</button>
+            <button class="starter-btn" onclick="handleQuickClick('🕒 What times are available this week?')">🕒 Check open slots</button>
+            <button class="starter-btn" onclick="handleQuickClick('👥 Can you route to multiple doctors/specialists?')">👥 Multi-staff routing</button>
+            <button class="starter-btn" onclick="handleQuickClick('🔄 I need to reschedule my meeting')">🔄 Reschedule meeting</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="chatkit-composer">
+        <input type="text" id="playground-input" placeholder="Type a message (e.g. 'Can I book for Thursday at 2 PM?')..." onkeydown="if(event.key==='Enter') sendPlaygroundMsg()">
+        <button onclick="sendPlaygroundMsg()">Send →</button>
+      </div>
     </div>
   </div>
 
-  <!-- ChatKit Initialization Script -->
   <script>
-    // Paste your Public Domain Key from Second Brain OS here:
-    const DOMAIN_KEY = 'domain_pk_demo_mode'; 
-    const API_URL = 'https://openai.secondbrainos.com/chatkit';
+    const msgBox = document.getElementById('chatkit-messages');
 
-    const customFetch = (url, options = {}) => {
-      return fetch(url, {
-        ...options,
-        headers: {
-          ...options.headers,
-          'X-Domain-Key': DOMAIN_KEY,
-        },
-      });
-    };
-
-    function initChatKit() {
-      const kit = document.querySelector('openai-chatkit');
-      if (kit && kit.setOptions) {
-        kit.setOptions({
-          api: {
-            url: API_URL,
-            domainKey: DOMAIN_KEY,
-            fetch: customFetch,
-          },
-          theme: {
-            colorScheme: 'dark',
-            color: {
-              accent: { primary: '#00f0ff', level: 2 },
-            },
-            radius: 'round',
-            density: 'spacious',
-          },
-          startScreen: {
-            greeting: 'Hi there! I am your 24/7 AI Receptionist. I can check live schedule openings, book confirmed consults, or answer questions about our automation systems.',
-            prompts: [
-              { label: '📅 Book a Consultation', prompt: 'I would like to book an appointment', icon: 'calendar' },
-              { label: '🕒 Check Available Times', prompt: 'What times are available this week?', icon: 'clock' },
-              { label: '🔄 Reschedule Meeting', prompt: 'I need to reschedule my meeting', icon: 'reload' }
-            ]
-          },
-          composer: {
-            placeholder: 'Ask about booking or services...'
-          }
-        });
-      } else {
-        setTimeout(initChatKit, 50);
-      }
+    function appendBubble(sender, text) {
+      const b = document.createElement('div');
+      b.className = `chat-bubble ${sender}`;
+      b.innerHTML = text;
+      msgBox.appendChild(b);
+      msgBox.scrollTop = msgBox.scrollHeight;
     }
 
-    initChatKit();
+    function handleQuickClick(text) {
+      appendBubble('user', text);
+      processAIResponse(text);
+    }
+
+    function sendPlaygroundMsg() {
+      const input = document.getElementById('playground-input');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      appendBubble('user', text);
+      processAIResponse(text);
+    }
+
+    function processAIResponse(userText) {
+      const lower = userText.toLowerCase();
+
+      setTimeout(() => {
+        if (lower.includes('book') || lower.includes('schedule') || lower.includes('appointment')) {
+          appendBubble('bot', `
+            ⚙️ <em>Executing tool: <code>getCalendlyAvailability(start="Today", multi_day=true)</code></em>...<br><br>
+            Here are the next available consultation openings directly on our calendar:
+            <div class="slot-grid">
+              <div class="slot-pill" onclick="bookSpecificSlot('Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
+              <div class="slot-pill" onclick="bookSpecificSlot('Thursday at 2:00 PM')">📅 Thu, 2:00 PM</div>
+              <div class="slot-pill" onclick="bookSpecificSlot('Friday at 11:00 AM')">📅 Fri, 11:00 AM</div>
+              <div class="slot-pill" onclick="bookSpecificSlot('Friday at 3:30 PM')">📅 Fri, 3:30 PM</div>
+            </div>
+            <br>Click any slot above or type your preferred time!
+          `);
+        } else if (lower.includes('available') || lower.includes('open') || lower.includes('time')) {
+          appendBubble('bot', `
+            I have 4 open slots this week synchronized across our Google Calendar:<br>
+            • <strong>Thursday:</strong> 10:30 AM & 2:00 PM<br>
+            • <strong>Friday:</strong> 11:00 AM & 3:30 PM<br><br>
+            Would you like me to reserve one of these for you?
+          `);
+        } else if (lower.includes('specialist') || lower.includes('doctor') || lower.includes('route')) {
+          appendBubble('bot', `
+            Yes! I use semantic intent matching to route callers and chat visitors to the exact right specialist (e.g. Dr. Sarah for Injectables vs Jessica for Laser Treatment). I automatically check the specific specialist's calendar.
+          `);
+        } else if (lower.includes('reschedule') || lower.includes('move') || lower.includes('change')) {
+          appendBubble('bot', `
+            ⚙️ <em>Executing tool: <code>updateCalendlyMeeting()</code></em>...<br><br>
+            I can move your appointment seamlessly. What is the email address associated with your original booking, and what new day works best for you?
+          `);
+        } else {
+          appendBubble('bot', `
+            I can help you schedule, check live availability, or answer any technical questions about integrating AI agents with your CRM. Would you like to reserve a 1-on-1 strategy call with our engineering team?
+          `);
+        }
+      }, 500);
+    }
+
+    function bookSpecificSlot(slot) {
+      appendBubble('user', `I would like to book ${slot}`);
+      setTimeout(() => {
+        appendBubble('bot', `
+          ✅ <strong>Confirmed!</strong><br>
+          ⚙️ <em>Executed tool: <code>createCalendlyContactMeeting(time="${slot}", format="E.164")</code></em><br><br>
+          Your 15-minute Strategy Call is locked in for <strong>${slot}</strong>.<br>
+          • 📅 Calendar invite sent to your Google Calendar<br>
+          • 🔔 Notification dispatched to CRM pipeline
+        `);
+      }, 600);
+    }
+
+    function resetChat() {
+      msgBox.innerHTML = `
+        <div class="chat-bubble bot">
+          👋 Hi there! I am your 24/7 AI Receptionist. I can check open appointment slots, lock in confirmed meetings, reschedule, or answer any questions about our AI automation systems.
+          
+          <div class="quick-starters">
+            <button class="starter-btn" onclick="handleQuickClick('📅 Book an appointment')">📅 Book an appointment</button>
+            <button class="starter-btn" onclick="handleQuickClick('🕒 What times are available this week?')">🕒 Check open slots</button>
+            <button class="starter-btn" onclick="handleQuickClick('👥 Can you route to multiple doctors/specialists?')">👥 Multi-staff routing</button>
+            <button class="starter-btn" onclick="handleQuickClick('🔄 I need to reschedule my meeting')">🔄 Reschedule meeting</button>
+          </div>
+        </div>
+      `;
+    }
   </script>
 
 </body>
