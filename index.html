@@ -596,14 +596,41 @@
             <label class="custom-checkbox-label">
               <input type="checkbox" id="no-website-checkbox" onchange="toggleNoWebsiteFields()">
               <span class="custom-checkbox-mark"></span>
-              <span>We don't have a live website yet (I'll describe our services manually)</span>
+              <span>We don't have a live website yet (I'll provide our services, charges & details manually)</span>
             </label>
           </div>
 
-          <!-- Dynamic Textarea for Manual Description -->
-          <div class="form-group manual-desc-group" id="manual-desc-group" style="display: none;">
-            <label for="demo-description">Brief Description of Services, Specialists & Pricing:</label>
-            <textarea id="demo-description" name="business_description" rows="3" placeholder="e.g. We offer Botox ($12/unit), lip fillers, and laser facials. We have 2 injectors and want the AI to answer pricing questions and book consultations directly on our schedule."></textarea>
+          <!-- Dynamic Structured Intake for Businesses Without a Website -->
+          <div class="manual-intake-card" id="manual-desc-group" style="display: none; background: rgba(0, 240, 255, 0.04); border: 1px dashed rgba(0, 240, 255, 0.3); border-radius: 16px; padding: 22px; margin-bottom: 24px;">
+            <div style="font-size: 0.9rem; font-weight: 700; color: var(--cyan); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+              <span>📝</span> Business Services & Pricing Details (To Feed Your AI's Brain)
+            </div>
+
+            <div class="form-group">
+              <label for="demo-services">Services & Pricing / Charges <span class="req">* (Essential for Salon, Spa, Clinic or Practice)</span></label>
+              <textarea id="demo-services" name="services_and_pricing" rows="3" placeholder="List your key services and their exact charges/prices, for example:
+• Botox: $12 - $15 / unit
+• Dermal Lip Fillers: $650 / syringe
+• Men's Haircut & Fade: $45 | Beard Sculpt: $25
+• Initial Consultation: 100% Free"></textarea>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="demo-staff">Specialists / Staff Names <span class="opt">(Optional)</span></label>
+                <input type="text" id="demo-staff" name="specialist_names" placeholder="e.g. Dr. Sarah (Injectables), Jax (Barber)">
+              </div>
+
+              <div class="form-group">
+                <label for="demo-location">City / Location <span class="opt">(For AI caller location context)</span></label>
+                <input type="text" id="demo-location" name="business_location" placeholder="e.g. Miami, FL or Manchester, UK">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="demo-hours">Working Days & Hours <span class="opt">(e.g. Mon–Sat 9 AM – 7 PM)</span></label>
+              <input type="text" id="demo-hours" name="operating_hours" placeholder="e.g. Mon–Fri 9am–6pm, Sat 10am–4pm, Closed Sunday">
+            </div>
           </div>
 
           <div class="form-grid-2">

@@ -38,15 +38,15 @@ function toggleNoWebsiteFields() {
   const checkbox = document.getElementById('no-website-checkbox');
   const descGroup = document.getElementById('manual-desc-group');
   const websiteInput = document.getElementById('demo-website');
-  const descTextarea = document.getElementById('demo-description');
+  const servicesTextarea = document.getElementById('demo-services');
 
   if (checkbox && checkbox.checked) {
     descGroup.style.display = 'block';
     if (websiteInput) websiteInput.value = '';
-    if (descTextarea) descTextarea.required = true;
+    if (servicesTextarea) servicesTextarea.required = true;
   } else {
     descGroup.style.display = 'none';
-    if (descTextarea) descTextarea.required = false;
+    if (servicesTextarea) servicesTextarea.required = false;
   }
 }
 
@@ -61,7 +61,11 @@ async function handleCustomDemoSubmit(e) {
   const business = document.getElementById('demo-business').value.trim();
   const niche = document.getElementById('demo-niche').value;
   const website = document.getElementById('demo-website').value.trim();
-  const description = document.getElementById('demo-description')?.value.trim() || '';
+  const isNoWebsite = document.getElementById('no-website-checkbox')?.checked;
+  const servicesAndPricing = document.getElementById('demo-services')?.value.trim() || '';
+  const specialistNames = document.getElementById('demo-staff')?.value.trim() || '';
+  const businessLocation = document.getElementById('demo-location')?.value.trim() || '';
+  const operatingHours = document.getElementById('demo-hours')?.value.trim() || '';
   const email = document.getElementById('demo-email').value.trim();
   const phone = document.getElementById('demo-phone').value.trim();
   const notes = document.getElementById('demo-notes')?.value.trim() || '';
@@ -74,8 +78,12 @@ async function handleCustomDemoSubmit(e) {
     full_name: name,
     business_name: business,
     industry_niche: niche,
-    website_url: website || 'No website provided (Manual details)',
-    manual_services_description: description || 'N/A',
+    has_website: !isNoWebsite && website ? 'YES' : 'NO (Manual Details Provided)',
+    website_url: website || 'No live website provided',
+    services_and_charges: servicesAndPricing || 'Scrape from website URL',
+    specialists_and_staff: specialistNames || 'N/A',
+    location_city: businessLocation || 'N/A',
+    operating_hours: operatingHours || 'N/A',
     business_email: email,
     phone_number: phone,
     special_requests: notes || 'N/A',
