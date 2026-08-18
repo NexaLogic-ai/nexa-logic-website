@@ -3,24 +3,35 @@
 // Formspree Lead Notification Webhook Endpoint
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xrpzaqpa';
 
-// 0. Mobile Navigation Drawer Handlers
-function toggleMobileMenu() {
-  const btn = document.getElementById('mobile-menu-btn');
-  const drawer = document.getElementById('mobile-nav-drawer');
-  if (btn && drawer) {
-    btn.classList.toggle('active');
-    drawer.classList.toggle('active');
-  }
-}
+// 0. Dynamic Island Capsule Scroll Spy & Navigation
+document.addEventListener('DOMContentLoaded', () => {
+  const sections = document.querySelectorAll('header#hero, section#solutions, section#demo, section#process, section#calculator, section#booking');
+  const islandItems = document.querySelectorAll('.island-item');
 
-function closeMobileMenu() {
-  const btn = document.getElementById('mobile-menu-btn');
-  const drawer = document.getElementById('mobile-nav-drawer');
-  if (btn && drawer) {
-    btn.classList.remove('active');
-    drawer.classList.remove('active');
+  function updateActiveIslandItem() {
+    let current = 'hero';
+    const scrollPosition = window.scrollY + 220;
+
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    islandItems.forEach(item => {
+      item.classList.remove('active');
+      const href = item.getAttribute('href');
+      if (href === `#${current}`) {
+        item.classList.add('active');
+      }
+    });
   }
-}
+
+  window.addEventListener('scroll', updateActiveIslandItem, { passive: true });
+  updateActiveIslandItem();
+});
 
 // 1. Switch Showroom Tabs (Voice, Chat, Routing, Reviews) with Touch & Auto-Scroll
 const DEMO_ORDER = ['voice', 'chat', 'routing', 'reviews'];
