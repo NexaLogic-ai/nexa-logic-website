@@ -3,31 +3,100 @@
 // Formspree Lead Notification Webhook Endpoint
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xrpzaqpa';
 
-// 1. Switch Showroom Tabs (Voice, Chat, Routing, Reviews)
+// 0. Mobile Navigation Drawer Handlers
+function toggleMobileMenu() {
+  const btn = document.getElementById('mobile-menu-btn');
+  const drawer = document.getElementById('mobile-nav-drawer');
+  if (btn && drawer) {
+    btn.classList.toggle('active');
+    drawer.classList.toggle('active');
+  }
+}
+
+function closeMobileMenu() {
+  const btn = document.getElementById('mobile-menu-btn');
+  const drawer = document.getElementById('mobile-nav-drawer');
+  if (btn && drawer) {
+    btn.classList.remove('active');
+    drawer.classList.remove('active');
+  }
+}
+
+// 1. Switch Showroom Tabs (Voice, Chat, Routing, Reviews) with Touch & Auto-Scroll
+const DEMO_ORDER = ['voice', 'chat', 'routing', 'reviews'];
+let currentDemoIndex = 0;
+
 function switchDemo(type) {
   const tabs = document.querySelectorAll('.demo-tab');
   const views = document.querySelectorAll('.demo-view');
+  const dots = document.querySelectorAll('.m-dot');
 
   tabs.forEach(t => t.classList.remove('active'));
   views.forEach(v => v.classList.remove('active'));
+  dots.forEach(d => d.classList.remove('active'));
+
+  const index = DEMO_ORDER.indexOf(type);
+  if (index !== -1) {
+    currentDemoIndex = index;
+    if (dots[index]) dots[index].classList.add('active');
+  }
 
   if (type === 'voice') {
-    tabs[0].classList.add('active');
-    document.getElementById('voice-demo-view').classList.add('active');
+    tabs[0]?.classList.add('active');
+    document.getElementById('voice-demo-view')?.classList.add('active');
+    tabs[0]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   } else if (type === 'chat') {
-    tabs[1].classList.add('active');
-    document.getElementById('chat-demo-view').classList.add('active');
+    tabs[1]?.classList.add('active');
+    document.getElementById('chat-demo-view')?.classList.add('active');
+    tabs[1]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   } else if (type === 'routing') {
-    tabs[2].classList.add('active');
-    document.getElementById('routing-demo-view').classList.add('active');
-    if (!document.getElementById('routing-matrix-card').innerHTML.trim()) {
+    tabs[2]?.classList.add('active');
+    document.getElementById('routing-demo-view')?.classList.add('active');
+    tabs[2]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    if (!document.getElementById('routing-matrix-card')?.innerHTML.trim()) {
       selectRoutingNiche('medspa');
     }
   } else if (type === 'reviews') {
-    tabs[3].classList.add('active');
-    document.getElementById('reviews-demo-view').classList.add('active');
+    tabs[3]?.classList.add('active');
+    document.getElementById('reviews-demo-view')?.classList.add('active');
+    tabs[3]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }
 }
+
+// Mobile Touch-Swipe Gesture Engine for Showroom
+document.addEventListener('DOMContentLoaded', () => {
+  const swipeCard = document.getElementById('demo-swipe-card');
+  if (!swipeCard) return;
+
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  swipeCard.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  swipeCard.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleCardSwipe();
+  }, { passive: true });
+
+  function handleCardSwipe() {
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) < 50) return; // Ignore small accidental taps
+
+    if (diff > 50) {
+      // Swiped Left -> Go to Next Demo
+      if (currentDemoIndex < DEMO_ORDER.length - 1) {
+        switchDemo(DEMO_ORDER[currentDemoIndex + 1]);
+      }
+    } else if (diff < -50) {
+      // Swiped Right -> Go to Prev Demo
+      if (currentDemoIndex > 0) {
+        switchDemo(DEMO_ORDER[currentDemoIndex - 1]);
+      }
+    }
+  }
+});
 
 // 2. Audio & Speech Synthesis Voice Engine
 let isCallActive = false;

@@ -34,7 +34,7 @@
         <span class="logo-text">Nexa<span class="logo-accent">Logic</span></span>
       </a>
 
-      <div class="nav-links">
+      <div class="nav-links desktop-nav">
         <a href="#solutions">Solutions</a>
         <a href="#demo">AI Showroom</a>
         <a href="#process">How It Works</a>
@@ -42,7 +42,26 @@
       </div>
 
       <div class="nav-actions">
-        <a href="#booking" class="btn btn-primary btn-glow">Book Strategy Call →</a>
+        <a href="#booking" class="btn btn-primary btn-glow desktop-cta">Book Strategy Call →</a>
+        <button id="mobile-menu-btn" class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer Overlay -->
+    <div id="mobile-nav-drawer" class="mobile-nav-drawer">
+      <div class="mobile-nav-links">
+        <a href="#solutions" onclick="closeMobileMenu()">Solutions</a>
+        <a href="#demo" onclick="closeMobileMenu()">AI Showroom</a>
+        <a href="#process" onclick="closeMobileMenu()">How It Works</a>
+        <a href="#calculator" onclick="closeMobileMenu()">ROI Calculator</a>
+        <a href="privacy.html" onclick="closeMobileMenu()">Privacy Policy</a>
+      </div>
+      <div class="mobile-nav-footer">
+        <a href="#booking" class="btn btn-primary btn-glow" onclick="closeMobileMenu()" style="width: 100%; text-align: center;">Book Strategy Call →</a>
       </div>
     </div>
   </nav>
@@ -233,6 +252,18 @@
           <p>Lightning-fast, dark-mode landing pages and client dashboards designed strictly to convert cold traffic into qualified booked calls.</p>
         </div>
 
+        <!-- Card 5: Voice Cloning -->
+        <div class="bento-card bento-wide" style="border-color: rgba(0, 240, 255, 0.3); background: linear-gradient(135deg, rgba(14, 22, 32, 0.9) 0%, rgba(18, 28, 42, 0.9) 100%);">
+          <div class="bento-tag" style="background: rgba(0, 240, 255, 0.15); color: var(--cyan);">🧬 Proprietary Tech</div>
+          <h3>Hyper-Realistic AI Voice Cloning & Dialect Localization</h3>
+          <p>We clone the voice of the founder, top doctor, or head sales representative with 99.8% vocal fidelity. Your AI agents speak in your exact tone, cadence, and local regional accents—creating instant caller trust.</p>
+          <div class="feature-pills">
+            <span>30-Second Audio Cloning</span>
+            <span>Multilingual Dialect Matching</span>
+            <span>Emotion & Inflection Control</span>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -248,14 +279,27 @@
       <h2 class="section-title">Test Our Autonomous AI Workforce <span class="gradient-text">In Action</span></h2>
       <p class="section-subtitle">Experience live simulations of our 4 core agency systems: Voice Phone Receptionist, 2-Way Web ChatKit Bot, Multi-Staff Router, and 5-Star Review Collector.</p>
 
-      <div class="demo-widget-card">
+      <!-- Mobile Swipe Guide Banner -->
+      <div class="mobile-swipe-guide">
+        <span>👈 Swipe tabs to test all 4 demos 👉</span>
+      </div>
+
+      <div class="demo-widget-card" id="demo-swipe-card">
         
         <!-- 4 Switchable Showroom Tabs -->
-        <div class="demo-tabs">
-          <button class="demo-tab active" onclick="switchDemo('voice')">🎙️ Voice Receptionist</button>
-          <button class="demo-tab" onclick="switchDemo('chat')">💬 Web ChatKit Bot</button>
-          <button class="demo-tab" onclick="switchDemo('routing')">👥 Multi-Staff Router</button>
-          <button class="demo-tab" onclick="switchDemo('reviews')">⭐ Review Collector</button>
+        <div class="demo-tabs" id="demo-tabs-container">
+          <button class="demo-tab active" id="tab-btn-voice" onclick="switchDemo('voice')">🎙️ Voice Receptionist</button>
+          <button class="demo-tab" id="tab-btn-chat" onclick="switchDemo('chat')">💬 Web ChatKit Bot</button>
+          <button class="demo-tab" id="tab-btn-routing" onclick="switchDemo('routing')">👥 Multi-Staff Router</button>
+          <button class="demo-tab" id="tab-btn-reviews" onclick="switchDemo('reviews')">⭐ Review Collector</button>
+        </div>
+
+        <!-- Mobile Demo Pagination Dots -->
+        <div class="mobile-demo-dots" id="mobile-demo-dots">
+          <span class="m-dot active" onclick="switchDemo('voice')"></span>
+          <span class="m-dot" onclick="switchDemo('chat')"></span>
+          <span class="m-dot" onclick="switchDemo('routing')"></span>
+          <span class="m-dot" onclick="switchDemo('reviews')"></span>
         </div>
 
         <!-- 1. Voice Demo View -->
