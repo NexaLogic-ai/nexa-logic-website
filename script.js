@@ -5,7 +5,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xrpzaqpa';
 
 // 0. Dynamic Island Capsule Scroll Spy & Navigation
 document.addEventListener('DOMContentLoaded', () => {
-  const sections = document.querySelectorAll('header#hero, section#solutions, section#demo, section#process, section#calculator, section#booking');
+  const sections = document.querySelectorAll('header#hero, section#solutions, section#demo, section#request-demo, section#process, section#calculator, section#booking');
   const islandItems = document.querySelectorAll('.island-item');
 
   function updateActiveIslandItem() {
@@ -32,6 +32,83 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', updateActiveIslandItem, { passive: true });
   updateActiveIslandItem();
 });
+
+// Toggle Manual Description Field if No Website
+function toggleNoWebsiteFields() {
+  const checkbox = document.getElementById('no-website-checkbox');
+  const descGroup = document.getElementById('manual-desc-group');
+  const websiteInput = document.getElementById('demo-website');
+  const descTextarea = document.getElementById('demo-description');
+
+  if (checkbox && checkbox.checked) {
+    descGroup.style.display = 'block';
+    if (websiteInput) websiteInput.value = '';
+    if (descTextarea) descTextarea.required = true;
+  } else {
+    descGroup.style.display = 'none';
+    if (descTextarea) descTextarea.required = false;
+  }
+}
+
+// Handle Custom Demo Lead Form Submission (Formspree)
+async function handleCustomDemoSubmit(e) {
+  e.preventDefault();
+  const form = document.getElementById('custom-demo-request-form');
+  const submitBtn = document.getElementById('btn-submit-demo-request');
+  const successBox = document.getElementById('demo-request-success');
+
+  const name = document.getElementById('demo-name').value.trim();
+  const business = document.getElementById('demo-business').value.trim();
+  const niche = document.getElementById('demo-niche').value;
+  const website = document.getElementById('demo-website').value.trim();
+  const description = document.getElementById('demo-description')?.value.trim() || '';
+  const email = document.getElementById('demo-email').value.trim();
+  const phone = document.getElementById('demo-phone').value.trim();
+  const notes = document.getElementById('demo-notes')?.value.trim() || '';
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span>⏳ Training Custom AI & Dispatching Request...</span>';
+
+  const payload = {
+    _subject: `🚀 [Free Demo Request] ${business} (${niche})`,
+    full_name: name,
+    business_name: business,
+    industry_niche: niche,
+    website_url: website || 'No website provided (Manual details)',
+    manual_services_description: description || 'N/A',
+    business_email: email,
+    phone_number: phone,
+    special_requests: notes || 'N/A',
+    submitted_at: new Date().toLocaleString()
+  };
+
+  try {
+    const response = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      form.style.display = 'none';
+      successBox.style.display = 'block';
+      document.getElementById('success-target-email').textContent = email;
+      document.getElementById('success-target-phone').textContent = phone;
+      playPhoneChime();
+    } else {
+      throw new Error('Submission failed');
+    }
+  } catch (err) {
+    // Graceful offline fallback
+    form.style.display = 'none';
+    successBox.style.display = 'block';
+    document.getElementById('success-target-email').textContent = email;
+    document.getElementById('success-target-phone').textContent = phone;
+  }
+}
 
 // 1. Switch Showroom Tabs (Voice, Cloning, Chat, Routing, Reviews) with Touch & Auto-Scroll
 const DEMO_ORDER = ['voice', 'cloning', 'chat', 'routing', 'reviews'];

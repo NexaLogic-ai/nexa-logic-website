@@ -56,6 +56,12 @@
           </div>
         </a>
 
+        <a href="#request-demo" class="island-item" data-tooltip="Free Custom Demo" aria-label="Free Demo">
+          <div class="island-icon-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+          </div>
+        </a>
+
         <a href="#process" class="island-item" data-tooltip="How It Works" aria-label="How It Works">
           <div class="island-icon-box">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M6 9v3a3 3 0 0 0 3 3h6"/></svg>
@@ -105,10 +111,9 @@
         </p>
 
         <div class="hero-cta-group">
-          <a href="#booking" class="btn btn-primary btn-large btn-glow">Schedule Your 1-on-1 AI Strategy Call →</a>
-          <a href="#demo" class="btn btn-secondary btn-large">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            Try Live Interactive Demo
+          <a href="#booking" class="btn btn-primary btn-large btn-glow">Schedule 1-on-1 Strategy Call →</a>
+          <a href="#request-demo" class="btn btn-secondary btn-large">
+            <span>🎁 Get Free Custom Demo in 24h</span>
           </a>
         </div>
 
@@ -530,6 +535,125 @@
         </div>
 
       </div>
+    </div>
+  </section>
+
+  <!-- Free Custom AI Voice Receptionist Demo Request (High-Converting Lead Magnet) -->
+  <section id="request-demo" class="request-demo-section">
+    <div class="container">
+      
+      <div class="section-badge cyan-badge">
+        <span class="cyan-dot"></span>
+        <span>🎁 100% Free • Zero Obligation</span>
+      </div>
+
+      <h2 class="section-title">Get a Custom AI Voice Receptionist <span class="gradient-text">Trained on Your Business</span></h2>
+      <p class="section-subtitle">Submit your website or service details below. Our AI engineers will train a bespoke conversational receptionist on your exact offerings and deliver a private live audio test link in under 24 hours.</p>
+
+      <div class="demo-form-card">
+        
+        <form id="custom-demo-request-form" onsubmit="handleCustomDemoSubmit(event)">
+          
+          <div class="form-grid-2">
+            
+            <div class="form-group">
+              <label for="demo-name">Your Full Name <span class="req">*</span></label>
+              <input type="text" id="demo-name" name="name" placeholder="e.g. Dr. Sarah Jenkins" required>
+            </div>
+
+            <div class="form-group">
+              <label for="demo-business">Business / Clinic Name <span class="req">*</span></label>
+              <input type="text" id="demo-business" name="business_name" placeholder="e.g. Radiance Aesthetics Clinic" required>
+            </div>
+
+          </div>
+
+          <div class="form-grid-2">
+            
+            <div class="form-group">
+              <label for="demo-niche">Business Industry / Niche <span class="req">*</span></label>
+              <select id="demo-niche" name="niche" required>
+                <option value="" disabled selected>Select your industry...</option>
+                <option value="Med Spa / Aesthetics">💉 Med Spa / Aesthetics Clinic</option>
+                <option value="Dental / Orthodontics">🦷 Dental / Orthodontics Practice</option>
+                <option value="Law Firm / Legal Intake">⚖️ Law Firm / Legal Counsel</option>
+                <option value="Barbershop / Salon">💈 Barbershop / Luxury Salon</option>
+                <option value="Real Estate Brokerage">🏡 Real Estate Brokerage</option>
+                <option value="HVAC / Home Services">🔧 HVAC / Home Services</option>
+                <option value="Other High-Ticket Business">⚡ Other Service Business</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="demo-website">Business Website URL <span class="opt">(We'll scrape this for your AI's brain)</span></label>
+              <input type="url" id="demo-website" name="website" placeholder="https://yourbusiness.com">
+            </div>
+
+          </div>
+
+          <!-- Checkbox for No Website -->
+          <div class="no-website-toggle-box">
+            <label class="custom-checkbox-label">
+              <input type="checkbox" id="no-website-checkbox" onchange="toggleNoWebsiteFields()">
+              <span class="custom-checkbox-mark"></span>
+              <span>We don't have a live website yet (I'll describe our services manually)</span>
+            </label>
+          </div>
+
+          <!-- Dynamic Textarea for Manual Description -->
+          <div class="form-group manual-desc-group" id="manual-desc-group" style="display: none;">
+            <label for="demo-description">Brief Description of Services, Specialists & Pricing:</label>
+            <textarea id="demo-description" name="business_description" rows="3" placeholder="e.g. We offer Botox ($12/unit), lip fillers, and laser facials. We have 2 injectors and want the AI to answer pricing questions and book consultations directly on our schedule."></textarea>
+          </div>
+
+          <div class="form-grid-2">
+            
+            <div class="form-group">
+              <label for="demo-email">Business Email <span class="req">* (Where to send your demo link)</span></label>
+              <input type="email" id="demo-email" name="email" placeholder="sarah@radianceclinic.com" required>
+            </div>
+
+            <div class="form-group">
+              <label for="demo-phone">Phone / WhatsApp Number <span class="req">* (For SMS delivery)</span></label>
+              <input type="tel" id="demo-phone" name="phone" placeholder="+1 (555) 000-0000" required>
+            </div>
+
+          </div>
+
+          <div class="form-group">
+            <label for="demo-notes">Specific Requests / Questions for Your Demo <span class="opt">(Optional)</span></label>
+            <input type="text" id="demo-notes" name="special_instructions" placeholder="e.g. Make sure it quotes Dr. Sarah and offers Thursday 10:30 AM appointment slots">
+          </div>
+
+          <button type="submit" id="btn-submit-demo-request" class="btn btn-primary btn-glow btn-block" style="margin-top: 10px; width: 100%; padding: 16px; font-size: 1.05rem;">
+            <span>🚀 Build My Free Custom AI Voice Receptionist Demo (Delivered in &lt; 24h)</span>
+          </button>
+
+          <div class="form-security-badges">
+            <span>🔒 100% Free Demo</span>
+            <span>⏱️ Delivered in &lt; 24h</span>
+            <span>💳 No Credit Card Required</span>
+            <span>📱 SMS & Email Delivery</span>
+          </div>
+
+        </form>
+
+        <!-- Success Confirmation State (Hidden initially) -->
+        <div id="demo-request-success" class="demo-success-box" style="display: none;">
+          <div class="success-icon-badge">🎉</div>
+          <h3>Custom Demo Request Received!</h3>
+          <p style="color: var(--text-muted); margin: 8px 0 16px;">Our engineering team is extracting your business details and training your bespoke AI Voice Receptionist right now.</p>
+          <div class="success-delivery-card">
+            <div><strong>Deliver To Email:</strong> <span id="success-target-email" style="color: var(--cyan);"></span></div>
+            <div><strong>SMS Audio Link:</strong> <span id="success-target-phone" style="color: var(--emerald);"></span></div>
+            <div><strong>Turnaround Time:</strong> &lt; 24 Hours</div>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 18px;">Want to fast-track your setup or discuss full phone system deployment today?</p>
+          <a href="#booking" class="btn btn-primary btn-glow" style="margin-top: 8px;">Book 15-Minute Strategy Walkthrough →</a>
+        </div>
+
+      </div>
+
     </div>
   </section>
 
