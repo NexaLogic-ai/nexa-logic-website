@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
   updateActiveIslandItem();
 });
 
-// 1. Switch Showroom Tabs (Voice, Chat, Routing, Reviews) with Touch & Auto-Scroll
-const DEMO_ORDER = ['voice', 'chat', 'routing', 'reviews'];
+// 1. Switch Showroom Tabs (Voice, Cloning, Chat, Routing, Reviews) with Touch & Auto-Scroll
+const DEMO_ORDER = ['voice', 'cloning', 'chat', 'routing', 'reviews'];
 let currentDemoIndex = 0;
 
 function switchDemo(type) {
@@ -56,21 +56,142 @@ function switchDemo(type) {
     tabs[0]?.classList.add('active');
     document.getElementById('voice-demo-view')?.classList.add('active');
     tabs[0]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-  } else if (type === 'chat') {
+  } else if (type === 'cloning') {
     tabs[1]?.classList.add('active');
-    document.getElementById('chat-demo-view')?.classList.add('active');
+    document.getElementById('cloning-demo-view')?.classList.add('active');
     tabs[1]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-  } else if (type === 'routing') {
+  } else if (type === 'chat') {
     tabs[2]?.classList.add('active');
-    document.getElementById('routing-demo-view')?.classList.add('active');
+    document.getElementById('chat-demo-view')?.classList.add('active');
     tabs[2]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  } else if (type === 'routing') {
+    tabs[3]?.classList.add('active');
+    document.getElementById('routing-demo-view')?.classList.add('active');
+    tabs[3]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
     if (!document.getElementById('routing-matrix-card')?.innerHTML.trim()) {
       selectRoutingNiche('medspa');
     }
   } else if (type === 'reviews') {
-    tabs[3]?.classList.add('active');
+    tabs[4]?.classList.add('active');
     document.getElementById('reviews-demo-view')?.classList.add('active');
-    tabs[3]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    tabs[4]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+}
+
+// Voice Cloning Profiles Data & Engine
+const CLONE_PROFILES = {
+  sarah: {
+    name: 'Dr. Sarah Jenkins — Autonomous AI Voice Clone',
+    desc: 'Trained on 60s phone recording • Warm, reassuring aesthetic clinical cadence',
+    speaker: 'Dr. Sarah (AI Clone):',
+    script: 'Hi there! This is Dr. Sarah from Radiance Aesthetics. I am in a treatment room right now, but I can check my live calendar, answer your questions about Botox, and book you directly into my schedule. What day works best for you?',
+    sample: 'Hey everyone, this is Dr. Sarah Jenkins. Welcome to Radiance Aesthetics. Here is a quick 30-second audio sample of my speaking voice from our latest clinic consultation.',
+    pitch: 1.15,
+    rate: 1.02
+  },
+  marcus: {
+    name: 'Marcus Vance, Esq. — Autonomous AI Voice Clone',
+    desc: 'Trained on podcast interview • Authoritative, articulate senior legal partner cadence',
+    speaker: 'Marcus Vance, Esq. (AI Clone):',
+    script: 'Good afternoon. This is Marcus Vance with Vance & Associates. I am currently in court, but our AI intake system has full access to my consultation schedule. Are you calling regarding a commercial contract dispute or corporate counsel?',
+    sample: 'Good day, my name is Marcus Vance, managing partner at Vance & Associates Legal. This is my direct spoken reference sample regarding our corporate advisory practice.',
+    pitch: 0.9,
+    rate: 0.98
+  },
+  jax: {
+    name: 'Jax Reynolds — Autonomous AI Voice Clone',
+    desc: 'Trained on Instagram Reel • High-energy, warm barbershop owner cadence',
+    speaker: 'Jax Reynolds (AI Clone):',
+    script: "Yo! What's up, it's Jax from Crown & Blade Barbershop! I'm behind the chair with clippers right now, but you can book a fresh fade or beard sculpt with me or any of my barbers this Thursday. You want morning or afternoon?",
+    sample: "What's going on guys, it's Jax from Crown & Blade. Testing 1-2-3 for our shop voice cloning engine.",
+    pitch: 1.05,
+    rate: 1.1
+  }
+};
+
+let currentCloneId = 'sarah';
+
+function selectCloneProfile(id) {
+  currentCloneId = id;
+  const cards = document.querySelectorAll('.clone-profile-card');
+  cards.forEach(c => c.classList.remove('active'));
+  document.getElementById(`clone-card-${id}`)?.classList.add('active');
+
+  const p = CLONE_PROFILES[id];
+  if (!p) return;
+
+  document.getElementById('clone-active-name').textContent = p.name;
+  document.getElementById('clone-active-desc').textContent = p.desc;
+  document.getElementById('clone-speaker-tag').textContent = p.speaker;
+  document.getElementById('clone-speech-text').textContent = p.script;
+}
+
+function playActiveVoiceClone() {
+  const p = CLONE_PROFILES[currentCloneId];
+  if (!p) return;
+
+  const waveform = document.getElementById('clone-waveform-bars');
+  waveform?.classList.add('playing');
+
+  playPhoneChime();
+
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(p.script);
+    utterance.pitch = p.pitch;
+    utterance.rate = p.rate;
+
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      if (currentCloneId === 'sarah') {
+        utterance.voice = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Zira')) || voices[0];
+      } else if (currentCloneId === 'marcus') {
+        utterance.voice = voices.find(v => v.name.includes('Male') || v.name.includes('David') || v.name.includes('George')) || voices[0];
+      } else {
+        utterance.voice = voices.find(v => v.name.includes('Male') || v.name.includes('Alex')) || voices[0];
+      }
+    }
+
+    utterance.onend = () => {
+      waveform?.classList.remove('playing');
+    };
+    utterance.onerror = () => {
+      waveform?.classList.remove('playing');
+    };
+
+    window.speechSynthesis.speak(utterance);
+  } else {
+    setTimeout(() => {
+      waveform?.classList.remove('playing');
+    }, 4000);
+  }
+}
+
+function playOriginalHumanSample() {
+  const p = CLONE_PROFILES[currentCloneId];
+  if (!p) return;
+
+  const waveform = document.getElementById('clone-waveform-bars');
+  waveform?.classList.add('playing');
+
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(p.sample);
+    utterance.pitch = p.pitch * 0.95;
+    utterance.rate = 1.0;
+
+    utterance.onend = () => {
+      waveform?.classList.remove('playing');
+    };
+    utterance.onerror = () => {
+      waveform?.classList.remove('playing');
+    };
+
+    window.speechSynthesis.speak(utterance);
+  } else {
+    setTimeout(() => {
+      waveform?.classList.remove('playing');
+    }, 3000);
   }
 }
 

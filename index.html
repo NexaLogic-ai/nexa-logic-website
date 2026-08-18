@@ -305,9 +305,10 @@
 
       <div class="demo-widget-card" id="demo-swipe-card">
         
-        <!-- 4 Switchable Showroom Tabs -->
+        <!-- 5 Switchable Showroom Tabs -->
         <div class="demo-tabs" id="demo-tabs-container">
           <button class="demo-tab active" id="tab-btn-voice" onclick="switchDemo('voice')">🎙️ Voice Receptionist</button>
+          <button class="demo-tab" id="tab-btn-cloning" onclick="switchDemo('cloning')">🧬 Voice Cloning Lab</button>
           <button class="demo-tab" id="tab-btn-chat" onclick="switchDemo('chat')">💬 Web ChatKit Bot</button>
           <button class="demo-tab" id="tab-btn-routing" onclick="switchDemo('routing')">👥 Multi-Staff Router</button>
           <button class="demo-tab" id="tab-btn-reviews" onclick="switchDemo('reviews')">⭐ Review Collector</button>
@@ -316,6 +317,7 @@
         <!-- Mobile Demo Pagination Dots -->
         <div class="mobile-demo-dots" id="mobile-demo-dots">
           <span class="m-dot active" onclick="switchDemo('voice')"></span>
+          <span class="m-dot" onclick="switchDemo('cloning')"></span>
           <span class="m-dot" onclick="switchDemo('chat')"></span>
           <span class="m-dot" onclick="switchDemo('routing')"></span>
           <span class="m-dot" onclick="switchDemo('reviews')"></span>
@@ -357,7 +359,93 @@
           </div>
         </div>
 
-        <!-- 2. Web ChatKit Booking Bot View -->
+        <!-- 2. Voice Cloning Lab Demo View -->
+        <div id="cloning-demo-view" class="demo-view">
+          <div class="cloning-sim-box" style="display: flex; flex-direction: column; gap: 24px; max-width: 760px; margin: 0 auto;">
+            
+            <div style="text-align: center;">
+              <span class="badge" style="background: rgba(0, 240, 255, 0.12); color: var(--cyan); border: 1px solid rgba(0, 240, 255, 0.3); font-size: 0.78rem; padding: 4px 12px; border-radius: 9999px;">🧬 30-Second Neural Voice Match</span>
+              <h3 style="font-family: var(--font-display); font-size: 1.35rem; margin: 10px 0 6px;">Hyper-Realistic Voice Cloning & Accent Studio</h3>
+              <p style="font-size: 0.92rem; color: var(--text-muted);">Listen to how Nexa clones the vocal tone, cadence, and empathy of real clinic founders and executives with 99.8% acoustic precision.</p>
+            </div>
+
+            <!-- Profile Selector Cards -->
+            <div class="clone-profiles-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px;">
+              <div class="clone-profile-card active" id="clone-card-sarah" onclick="selectCloneProfile('sarah')">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 1.6rem;">👩‍⚕️</span>
+                  <div>
+                    <div style="font-weight: 700; color: #fff; font-size: 0.92rem;">Dr. Sarah Jenkins</div>
+                    <div style="font-size: 0.76rem; color: var(--cyan);">Med Spa Founder Clone</div>
+                  </div>
+                </div>
+                <div class="clone-metric-tag" style="margin-top: 10px; font-size: 0.74rem; color: var(--emerald); display: flex; align-items: center; gap: 4px;">
+                  <span>●</span> 99.8% Vocal Match
+                </div>
+              </div>
+
+              <div class="clone-profile-card" id="clone-card-marcus" onclick="selectCloneProfile('marcus')">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 1.6rem;">👨‍⚖️</span>
+                  <div>
+                    <div style="font-weight: 700; color: #fff; font-size: 0.92rem;">Marcus Vance, Esq.</div>
+                    <div style="font-size: 0.76rem; color: #a855f7;">Senior Partner Clone</div>
+                  </div>
+                </div>
+                <div class="clone-metric-tag" style="margin-top: 10px; font-size: 0.74rem; color: var(--emerald); display: flex; align-items: center; gap: 4px;">
+                  <span>●</span> 99.7% Vocal Match
+                </div>
+              </div>
+
+              <div class="clone-profile-card" id="clone-card-jax" onclick="selectCloneProfile('jax')">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 1.6rem;">💇‍♂️</span>
+                  <div>
+                    <div style="font-weight: 700; color: #fff; font-size: 0.92rem;">Jax Reynolds</div>
+                    <div style="font-size: 0.76rem; color: #f59e0b;">Barbershop Owner Clone</div>
+                  </div>
+                </div>
+                <div class="clone-metric-tag" style="margin-top: 10px; font-size: 0.74rem; color: var(--emerald); display: flex; align-items: center; gap: 4px;">
+                  <span>●</span> 99.9% Vocal Match
+                </div>
+              </div>
+            </div>
+
+            <!-- Active Clone Interactive Audio Player Card -->
+            <div id="clone-player-card" style="background: rgba(10, 16, 26, 0.9); border: 1px solid var(--border); border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 18px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px;">
+                <div>
+                  <div id="clone-active-name" style="font-weight: 700; font-size: 1.05rem; color: #fff;">Dr. Sarah Jenkins — Autonomous AI Voice Clone</div>
+                  <div id="clone-active-desc" style="font-size: 0.8rem; color: var(--text-muted);">Trained on 60s phone recording • Warm, reassuring aesthetic clinical cadence</div>
+                </div>
+                <span style="background: rgba(34, 197, 94, 0.15); color: var(--emerald); font-size: 0.75rem; padding: 4px 10px; border-radius: 9999px; font-weight: 600;">Neural V3 Active</span>
+              </div>
+
+              <!-- Animated Sound Waveform Bars -->
+              <div class="clone-waveform" id="clone-waveform-bars" style="display: flex; align-items: center; justify-content: center; gap: 4px; height: 50px; background: rgba(5, 8, 12, 0.6); border-radius: 12px; padding: 0 16px;">
+                <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+              </div>
+
+              <!-- Action Controls -->
+              <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
+                <button id="btn-play-clone" class="btn btn-primary btn-glow" onclick="playActiveVoiceClone()">
+                  <span>▶ Play Live Cloned Voice Greeting & Booking Demo</span>
+                </button>
+                <button class="btn btn-secondary" onclick="playOriginalHumanSample()">
+                  <span>🎧 Original Human Sample</span>
+                </button>
+              </div>
+
+              <!-- Spoken Script Transcript Box -->
+              <div id="clone-transcript-box" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; font-size: 0.88rem; color: var(--text-primary); line-height: 1.5;">
+                <strong style="color: var(--cyan);" id="clone-speaker-tag">Dr. Sarah (AI Clone):</strong> "<span id="clone-speech-text">Hi there! This is Dr. Sarah from Radiance Aesthetics. I am in a treatment room right now, but I can check my live calendar, answer your questions about Botox, and book you directly into my schedule. What day works best for you?</span>"
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 3. Web ChatKit Booking Bot View -->
         <div id="chat-demo-view" class="demo-view">
           <div class="chat-sim-box">
             <div class="chatkit-topbar" style="background: rgba(10, 16, 26, 0.9); border-bottom: 1px solid var(--border); padding: 12px 18px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center;">

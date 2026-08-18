@@ -767,6 +767,51 @@ body {
   display: block;
 }
 
+/* Voice Cloning Lab Styles */
+.clone-profile-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.clone-profile-card:hover {
+  border-color: rgba(0, 240, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.clone-profile-card.active {
+  background: rgba(0, 240, 255, 0.08);
+  border-color: var(--cyan);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+}
+
+.clone-waveform .wave-bar {
+  width: 4px;
+  height: 12px;
+  background: rgba(0, 240, 255, 0.4);
+  border-radius: 9999px;
+  transition: height 0.15s ease;
+}
+
+.clone-waveform.playing .wave-bar {
+  background: var(--cyan);
+  animation: waveAnim 0.8s ease-in-out infinite alternate;
+}
+
+.clone-waveform.playing .wave-bar:nth-child(2n) { animation-delay: 0.1s; }
+.clone-waveform.playing .wave-bar:nth-child(3n) { animation-delay: 0.2s; }
+.clone-waveform.playing .wave-bar:nth-child(4n) { animation-delay: 0.3s; }
+.clone-waveform.playing .wave-bar:nth-child(5n) { animation-delay: 0.15s; }
+
+@keyframes waveAnim {
+  0% { height: 8px; }
+  50% { height: 38px; }
+  100% { height: 16px; }
+}
+
 /* Voice Simulation Box */
 .voice-sim-box {
   display: flex;
