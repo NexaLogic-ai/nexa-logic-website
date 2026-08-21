@@ -50,7 +50,7 @@
           </div>
         </a>
 
-        <a href="#demo" class="island-item" data-tooltip="AI Showroom" aria-label="AI Showroom">
+        <a href="#demo" class="island-item" data-tooltip="Simulation Lab" aria-label="Simulation Lab">
           <div class="island-icon-box">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
           </div>
@@ -181,10 +181,11 @@
             <!-- Action Buttons: Direct Call Helpline -->
             <div style="display: flex; flex-direction: column; gap: 8px;">
               <a href="tel:+971585517132" class="btn btn-primary btn-glow" style="width: 100%; text-align: center; justify-content: center; font-size: 0.92rem; padding: 12px; border-radius: 10px;">
-                <span>📞 Tap to Call Live AI Hotline: +971 58 551 7132</span>
+                <span>📞 Dial from Phone: +971 58 551 7132</span>
               </a>
-              <a href="#demo" class="btn btn-secondary" style="width: 100%; text-align: center; justify-content: center; font-size: 0.8rem; padding: 8px; border-radius: 8px;">
-                <span>🎧 Or Test In-Browser Voice Showroom Below ↓</span>
+              <div style="font-size: 0.74rem; color: var(--text-dim); text-align: center;">📱 Tap from mobile or dial manually to test live cellular hotline</div>
+              <a href="#demo" class="btn btn-secondary" style="width: 100%; text-align: center; justify-content: center; font-size: 0.8rem; padding: 8px; border-radius: 8px; margin-top: 4px;">
+                <span>🎧 Or Test Simulation Lab Below ↓</span>
               </a>
             </div>
 
@@ -274,7 +275,7 @@
       <div class="bento-grid">
         
         <!-- Agent 1: Voice Phone Agents -->
-        <div class="bento-card bento-large">
+        <div class="bento-card bento-large" onclick="jumpToDemo('voice')" style="cursor: pointer;">
           <div class="bento-tag">🎙️ Flagship Voice Workforce</div>
           <h3>24/7 Inbound & Outbound AI Voice Phone Agents</h3>
           <p>Cognitive, human-sounding voice agents with &lt;500ms latency. They answer live phone calls 24/7, quote complex pricing, check real-time calendar availability, handle triage, and lock bookings directly into your calendar with zero human intervention.</p>
@@ -284,10 +285,13 @@
             <span>Emergency Call Transfers</span>
             <span>Call Recording & Transcripts</span>
           </div>
+          <div style="margin-top: 14px; font-size: 0.84rem; color: var(--cyan); font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>👉 Test Live Voice Prototype Below ↓</span>
+          </div>
         </div>
 
         <!-- Agent 2: WhatsApp Business Agent -->
-        <div class="bento-card">
+        <div class="bento-card" onclick="jumpToDemo('chat')" style="cursor: pointer;">
           <div class="bento-tag" style="background: rgba(16, 185, 129, 0.15); color: var(--emerald);">📲 WhatsApp Official</div>
           <h3>WhatsApp Business Autonomous AI Agents</h3>
           <p>Full 2-way conversational qualification on WhatsApp. Answers FAQs, dispatches treatment/product PDF brochures, and books consultation slots directly in the chat.</p>
@@ -296,10 +300,13 @@
             <span>Catalog & PDF Dispatch</span>
             <span>24/7 Auto-Reply</span>
           </div>
+          <div style="margin-top: 14px; font-size: 0.84rem; color: var(--emerald); font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>👉 Test 2-Way Chat Prototype ↓</span>
+          </div>
         </div>
 
         <!-- Agent 3: Instagram DM & Social Agent -->
-        <div class="bento-card">
+        <div class="bento-card" onclick="jumpToDemo('chat')" style="cursor: pointer;">
           <div class="bento-tag" style="background: rgba(244, 63, 94, 0.15); color: #f43f5e;">📸 Social Conversion</div>
           <h3>Instagram DM & Social AI Agents</h3>
           <p>Instantly turns followers into paid clients. Responds to story mentions, DMs, and triggers automated qualification when users comment keywords on reels.</p>
@@ -308,10 +315,13 @@
             <span>Story Mention Capture</span>
             <span>Lead Qualification</span>
           </div>
+          <div style="margin-top: 14px; font-size: 0.84rem; color: #f43f5e; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>👉 Test Social AI Prototype ↓</span>
+          </div>
         </div>
 
         <!-- Agent 4: LinkedIn B2B Growth Agent -->
-        <div class="bento-card">
+        <div class="bento-card" onclick="toggleFloatingAgent()" style="cursor: pointer;">
           <div class="bento-tag" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">💼 B2B Enterprise</div>
           <h3>LinkedIn B2B AI Growth Agents</h3>
           <p>Screens incoming executive messages, qualifies prospect company size and budget, and books high-ticket discovery calls directly with founders and partners.</p>
@@ -320,10 +330,13 @@
             <span>Executive Tone Matching</span>
             <span>Calendar Integration</span>
           </div>
+          <div style="margin-top: 14px; font-size: 0.84rem; color: #60a5fa; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>👉 Open Interactive AI Assistant ↗</span>
+          </div>
         </div>
 
         <!-- Agent 5: Website Live Chat & Voice Widget -->
-        <div class="bento-card">
+        <div class="bento-card" onclick="toggleFloatingAgent()" style="cursor: pointer;">
           <div class="bento-tag" style="background: rgba(0, 240, 255, 0.15); color: var(--cyan);">💻 1-Line Embed</div>
           <h3>Website Live Voice & Chat Agents</h3>
           <p>Floating glassmorphic AI assistant installed with 1 line of code on WordPress, Shopify, Webflow, or custom React. Engages visitors and books calls on-page.</p>
@@ -332,10 +345,13 @@
             <span>Universal CMS Embed</span>
             <span>Instant Speed-to-Lead</span>
           </div>
+          <div style="margin-top: 14px; font-size: 0.84rem; color: var(--cyan); font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>👉 Open Live Web Assistant ↗</span>
+          </div>
         </div>
 
         <!-- Agent 6: SMS Speed-to-Lead & Review Engine -->
-        <div class="bento-card">
+        <div class="bento-card" onclick="jumpToDemo('reviews')" style="cursor: pointer;">
           <div class="bento-tag" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">⭐ Revenue Multiplier</div>
           <h3>SMS Missed-Call Recovery & Google Review Agents</h3>
           <p>Instantly texts missed callers within 3 seconds to recover lost revenue, and automatically requests 5-star Google reviews after successful appointments.</p>
@@ -344,10 +360,13 @@
             <span>5-Star Google Review Engine</span>
             <span>24h Reminder Sequences</span>
           </div>
+          <div style="margin-top: 14px; font-size: 0.84rem; color: #f59e0b; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>👉 Test Review Engine Prototype ↓</span>
+          </div>
         </div>
 
         <!-- Agent 7: Tier-1 Support & Emergency Triage -->
-        <div class="bento-card">
+        <div class="bento-card" onclick="jumpToDemo('routing')" style="cursor: pointer;">
           <div class="bento-tag" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">🛡️ 24/7 Support</div>
           <h3>24/7 Tier-1 Support & Emergency Triage Agents</h3>
           <p>Resolves 80% of routine inquiries, order status, return policies, and after-hours emergency triage without putting callers on hold or burning out human staff.</p>
@@ -356,10 +375,13 @@
             <span>Emergency Live Transfer</span>
             <span>Ticketing & CRM Sync</span>
           </div>
+          <div style="margin-top: 14px; font-size: 0.84rem; color: #c084fc; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>👉 Test Multi-Staff Routing Lab ↓</span>
+          </div>
         </div>
 
         <!-- Agent 8: Database Reactivation & Outbound -->
-        <div class="bento-card">
+        <div class="bento-card" onclick="jumpToDemo('voice')" style="cursor: pointer;">
           <div class="bento-tag" style="background: rgba(236, 72, 153, 0.15); color: #f472b6;">🔄 Pipeline Revival</div>
           <h3>Speed-to-Lead & Database Reactivation Agents</h3>
           <p>Calls new ad leads within 30 seconds of form submission, and dials past dead CRM databases with exclusive seasonal offers to unlock instant found revenue.</p>
@@ -368,10 +390,13 @@
             <span>Dormant CRM Revival</span>
             <span>Automated Callback Scheduling</span>
           </div>
+          <div style="margin-top: 14px; font-size: 0.84rem; color: #f472b6; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>👉 Test Voice Simulation Below ↓</span>
+          </div>
         </div>
 
         <!-- Proprietary: Voice Cloning -->
-        <div class="bento-card bento-wide" style="border-color: rgba(0, 240, 255, 0.3); background: linear-gradient(135deg, rgba(14, 22, 32, 0.9) 0%, rgba(18, 28, 42, 0.9) 100%);">
+        <div class="bento-card bento-wide" onclick="jumpToDemo('cloning')" style="cursor: pointer; border-color: rgba(0, 240, 255, 0.3); background: linear-gradient(135deg, rgba(14, 22, 32, 0.9) 0%, rgba(18, 28, 42, 0.9) 100%);">
           <div class="bento-tag" style="background: rgba(0, 240, 255, 0.15); color: var(--cyan);">🧬 Proprietary Technology</div>
           <h3>Hyper-Realistic AI Voice Cloning & Executive Localization</h3>
           <p>We clone the voice of the founder, top doctor, or head sales representative with 99.8% vocal fidelity. Your AI agents speak in your exact tone, cadence, and local regional accents—creating instant caller trust and authority.</p>
@@ -381,34 +406,37 @@
             <span>Emotion & Inflection Control</span>
             <span>Turnkey Turnaround &lt; 7 Days</span>
           </div>
+          <div style="margin-top: 14px; font-size: 0.88rem; color: var(--cyan); font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>👉 Enter Voice Cloning Lab & Record Your Voice ↓</span>
+          </div>
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- Unified Interactive AI Agent Showroom -->
+  <!-- Autonomous AI Workforce Simulation Lab -->
   <section id="demo" class="demo-section">
     <div class="container">
-      <div class="section-badge purple-badge">
-        <span class="purple-dot"></span>
-        <span>Interactive AI Agent Showroom</span>
+      <div class="section-badge cyan-badge">
+        <span class="cyan-dot"></span>
+        <span>⚡ Live Simulation Lab</span>
       </div>
 
-      <h2 class="section-title">Test Our Autonomous AI Workforce <span class="gradient-text">In Action</span></h2>
-      <p class="section-subtitle">Experience live simulations of our 4 core agency systems: Voice Phone Receptionist, 2-Way Web ChatKit Bot, Multi-Staff Router, and 5-Star Review Collector.</p>
+      <h2 class="section-title">Autonomous AI Workforce <span class="gradient-text">Simulation Lab</span></h2>
+      <p class="section-subtitle">Click any tab below to test live working prototypes of our 5 core autonomous AI systems.</p>
 
       <!-- Mobile Swipe Guide Banner -->
       <div class="mobile-swipe-guide">
-        <span>👈 Swipe tabs to test all 4 demos 👉</span>
+        <span>👈 Swipe tabs to test all 5 simulation labs 👉</span>
       </div>
 
       <div class="demo-widget-card" id="demo-swipe-card">
         
         <!-- 5 Switchable Showroom Tabs -->
         <div class="demo-tabs" id="demo-tabs-container">
-          <button class="demo-tab active" id="tab-btn-voice" onclick="switchDemo('voice')">🎙️ Voice Receptionist</button>
-          <button class="demo-tab" id="tab-btn-cloning" onclick="switchDemo('cloning')">🧬 Voice Cloning Lab</button>
+          <button class="demo-tab active" id="tab-btn-voice" onclick="switchDemo('voice')">🎙️ Voice Phone Agent</button>
+          <button class="demo-tab" id="tab-btn-cloning" onclick="switchDemo('cloning')">🧬 Voice Cloning Studio</button>
           <button class="demo-tab" id="tab-btn-chat" onclick="switchDemo('chat')">💬 Web ChatKit Bot</button>
           <button class="demo-tab" id="tab-btn-routing" onclick="switchDemo('routing')">👥 Multi-Staff Router</button>
           <button class="demo-tab" id="tab-btn-reviews" onclick="switchDemo('reviews')">⭐ Review Collector</button>
@@ -731,16 +759,16 @@
           </div>
 
           <!-- Checkbox for No Website -->
-          <div class="no-website-toggle-box">
-            <label class="custom-checkbox-label">
-              <input type="checkbox" id="no-website-checkbox" onchange="toggleNoWebsiteFields()">
+          <div class="no-website-toggle-box" style="margin-bottom: 18px;">
+            <label class="custom-checkbox-label" onclick="toggleNoWebsiteFields()" style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+              <input type="checkbox" id="no-website-checkbox" onchange="toggleNoWebsiteFields()" onclick="event.stopPropagation(); toggleNoWebsiteFields();">
               <span class="custom-checkbox-mark"></span>
-              <span>We don't have a live website yet (I'll provide our services, charges & details manually)</span>
+              <span style="color: #fff; font-weight: 500;">We don't have a live website yet (I'll provide our services, charges & details manually)</span>
             </label>
           </div>
 
           <!-- Dynamic Structured Intake for Businesses Without a Website -->
-          <div class="manual-intake-card" id="manual-desc-group" style="display: none; background: rgba(0, 240, 255, 0.04); border: 1px dashed rgba(0, 240, 255, 0.3); border-radius: 16px; padding: 22px; margin-bottom: 24px;">
+          <div class="manual-intake-card" id="manual-desc-group" style="display: none; background: rgba(0, 240, 255, 0.05); border: 1px dashed rgba(0, 240, 255, 0.4); border-radius: 16px; padding: 22px; margin-bottom: 24px;">
             <div style="font-size: 0.9rem; font-weight: 700; color: var(--cyan); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
               <span>📝</span> Business Services & Pricing Details (To Feed Your AI's Brain)
             </div>
@@ -945,24 +973,28 @@
     </div>
   </section>
 
-  <!-- Primary Booking & Live Calendly Embed Section -->
+  <!-- Primary Booking & Live Cal.com Embed Section -->
   <section id="booking" class="booking-section">
     <div class="container">
       <div class="booking-header text-center">
         <div class="section-badge cyan-badge">
           <span class="cyan-dot"></span>
-          <span>Live Booking Calendar</span>
+          <span>Live Cal.com Booking Calendar</span>
         </div>
         <h2 class="section-title">Schedule Your 15-Minute AI Architecture Session</h2>
-        <p class="section-subtitle center-margin">Select a day and time below that works best for you to speak with our AI engineering team.</p>
+        <p class="section-subtitle center-margin">Select a day and time below that works best for you to speak with Nomena.</p>
       </div>
 
-      <div class="calendly-embed-container">
-        <!-- Live Dark-Mode Calendly Inline Widget -->
-        <div class="calendly-inline-widget" 
-             data-url="https://calendly.com/nomenakhan14/new-meeting?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0e1620&text_color=f8fafc&primary_color=00f0ff" 
-             style="min-width:320px;height:720px;border-radius:24px;overflow:hidden;">
-        </div>
+      <div class="cal-embed-container" style="background: rgba(10, 15, 22, 0.95); border: 1px solid var(--border-glow); border-radius: 24px; overflow: hidden; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(0, 240, 255, 0.1); margin-bottom: 28px;">
+        <!-- Live Cal.com Dark Mode Embed -->
+        <iframe 
+          src="https://cal.com/nomena-khan-l63gmb/15min?theme=dark" 
+          width="100%" 
+          height="720" 
+          frameborder="0" 
+          style="border: none; width: 100%; height: 720px; display: block; border-radius: 24px;" 
+          allowfullscreen>
+        </iframe>
       </div>
 
       <div class="booking-guarantee-strip">
@@ -972,7 +1004,7 @@
         </div>
         <div class="guarantee-item">
           <span class="g-icon">⚡</span>
-          <span>Custom Niche Prototype Included</span>
+          <span>Custom AI Architecture Included</span>
         </div>
         <div class="guarantee-item">
           <span class="g-icon">📅</span>
@@ -994,7 +1026,7 @@
       <div class="footer-nav">
         <h4>Navigation</h4>
         <a href="#solutions">Solutions</a>
-        <a href="#demo">AI Showroom</a>
+        <a href="#demo">Simulation Lab</a>
         <a href="#process">How It Works</a>
         <a href="#showdown">Live Showdown</a>
       </div>

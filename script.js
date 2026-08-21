@@ -39,13 +39,22 @@ function toggleNoWebsiteFields() {
   const descGroup = document.getElementById('manual-desc-group');
   const websiteInput = document.getElementById('demo-website');
   const servicesTextarea = document.getElementById('demo-services');
+  if (!checkbox || !descGroup) return;
 
-  if (checkbox && checkbox.checked) {
+  if (checkbox.checked) {
     descGroup.style.display = 'block';
-    if (websiteInput) websiteInput.value = '';
+    if (websiteInput) {
+      websiteInput.value = '';
+      websiteInput.placeholder = '(No website - Details provided manually below)';
+      websiteInput.disabled = true;
+    }
     if (servicesTextarea) servicesTextarea.required = true;
   } else {
     descGroup.style.display = 'none';
+    if (websiteInput) {
+      websiteInput.placeholder = 'https://yourbusiness.com';
+      websiteInput.disabled = false;
+    }
     if (servicesTextarea) servicesTextarea.required = false;
   }
 }
@@ -163,10 +172,15 @@ function switchDemo(type) {
   }
 }
 
-// Voice Cloning Profiles Data & Engine
-const CLONE_PROFILES = {
-  sarah: {
-    name: 'Dr. Sarah Jenkins — Autonomous AI Voice Clone',
+// Jump and switch to specific Simulation Lab tab
+function jumpToDemo(type) {
+  switchDemo(type);
+  const demoSection = document.getElementById('demo');
+  if (demoSection) {
+    demoSection.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
 // ================= 1. VOICE CLONING LAB ENGINE =================
 const CLONE_PROFILES = {
   sarah: {
@@ -481,28 +495,39 @@ function speakAI(text, onComplete) {
     return;
   }
 
-  window.speechSynthesis.cancel(); // Stop previous speech
+  try {
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.resume();
+  } catch (e) {}
   
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = 1.02; // Natural conversational tempo
   utterance.pitch = 1.15; // Elena warm tone
   
   loadBrowserVoices();
-  const naturalVoice = availableVoices.find(v => (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Karen') || v.name.includes('Ava') || v.name.includes('Google US English')));
-  if (naturalVoice) utterance.voice = naturalVoice;
+  if (availableVoices && availableVoices.length > 0) {
+    const naturalVoice = availableVoices.find(v => (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Karen') || v.name.includes('Ava') || v.name.includes('Google US English')));
+    if (naturalVoice) utterance.voice = naturalVoice;
+  }
 
   const pulse = document.getElementById('voice-pulse');
   if (pulse) pulse.classList.add('speaking');
 
-  utterance.onend = () => {
+  let finished = false;
+  const finish = () => {
+    if (finished) return;
+    finished = true;
     if (pulse) pulse.classList.remove('speaking');
     if (onComplete) onComplete();
   };
 
-  utterance.onerror = () => {
-    if (pulse) pulse.classList.remove('speaking');
-    if (onComplete) onComplete();
-  };
+  utterance.onend = finish;
+  utterance.onerror = finish;
+
+  // Safety fallback timer so UI never gets stuck
+  setTimeout(() => {
+    finish();
+  }, Math.max(3500, text.length * 80));
 
   window.speechSynthesis.speak(utterance);
 }
@@ -1014,45 +1039,57 @@ function submitSpecialistBooking(name, service, slug, slot) {
 }
 
 // 4. Interactive Speed-to-Lead Live Battle Simulator
+let nexaInterval = null;
+let tradInterval = null;
+
 function runSpeedSimulation() {
   const telemetry = document.getElementById('sim-telemetry');
   const btn = document.getElementById('btn-run-sim');
   const nexaTimer = document.getElementById('sim-nexa-timer');
   const tradTimer = document.getElementById('sim-trad-timer');
+  if (!telemetry || !btn) return;
+
+  if (nexaInterval) clearInterval(nexaInterval);
+  if (tradInterval) clearInterval(tradInterval);
+
+  playPhoneChime();
 
   btn.disabled = true;
-  btn.innerHTML = '<span>⚡ Simulating Inbound Inbound Call Across Systems...</span>';
+  btn.innerHTML = '<span>⚡ Simulating Inbound Call Across Systems...</span>';
   telemetry.style.display = 'grid';
 
   // Animate Nexa Logic AI Timer (0.00s -> 0.42s)
   let nexaMs = 0;
-  nexaTimer.innerText = '0.00s';
-  const nexaInterval = setInterval(() => {
+  if (nexaTimer) nexaTimer.innerText = '0.00s';
+  nexaInterval = setInterval(() => {
     nexaMs += 35;
     if (nexaMs >= 420) {
       clearInterval(nexaInterval);
-      nexaTimer.innerText = '0.42s ⚡ (Answered & Booked!)';
+      if (nexaTimer) nexaTimer.innerText = '0.42s ⚡ (Answered & Booked!)';
       btn.disabled = false;
       btn.innerHTML = '<span>⚡ Re-Run Live Simulation</span>';
     } else {
-      nexaTimer.innerText = (nexaMs / 1000).toFixed(2) + 's';
+      if (nexaTimer) nexaTimer.innerText = (nexaMs / 1000).toFixed(2) + 's';
     }
   }, 30);
 
   // Animate Traditional Timer (Counting up to 42 minutes)
   let tradMin = 0;
   let tradSec = 0;
-  const tradInterval = setInterval(() => {
+  if (tradTimer) tradTimer.innerText = '0m 00s';
+  tradInterval = setInterval(() => {
     tradMin += 3;
     tradSec = Math.floor(Math.random() * 59);
     if (tradMin >= 42) {
       clearInterval(tradInterval);
-      tradTimer.innerText = '42m 18s ❌ (Missed / Voicemail)';
+      if (tradTimer) tradTimer.innerText = '42m 18s ❌ (Missed / Voicemail)';
     } else {
-      tradTimer.innerText = `${tradMin}m ${tradSec}s`;
+      if (tradTimer) tradTimer.innerText = `${tradMin}m ${tradSec < 10 ? '0' + tradSec : tradSec}s`;
     }
-  }, 50);
+  }, 45);
 }
+
+window.runSpeedSimulation = runSpeedSimulation;
 
 // ================= 5. FLOATING AI ASSISTANT (CONVERSATIONAL INTELLIGENCE & LEAD ENGINE) =================
 let visitorData = {
