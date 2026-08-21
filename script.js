@@ -1054,8 +1054,7 @@ function runSpeedSimulation() {
   }, 50);
 }
 
-// ================= 5. FLOATING AI AUTO-AGENT (WITH INSTANT FORMSPREE EMAIL ALERTS) =================
-let leadStage = 'ASK_NAME'; // 'ASK_NAME' -> 'ASK_EMAIL' -> 'QUALIFIED'
+// ================= 5. FLOATING AI ASSISTANT (CONVERSATIONAL INTELLIGENCE & LEAD ENGINE) =================
 let visitorData = {
   name: '',
   email: '',
@@ -1064,9 +1063,10 @@ let visitorData = {
 
 function toggleFloatingAgent() {
   const drawer = document.getElementById('ai-chat-drawer');
+  if (!drawer) return;
   if (drawer.style.display === 'none' || drawer.style.display === '') {
     drawer.style.display = 'flex';
-    document.getElementById('drawer-input').focus();
+    document.getElementById('drawer-input')?.focus();
   } else {
     drawer.style.display = 'none';
   }
@@ -1085,25 +1085,21 @@ function sendDrawerMessage() {
   userBubble.innerText = text;
   msgContainer.appendChild(userBubble);
   input.value = '';
-
   msgContainer.scrollTop = msgContainer.scrollHeight;
 
-  // Bot Intake Progression
+  // Simulate Typing / Thinking indicator
   setTimeout(() => {
     const botBubble = document.createElement('div');
     botBubble.className = 'drawer-bubble bot';
 
-    if (leadStage === 'ASK_NAME') {
-      visitorData.name = text;
-      leadStage = 'ASK_EMAIL';
-      botBubble.innerText = `Great to meet you, ${visitorData.name}! What is the best Business Email to send your AI demo notes to?`;
-      document.getElementById('drawer-input').placeholder = "Enter your business email...";
-    } 
-    else if (leadStage === 'ASK_EMAIL') {
-      visitorData.email = text;
-      leadStage = 'QUALIFIED';
+    const lower = text.toLowerCase();
+
+    // 1. Email Extraction & Formspree Dispatch
+    const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+    if (emailMatch) {
+      visitorData.email = emailMatch[0];
       
-      // Dispatch Instant Email Notification via Formspree Webhook
+      // Dispatch Instant Lead to Formspree
       fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
         headers: {
@@ -1111,49 +1107,103 @@ function sendDrawerMessage() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          lead_name: visitorData.name,
           lead_email: visitorData.email,
-          lead_source: visitorData.source,
+          lead_name: visitorData.name || 'Website Visitor',
+          raw_message: text,
           submitted_at: new Date().toLocaleString()
         })
-      })
-      .then(response => {
-        console.log('⚡ Lead successfully dispatched to Formspree email!');
-      })
-      .catch(err => {
-        console.error('Error sending lead to Formspree:', err);
-      });
+      }).catch(e => console.error(e));
 
-      // Save lead locally as well
-      try {
-        localStorage.setItem('nexa_lead_' + Date.now(), JSON.stringify(visitorData));
-      } catch(e) {}
-
-      botBubble.innerHTML = `Thanks, ${visitorData.name}! ✅ I've saved your info and notified our team. How can Nexa Logic help your business today? You can ask me any question, or <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">click here to pick a time on our live calendar</a>.`;
-      document.getElementById('drawer-input').placeholder = "Ask Nexa AI anything...";
-    } 
+      botBubble.innerHTML = `✅ <strong>Got it!</strong> I've recorded your email as <code>${visitorData.email}</code>. Our engineering team has been notified. Would you like to <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">pick a 15-min slot on our calendar</a>, or do you have any questions about our pricing and turnaround?`;
+    }
+    // 2. Greetings & Pleasantries
+    else if (lower === 'hi' || lower === 'hello' || lower === 'hey' || lower.includes('how are you') || lower.includes('who are you') || lower.includes('good morning') || lower.includes('good afternoon') || lower.includes('good evening')) {
+      botBubble.innerHTML = `👋 Hello! I'm doing great, thank you! I am the <strong>Nexa Logic Autonomous AI Assistant</strong>.<br><br>I can answer any questions about our <strong>24/7 AI Voice Phone Agents</strong>, <strong>WhatsApp & Instagram Automations</strong>, <strong>package pricing</strong>, <strong>delivery timelines</strong>, or help you lock in a 15-minute strategy call with Nomena.<br><br>What can I help your business with today?`;
+    }
+    // 3. Pricing, Cost & Retainers
+    else if (lower.includes('cost') || lower.includes('charge') || lower.includes('price') || lower.includes('pricing') || lower.includes('rate') || lower.includes('package') || lower.includes('fee') || lower.includes('retainer') || lower.includes('how much') || lower.includes('quote') || lower.includes('budget') || lower.includes('aed') || lower.includes('dollar') || lower.includes('pay')) {
+      botBubble.innerHTML = `💰 <strong>Nexa Logic Transparent Deployment Tiers:</strong><br><br>
+        • <strong>Starter Plan:</strong> 7,500 AED ($2,000) setup + 1,500 AED/mo (Dedicated 24/7 Inbound Voice/Chat Agent + CRM Sync)<br>
+        • <strong>Pro Autopilot (Most Popular):</strong> 12,500 AED ($3,400) setup + 2,200 AED/mo (Omnichannel Phone, WhatsApp & Instagram + <em>Founding Partner Perk: 1st month retainer waived!</em>)<br>
+        • <strong>Enterprise Custom:</strong> 18,500 AED ($5,000) setup + 3,500 AED/mo (Multi-Staff Voice Routing, Voice Cloning & 24/7 Priority SLA)<br><br>
+        Would you like to <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">book a 15-minute strategy call</a> to get a tailored architecture for your business?`;
+    }
+    // 4. Delivery Timeline & Turnaround
+    else if (lower.includes('how long') || lower.includes('delivery') || lower.includes('timeline') || lower.includes('turnaround') || lower.includes('how fast') || lower.includes('time') || lower.includes('launch') || lower.includes('days') || lower.includes('weeks') || lower.includes('deliver a project')) {
+      botBubble.innerHTML = `⏱️ <strong>Our Turnkey Delivery Timeline is under 7 Days:</strong><br><br>
+        • <strong>Days 1–2:</strong> Discovery & Ingestion of your services, FAQs & pricing.<br>
+        • <strong>Days 3–4:</strong> Prompt Engineering, Voice Tuning & Cal.com/CRM Integrations.<br>
+        • <strong>Days 5–6:</strong> Rigorous stress-testing, latency optimization (&lt;500ms) & edge-case handling.<br>
+        • <strong>Day 7:</strong> 1-Click Live Go-Live on your phone lines and WhatsApp!<br><br>
+        Ready to start? <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">Click here to pick your kickoff slot</a>.`;
+    }
+    // 5. All 8 Agents / What We Build
+    else if (lower.includes('what agents') || lower.includes('what do you build') || lower.includes('what do you do') || lower.includes('services') || lower.includes('offerings') || lower.includes('features')) {
+      botBubble.innerHTML = `🤖 <strong>We deploy an 8-Channel Autonomous AI Workforce:</strong><br><br>
+        1. 🎙️ <strong>24/7 AI Voice Phone Agents</strong> (Sub-500ms live phone calling & calendar booking)<br>
+        2. 📲 <strong>WhatsApp Business Agents</strong> (In-chat booking & PDF brochures)<br>
+        3. ⚡ <strong>Speed-to-Lead Outbound Callers</strong> (Calls ad leads in &lt;30 seconds)<br>
+        4. 🔄 <strong>Cold CRM Reactivation Agents</strong> (Reviving dormant client databases)<br>
+        5. 🛡️ <strong>24/7 Tier-1 Support Agents</strong> (Zero hold times & FAQ triage)<br>
+        6. 📸 <strong>Instagram DM & Social Lead Agents</strong> (Comment-to-DM automated triggers)<br>
+        7. ⭐ <strong>5-Star Google Review Multipliers & SMS Recovery</strong><br>
+        8. 🧬 <strong>30-Second Executive Voice Cloning Studio</strong><br><br>
+        Which system would solve your biggest bottleneck right now?`;
+    }
+    // 6. Voice Cloning Tech
+    else if (lower.includes('clone') || lower.includes('cloning') || lower.includes('accent') || lower.includes('sound real') || lower.includes('human') || lower.includes('robotic')) {
+      botBubble.innerHTML = `🧬 <strong>Hyper-Realistic Neural Voice Cloning:</strong><br><br>
+        We clone the voice of the founder, top doctor, or head executive using just a 30–60 second phone recording with <strong>99.8% vocal fidelity</strong>. The AI speaks with your exact cadence, timbre, and regional accents!<br><br>
+        You can test our live Voice Cloning Studio right on this page or <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">book a live demo with Nomena</a>.`;
+    }
+    // 7. Booking / Meeting / Demo
+    else if (lower.includes('book') || lower.includes('schedule') || lower.includes('meeting') || lower.includes('demo') || lower.includes('call') || lower.includes('strategy') || lower.includes('consultation') || lower.includes('appointment') || lower.includes('talk')) {
+      botBubble.innerHTML = `📅 <strong>Schedule Your 15-Minute AI Strategy Walkthrough:</strong><br><br>
+        You can pick a live time slot directly on our calendar: <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">Click here to choose your slot</a>.<br><br>
+        Nomena will prepare a custom AI roadmap tailored to your specific business workflows!`;
+    }
+    // 8. Contact Info / Phone Number / WhatsApp
+    else if (lower.includes('phone') || lower.includes('number') || lower.includes('call you') || lower.includes('whatsapp') || lower.includes('hotline') || lower.includes('contact') || lower.includes('reach')) {
+      botBubble.innerHTML = `📞 <strong>Direct Contact Channels:</strong><br><br>
+        • <strong>24/7 Telephone AI Hotline:</strong> <a href="tel:+971585517132" style="color:#00f0ff; font-family:monospace; text-decoration:underline;">+971 58 551 7132</a> (Tap to dial from phone/Mac)<br>
+        • <strong>Official WhatsApp Line:</strong> <code>+971 58 551 7132</code><br>
+        • <strong>Direct Email:</strong> <code>hello@nexalogic.co</code><br><br>
+        Elena is live on our phone line right now if you'd like to test an inbound call!`;
+    }
+    // 9. Integrations & CRM
+    else if (lower.includes('crm') || lower.includes('integrate') || lower.includes('hubspot') || lower.includes('gohighlevel') || lower.includes('calendly') || lower.includes('cal.com') || lower.includes('sheets') || lower.includes('zapier') || lower.includes('make')) {
+      botBubble.innerHTML = `⚡ <strong>Turnkey CRM & Workflow Integrations:</strong><br><br>
+        We integrate natively with <strong>Cal.com, Google Calendar, Calendly, GoHighLevel, HubSpot, Salesforce, Airtable, Notion, Make.com, and Zapier</strong>.<br><br>
+        All call transcripts, caller recordings, qualified lead cards, and confirmed appointments sync in real time with zero manual data entry.`;
+    }
+    // 10. Intelligent Name Capture ("my name is X" / "I am X")
+    else if (lower.startsWith('my name is ') || lower.startsWith('i am ') || lower.startsWith("i'm ")) {
+      const parts = text.split(/is|am|'m/i);
+      visitorData.name = parts[1]?.trim() || text;
+      botBubble.innerHTML = `Great to meet you, <strong>${visitorData.name}</strong>! 🤝 What is your business name or what questions can I answer about our AI workforce for you?`;
+    }
+    // 11. Conversational Fallback with Helpful Guidance
     else {
-      // General Q&A after qualification
-      const lower = text.toLowerCase();
-      if (lower.includes('voice') || lower.includes('call') || lower.includes('phone')) {
-        botBubble.innerHTML = `Our Voice AI agents sound 100% human with &lt;600ms latency. They answer inbound calls 24/7 and book appointments on your calendar. Ready to see a live prototype? <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline;">Click to book a call</a>.`;
-      } else if (lower.includes('crm') || lower.includes('integrate') || lower.includes('tools')) {
-        botBubble.innerText = "We build turnkey integrations with GoHighLevel, HubSpot, Airtable, Notion, and Google Sheets. All call transcripts and leads sync in real time.";
-      } else if (lower.includes('book') || lower.includes('strategy') || lower.includes('audit')) {
-        botBubble.innerHTML = `You can pick a time on our live calendar right now! <a href='#booking' onclick='toggleFloatingAgent()' style='color:#00f0ff; text-decoration:underline; font-weight:700;'>Click here to jump to the scheduler</a>.`;
-      } else {
-        botBubble.innerHTML = `Nexa Logic builds custom autonomous AI systems for your specific business workflows. Would you like to <a href='#booking' onclick='toggleFloatingAgent()' style='color:#00f0ff; text-decoration:underline;'>schedule a quick 15-minute live demo</a>?`;
-      }
+      botBubble.innerHTML = `Thanks for asking! Nexa Logic engineers custom 24/7 Autonomous AI Workforces (Voice, WhatsApp, Instagram & CRM automation) with &lt;7 day turnaround and sub-500ms voice speed.<br><br>
+        You can:<br>
+        • Ask about <strong>pricing & packages</strong><br>
+        • Ask about our <strong>7-day delivery timeline</strong><br>
+        • Ask about our <strong>8 autonomous AI agent types</strong><br>
+        • Call our 24/7 hotline at <a href="tel:+971585517132" style="color:#00f0ff;">+971 58 551 7132</a><br>
+        • Or <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">book a 15-min strategy session on our calendar</a>!`;
     }
 
     msgContainer.appendChild(botBubble);
     msgContainer.scrollTop = msgContainer.scrollHeight;
-  }, 700);
+  }, 400);
 }
 
 function sendQuickChip(questionText) {
-  document.getElementById('drawer-input').value = questionText;
-  sendDrawerMessage();
+  const input = document.getElementById('drawer-input');
+  if (input) {
+    input.value = questionText;
+    sendDrawerMessage();
+  }
 }
 
 // Initialize on DOM load
