@@ -742,11 +742,12 @@ function processShowroomAIResponse(userText) {
       return;
     }
 
-    // 7. Pricing
-    if (t.includes('price') || t.includes('cost') || t.includes('package') || t.includes('fee')) {
+    // 7. Pricing & Rate Card Hook
+    if (t.includes('price') || t.includes('cost') || t.includes('package') || t.includes('fee') || t.includes('how much') || t.includes('rate') || t.includes('charge')) {
       appendShowroomBubble('bot', `
-        We customize our AI systems based on your business volume and CRM stack (typically structured as a one-time turnkey setup + a monthly retainer).<br><br>
-        On our 15-minute strategy call, we perform a complete revenue audit to show your exact ROI. Would you like to view our open slots for <strong>Thursday</strong> or <strong>Friday</strong>?
+        📋 <strong>Bespoke Architecture & 2026 Executive Rate Card:</strong><br><br>
+        Our AI systems are tailored to your monthly business volume, channels (Voice, WhatsApp, Instagram), and CRM integrations.<br><br>
+        We'd love to send you our complete <strong>2026 Executive Rate Card & ROI Breakdown</strong>. Please type your <strong>Business Email Address</strong> below to receive it immediately, or say <strong>"Book a meeting"</strong> to pick a live strategy call!
       `);
       return;
     }
@@ -1140,19 +1141,21 @@ function sendDrawerMessage() {
         })
       }).catch(e => console.error(e));
 
-      botBubble.innerHTML = `✅ <strong>Got it!</strong> I've recorded your email as <code>${visitorData.email}</code> and sent a confirmation to your inbox. Would you like to <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">pick a 15-min slot on our calendar</a>, or ask any other questions?`;
+      botBubble.innerHTML = `✅ <strong>2026 Executive Rate Card Dispatched!</strong><br><br>
+        I've logged your request and sent our official <strong>2026 Executive Rate Card & Revenue Audit Breakdown</strong> to <code>${visitorData.email}</code>. Please check your inbox in 1–2 minutes!<br><br>
+        Would you also like to <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">lock in a 15-minute Strategy Consultation</a> with Nomena on our live calendar to review your custom implementation?`;
     }
     // 2. Greetings & Pleasantries
     else if (lower === 'hi' || lower === 'hello' || lower === 'hey' || lower.includes('how are you') || lower.includes('who are you') || lower.includes('good morning') || lower.includes('good afternoon') || lower.includes('good evening')) {
-      botBubble.innerHTML = `👋 Hello! I'm doing great, thank you! I am the <strong>Nexa Logic Autonomous AI Assistant</strong>.<br><br>I can answer any questions about our <strong>24/7 AI Voice Phone Agents</strong>, <strong>WhatsApp & Instagram Automations</strong>, <strong>package pricing</strong>, <strong>delivery timelines</strong>, or help you lock in a 15-minute strategy call with Nomena.<br><br>What can I help your business with today?`;
+      botBubble.innerHTML = `👋 Hello! I'm doing great, thank you! I am the <strong>Nexa Logic Autonomous AI Assistant</strong>.<br><br>I can answer any questions about our <strong>24/7 AI Voice Phone Agents</strong>, <strong>WhatsApp & Instagram Automations</strong>, dispatch our <strong>2026 Executive Rate Card</strong>, or help you lock in a 15-minute strategy call with Nomena.<br><br>What can I help your business with today?`;
     }
-    // 3. Pricing, Cost & Retainers
+    // 3. Pricing, Cost & Executive Rate Card Request (Lead Magnet Hook)
     else if (lower.includes('cost') || lower.includes('charge') || lower.includes('price') || lower.includes('pricing') || lower.includes('rate') || lower.includes('package') || lower.includes('fee') || lower.includes('retainer') || lower.includes('how much') || lower.includes('quote') || lower.includes('budget') || lower.includes('aed') || lower.includes('dollar') || lower.includes('pay')) {
-      botBubble.innerHTML = `💰 <strong>Nexa Logic Transparent Deployment Tiers:</strong><br><br>
-        • <strong>Starter Plan:</strong> 7,500 AED ($2,000) setup + 1,500 AED/mo (Dedicated 24/7 Inbound Voice/Chat Agent + CRM Sync)<br>
-        • <strong>Pro Autopilot (Most Popular):</strong> 12,500 AED ($3,400) setup + 2,200 AED/mo (Omnichannel Phone, WhatsApp & Instagram + <em>Founding Partner Perk: 1st month retainer waived!</em>)<br>
-        • <strong>Enterprise Custom:</strong> 18,500 AED ($5,000) setup + 3,500 AED/mo (Multi-Staff Voice Routing, Voice Cloning & 24/7 Priority SLA)<br><br>
-        Would you like to <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">book a 15-minute strategy call</a> to get a tailored architecture for your business?`;
+      botBubble.innerHTML = `📋 <strong>2026 Executive Rate Card & Revenue Audit:</strong><br><br>
+        Because each AI workforce is custom-engineered to your monthly call volume, CRM stack, and whether you require Voice, WhatsApp, or Multi-Staff Routing, we do not post generic prices.<br><br>
+        Instead, we provide our transparent <strong>2026 Executive Rate Card & ROI Calculator</strong> with exact tier breakdowns.<br><br>
+        ✉️ <strong>Where should I send your Rate Card?</strong><br>
+        Please type your <strong>Business Email Address</strong> below, and I will dispatch the full PDF guide directly to your inbox immediately!`;
     }
     // 4. Delivery Timeline & Turnaround
     else if (lower.includes('how long') || lower.includes('delivery') || lower.includes('timeline') || lower.includes('turnaround') || lower.includes('how fast') || lower.includes('time') || lower.includes('launch') || lower.includes('days') || lower.includes('weeks') || lower.includes('deliver a project')) {
