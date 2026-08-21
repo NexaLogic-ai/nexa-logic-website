@@ -1,5 +1,5 @@
 // Master Lead Intake & Email Auto-Responder Endpoints (100% Free Google Sheets + Formspree)
-const GOOGLE_SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyEhiJVYPOs6XYBxf1SWGjAVpMx8DqpQhdy9hVEDNoh2HRzhgnA3TvvyIS4ReZVr0po/exec';
+const GOOGLE_SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwVK3RrV3FGGLoh822ID3JVFhVIaqqCitwGjBXXbMuDomDvTUIePJR1Ca9CK6MD2dd3/exec';
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xrpzaqpa';
 
 // 0. Dynamic Island Capsule Scroll Spy & Navigation
@@ -742,12 +742,12 @@ function processShowroomAIResponse(userText) {
       return;
     }
 
-    // 7. Pricing & Rate Card Hook
+    // 7. Pricing & Packages
     if (t.includes('price') || t.includes('cost') || t.includes('package') || t.includes('fee') || t.includes('how much') || t.includes('rate') || t.includes('charge')) {
       appendShowroomBubble('bot', `
-        📋 <strong>Bespoke Architecture & 2026 Executive Rate Card:</strong><br><br>
-        Our AI systems are tailored to your monthly business volume, channels (Voice, WhatsApp, Instagram), and CRM integrations.<br><br>
-        We'd love to send you our complete <strong>2026 Executive Rate Card & ROI Breakdown</strong>. Please type your <strong>Business Email Address</strong> below to receive it immediately, or say <strong>"Book a meeting"</strong> to pick a live strategy call!
+        💰 <strong>Pricing & Solutions Overview:</strong><br><br>
+        Our AI systems are customized to your monthly volume, channels (Phone, WhatsApp, Instagram), and CRM setup.<br><br>
+        Please type your <strong>Email Address</strong> below to receive our complete Pricing Overview directly in your inbox, or say <strong>"Book a meeting"</strong> to pick a time on our live calendar!
       `);
       return;
     }
@@ -1118,11 +1118,20 @@ function sendDrawerMessage() {
         headers: {
           'Content-Type': 'application/json'
         },
+      const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+      if (emailMatch) {
+        visitorData.email = emailMatch[0];
+      }
+
+      fetch(GOOGLE_SHEETS_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
+          lead_type: 'pricing_request',
           business_email: visitorData.email,
-          full_name: visitorData.name || 'Website Chat Visitor',
-          business_name: 'Inbound Web Visitor',
-          special_requests: `Chat Inquiry: "${text}"`,
+          full_name: visitorData.name || '',
+          business_name: '',
+          special_requests: `Chat Inquiry / Pricing Request: "${text}"`,
           submitted_at: new Date().toLocaleString()
         })
       }).catch(e => console.error(e));
@@ -1134,28 +1143,26 @@ function sendDrawerMessage() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+          lead_type: 'pricing_request',
           lead_email: visitorData.email,
-          lead_name: visitorData.name || 'Website Visitor',
           raw_message: text,
           submitted_at: new Date().toLocaleString()
         })
       }).catch(e => console.error(e));
 
-      botBubble.innerHTML = `✅ <strong>2026 Executive Rate Card Dispatched!</strong><br><br>
-        I've logged your request and sent our official <strong>2026 Executive Rate Card & Revenue Audit Breakdown</strong> to <code>${visitorData.email}</code>. Please check your inbox in 1–2 minutes!<br><br>
-        Would you also like to <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">lock in a 15-minute Strategy Consultation</a> with Nomena on our live calendar to review your custom implementation?`;
+      botBubble.innerHTML = `✅ <strong>Sent!</strong> I've emailed our complete <strong>Pricing & Solutions Overview</strong> to <code>${visitorData.email}</code>. Please check your inbox in 1–2 minutes!<br><br>
+        If you'd like to review your custom setup with Nomena, you can also <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">pick a 15-min strategy call on our calendar</a>.`;
     }
     // 2. Greetings & Pleasantries
     else if (lower === 'hi' || lower === 'hello' || lower === 'hey' || lower.includes('how are you') || lower.includes('who are you') || lower.includes('good morning') || lower.includes('good afternoon') || lower.includes('good evening')) {
-      botBubble.innerHTML = `👋 Hello! I'm doing great, thank you! I am the <strong>Nexa Logic Autonomous AI Assistant</strong>.<br><br>I can answer any questions about our <strong>24/7 AI Voice Phone Agents</strong>, <strong>WhatsApp & Instagram Automations</strong>, dispatch our <strong>2026 Executive Rate Card</strong>, or help you lock in a 15-minute strategy call with Nomena.<br><br>What can I help your business with today?`;
+      botBubble.innerHTML = `👋 Hello! I am the <strong>Nexa Logic AI Assistant</strong>.<br><br>I can answer questions about our <strong>24/7 AI Voice Phone Agents</strong>, <strong>WhatsApp Automations</strong>, email our <strong>pricing packages</strong>, or help you book a 15-minute call with Nomena.<br><br>How can I help you today?`;
     }
-    // 3. Pricing, Cost & Executive Rate Card Request (Lead Magnet Hook)
+    // 3. Pricing, Cost & Packages Request
     else if (lower.includes('cost') || lower.includes('charge') || lower.includes('price') || lower.includes('pricing') || lower.includes('rate') || lower.includes('package') || lower.includes('fee') || lower.includes('retainer') || lower.includes('how much') || lower.includes('quote') || lower.includes('budget') || lower.includes('aed') || lower.includes('dollar') || lower.includes('pay')) {
-      botBubble.innerHTML = `📋 <strong>2026 Executive Rate Card & Revenue Audit:</strong><br><br>
-        Because each AI workforce is custom-engineered to your monthly call volume, CRM stack, and whether you require Voice, WhatsApp, or Multi-Staff Routing, we do not post generic prices.<br><br>
-        Instead, we provide our transparent <strong>2026 Executive Rate Card & ROI Calculator</strong> with exact tier breakdowns.<br><br>
-        ✉️ <strong>Where should I send your Rate Card?</strong><br>
-        Please type your <strong>Business Email Address</strong> below, and I will dispatch the full PDF guide directly to your inbox immediately!`;
+      botBubble.innerHTML = `💰 <strong>Nexa Logic Pricing & Packages:</strong><br><br>
+        Because our AI systems are custom-tailored to your monthly call volume, CRM integrations, and business setup, we email our complete <strong>Pricing & Solutions Overview</strong> with exact package breakdowns.<br><br>
+        ✉️ <strong>Where should I send your pricing overview?</strong><br>
+        Please type your <strong>Email Address</strong> below, and I'll send it straight to your inbox!`;
     }
     // 4. Delivery Timeline & Turnaround
     else if (lower.includes('how long') || lower.includes('delivery') || lower.includes('timeline') || lower.includes('turnaround') || lower.includes('how fast') || lower.includes('time') || lower.includes('launch') || lower.includes('days') || lower.includes('weeks') || lower.includes('deliver a project')) {
