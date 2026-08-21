@@ -1,5 +1,5 @@
 // Master Lead Intake & Email Auto-Responder Endpoints (100% Free Google Sheets + Formspree)
-const GOOGLE_SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwJdbUFRvsCNf7qvjTah0b_Mhs-dczIKlv1mBTGqd_E_DA8Nmh4yRYL4xmOQ2nyYPDe/exec';
+const GOOGLE_SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyEhiJVYPOs6XYBxf1SWGjAVpMx8DqpQhdy9hVEDNoh2HRzhgnA3TvvyIS4ReZVr0po/exec';
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xrpzaqpa';
 
 // 0. Dynamic Island Capsule Scroll Spy & Navigation
@@ -104,7 +104,7 @@ async function handleCustomDemoSubmit(e) {
       method: 'POST',
       mode: 'no-cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'text/plain;charset=utf-8'
       },
       body: JSON.stringify(payload)
     }).catch(e => console.error('Google Sheets dispatch error:', e));
