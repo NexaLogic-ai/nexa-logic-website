@@ -693,7 +693,7 @@ function processShowroomAIResponse(userText) {
       showroomFlow.selectedDay = 'Thursday';
       showroomFlow.state = 'AWAITING_TIME';
       appendShowroomBubble('bot', `
-        ⚙️ <em>Querying Calendly API for Thursday openings...</em><br><br>
+        ⚙️ <em>Querying Cal.com API for Thursday openings...</em><br><br>
         I found <strong>2 available openings</strong> for Thursday:
         <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
           <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 10:30 AM')">🕒 10:30 AM (Morning)</div>
@@ -708,7 +708,7 @@ function processShowroomAIResponse(userText) {
       showroomFlow.selectedDay = 'Friday';
       showroomFlow.state = 'AWAITING_TIME';
       appendShowroomBubble('bot', `
-        ⚙️ <em>Querying Calendly API for Friday openings...</em><br><br>
+        ⚙️ <em>Querying Cal.com API for Friday openings...</em><br><br>
         I found <strong>2 available openings</strong> for Friday:
         <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
           <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 11:00 AM')">🕒 11:00 AM (Morning)</div>
@@ -750,14 +750,39 @@ function processShowroomAIResponse(userText) {
     if (showroomFlow.state === 'AWAITING_EMAIL' || (t.includes('@') && t.includes('.'))) {
       showroomFlow.userEmail = userText;
       showroomFlow.state = 'CONFIRMED';
+
+      // Dispatch lead to Google Sheets & Formspree
+      const leadPayload = {
+        full_name: showroomFlow.userName || 'Web Chat Lead',
+        business_name: 'ChatKit Prototype Reservation',
+        industry_niche: 'Web Chat Booking',
+        business_email: showroomFlow.userEmail,
+        phone_number: 'Provided via Web Chat',
+        special_requests: `Selected Slot: ${showroomFlow.selectedTime || 'Thursday at 10:30 AM'}`,
+        submitted_at: new Date().toLocaleString()
+      };
+
+      fetch(GOOGLE_SHEETS_ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(leadPayload)
+      }).catch(e => console.error(e));
+
+      fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(leadPayload)
+      }).catch(e => console.error(e));
+
       appendShowroomBubble('bot', `
         ✅ <strong>All Set! Your Meeting is Confirmed!</strong><br><br>
-        ⚙️ <em>Executed tool: <code>createCalendlyContactMeeting(time="${showroomFlow.selectedTime || 'Thursday at 2:00 PM'}", email="${showroomFlow.userEmail}")</code></em><br><br>
+        ⚙️ <em>Executed tool: <code>createCalComMeeting(slot="${showroomFlow.selectedTime || 'Thursday at 10:30 AM'}", email="${showroomFlow.userEmail}")</code></em><br><br>
         • 👤 <strong>Name:</strong> ${showroomFlow.userName || 'Valued Client'}<br>
         • ✉️ <strong>Email:</strong> ${showroomFlow.userEmail}<br>
-        • 📅 <strong>Scheduled Time:</strong> ${showroomFlow.selectedTime || 'Thursday at 2:00 PM'}<br>
-        • 🔗 <strong>Location:</strong> Google Meet (Invite sent to your email)<br><br>
-        Our engineering team is notified and ready to meet with you!
+        • 📅 <strong>Scheduled Time:</strong> ${showroomFlow.selectedTime || 'Thursday at 10:30 AM'}<br>
+        • 🔗 <strong>Location:</strong> Google Meet (Invite synced with Google Calendar)<br><br>
+        <a href="https://cal.com/nomena-khan-l63gmb/15min" target="_blank" style="background:#00f0ff; color:#030708; font-weight:700; padding:8px 16px; border-radius:6px; text-decoration:none; display:inline-block; margin-top:6px;">📅 Lock Time on Live Cal.com Calendar →</a>
       `);
       return;
     }
@@ -766,7 +791,7 @@ function processShowroomAIResponse(userText) {
     if (t.includes('book') || t.includes('schedule') || t.includes('appointment') || t.includes('consultation')) {
       showroomFlow.state = 'AWAITING_TIME';
       appendShowroomBubble('bot', `
-        ⚙️ <em>Executing tool: <code>getCalendlyAvailability(multi_day=true)</code></em>...<br><br>
+        ⚙️ <em>Executing tool: <code>getCalComAvailability(multi_day=true)</code></em>...<br><br>
         I've checked our live schedule. Here are our soonest openings:
         <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
           <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
@@ -969,7 +994,7 @@ function simulateSpecialistRouting(name, service, slug, duration) {
       🤖 <strong>AI Semantic Intent Analyzer:</strong> Inbound inquiry for <em>"${service}"</em> detected!
     </div>
     <div style="background: rgba(18,28,42,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 0.88rem; line-height: 1.5; color: #fff;">
-      ⚙️ <em>Executing tool: <code>getCalendlyAvailability(specialist="${slug}", duration="${duration}")</code></em><br><br>
+      ⚙️ <em>Executing tool: <code>getCalComAvailability(specialist="${slug}", duration="${duration}")</code></em><br><br>
       "I have routed you to <strong>${name}</strong>'s personal calendar. Here are their soonest available appointments:"
       
       <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
@@ -1021,12 +1046,36 @@ function submitSpecialistBooking(name, service, slug, slot) {
   const clientEmail = (document.getElementById('spec-client-email')?.value.trim()) || 'sarah.j@example.com';
   const clientPhone = (document.getElementById('spec-client-phone')?.value.trim()) || '+1 (415) 555-0199';
 
+  // Dispatch Specialist Lead to Google Sheets & Formspree
+  const leadPayload = {
+    full_name: clientName,
+    business_name: `Specialist Booking: ${name} (${service})`,
+    industry_niche: 'Multi-Staff Router Demo',
+    business_email: clientEmail,
+    phone_number: clientPhone,
+    special_requests: `Booked slot: ${slot} with ${name}`,
+    submitted_at: new Date().toLocaleString()
+  };
+
+  fetch(GOOGLE_SHEETS_ENDPOINT, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(leadPayload)
+  }).catch(e => console.error(e));
+
+  fetch(FORMSPREE_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify(leadPayload)
+  }).catch(e => console.error(e));
+
   box.innerHTML = `
     <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 8px; padding: 18px; font-size: 0.88rem; color: #fff;">
       <div style="font-weight: 700; color: var(--emerald); font-size: 1rem; margin-bottom: 8px;">
         ✅ Appointment Confirmed & Synced!
       </div>
-      ⚙️ <em>Executed tool: <code>createCalendlyContactMeeting(specialist="${slug}", name="${clientName}", email="${clientEmail}", phone="${clientPhone}", time="${slot}", format="E.164")</code></em><br><br>
+      ⚙️ <em>Executed tool: <code>createCalComSpecialistMeeting(specialist="${slug}", name="${clientName}", email="${clientEmail}", phone="${clientPhone}", time="${slot}")</code></em><br><br>
       
       <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; margin: 12px 0; line-height: 1.65;">
         • 👤 <strong>Patient / Client:</strong> ${clientName}<br>
@@ -1035,7 +1084,8 @@ function submitSpecialistBooking(name, service, slug, slot) {
         <span style="color: var(--cyan); font-weight: 600;">📬 Multi-Channel Dispatch Actions:</span><br>
         • ✉️ <strong>Email Invite:</strong> Google Calendar invite & video link sent to <code>${clientEmail}</code><br>
         • 📱 <strong>SMS Text Alert:</strong> Instant confirmation SMS + automated 24-hour reminder queued for <code>${clientPhone}</code><br>
-        • 🔄 <strong>CRM Sync:</strong> Contact deal card created in pipeline with 0 manual data entry!
+        • 🔄 <strong>CRM Sync:</strong> Contact deal card created in pipeline with 0 manual data entry!<br><br>
+        <a href="https://cal.com/nomena-khan-l63gmb/15min" target="_blank" style="background:#00f0ff; color:#030708; font-weight:700; padding:8px 16px; border-radius:6px; text-decoration:none; display:inline-block;">📅 View on Live Cal.com Calendar →</a>
       </div>
 
       <button class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; margin-top: 6px;" onclick="selectRoutingNiche('medspa')">⟳ Test Another Specialist or Practice</button>
