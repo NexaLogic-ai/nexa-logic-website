@@ -186,55 +186,175 @@ function jumpToDemo(type) {
   }
 }
 
-// ================= 1. VOICE CLONING LAB ENGINE =================
+// ================= 1. STUDIO SCENARIO TELEPHONY ENGINE (TAB 1) =================
+const SCENARIOS = {
+  1: {
+    title: 'Patient Treatment Intake',
+    subtitle: 'Botox pricing & calendar booking',
+    duration: 24,
+    speaker: 'Elena (AI Receptionist):',
+    transcript: '“Thanks for calling Radiance Aesthetic Clinic! This is Elena. Are you looking to schedule an appointment with Dr. Sarah, or can I answer any questions about our Botox and dermal filler packages today? ... Perfect! Dr. Sarah has an opening this Thursday at 10:30 AM or Friday at 2:00 PM. Which time suits you best?”'
+  },
+  2: {
+    title: '2:00 AM Emergency Triage',
+    subtitle: 'After-hours call transfer to on-call doc',
+    duration: 28,
+    speaker: 'Elena (AI Triage Agent):',
+    transcript: '“Hello, thanks for calling Radiance Clinic after-hours emergency line. I understand you have post-procedure swelling. I have logged your patient chart and am immediately connecting you to Dr. Sarah\'s on-call priority line right now. Please hold for one second while I initiate the direct transfer.”'
+  },
+  3: {
+    title: '2-Way Rescheduling',
+    subtitle: 'Self-service calendar modification',
+    duration: 20,
+    speaker: 'Elena (AI Assistant):',
+    transcript: '“Hi Marcus! I found your appointment with Dr. Sarah for Thursday at 2:00 PM. I can easily move that for you to Friday at 11:00 AM. I have updated your calendar and dispatched an instant SMS confirmation to your mobile right now!”'
+  }
+};
+
+let currentScenarioId = 1;
+let isScenarioPlaying = false;
+let scenarioAudioTimer = null;
+let scenarioSecondsElapsed = 0;
+let audioCtx = null;
+
+// Sound Effects for Studio Playback
+function playPhoneChime() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    if (!audioCtx) audioCtx = new AudioContext();
+    
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(520, now);
+    osc.frequency.exponentialRampToValueAtTime(1040, now + 0.18);
+    
+    gain.gain.setValueAtTime(0.06, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start(now);
+    osc.stop(now + 0.18);
+  } catch (e) {
+    console.log('Audio chime not available');
+  }
+}
+
+function switchVoiceScenario(id) {
+  stopScenarioAudioPlayback();
+  currentScenarioId = id;
+
+  for (let i = 1; i <= 3; i++) {
+    const btn = document.getElementById(`btn-scen-${i}`);
+    if (btn) {
+      if (i === id) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  }
+
+  const sc = SCENARIOS[id];
+  if (!sc) return;
+
+  const transcriptBox = document.getElementById('voice-scenario-transcript');
+  if (transcriptBox) {
+    transcriptBox.innerHTML = `<strong style="color: var(--cyan);">${sc.speaker}</strong> ${sc.transcript}`;
+  }
+
+  const timer = document.getElementById('voice-scenario-timer');
+  if (timer) timer.textContent = `0:00 / 0:${sc.duration < 10 ? '0' + sc.duration : sc.duration}`;
+}
+
+function toggleScenarioAudioPlayback() {
+  if (isScenarioPlaying) {
+    stopScenarioAudioPlayback();
+    return;
+  }
+
+  const sc = SCENARIOS[currentScenarioId];
+  if (!sc) return;
+
+  isScenarioPlaying = true;
+  scenarioSecondsElapsed = 0;
+
+  playPhoneChime();
+
+  const playBtnText = document.getElementById('btn-voice-play-text');
+  if (playBtnText) playBtnText.textContent = '⏸ Pause Studio Track';
+
+  const waveform = document.getElementById('voice-sim-waveform');
+  if (waveform) waveform.classList.add('playing');
+
+  const timer = document.getElementById('voice-scenario-timer');
+
+  scenarioAudioTimer = setInterval(() => {
+    scenarioSecondsElapsed++;
+    if (timer) {
+      const min = Math.floor(scenarioSecondsElapsed / 60);
+      const sec = scenarioSecondsElapsed % 60;
+      timer.textContent = `${min}:${sec < 10 ? '0' + sec : sec} / 0:${sc.duration < 10 ? '0' + sc.duration : sc.duration}`;
+    }
+
+    if (scenarioSecondsElapsed >= sc.duration) {
+      stopScenarioAudioPlayback();
+    }
+  }, 1000);
+}
+
+function stopScenarioAudioPlayback() {
+  isScenarioPlaying = false;
+  if (scenarioAudioTimer) {
+    clearInterval(scenarioAudioTimer);
+    scenarioAudioTimer = null;
+  }
+
+  const playBtnText = document.getElementById('btn-voice-play-text');
+  if (playBtnText) playBtnText.textContent = '▶ Play Studio Audio Track';
+
+  const waveform = document.getElementById('voice-sim-waveform');
+  if (waveform) waveform.classList.remove('playing');
+
+  const sc = SCENARIOS[currentScenarioId];
+  const timer = document.getElementById('voice-scenario-timer');
+  if (timer && sc) timer.textContent = `0:00 / 0:${sc.duration < 10 ? '0' + sc.duration : sc.duration}`;
+}
+
+// ================= 2. EXECUTIVE NEURAL VOICE CLONING STUDIO (TAB 2) =================
 const CLONE_PROFILES = {
   sarah: {
-    name: 'Dr. Sarah Jenkins — Autonomous AI Voice Clone',
-    desc: 'Trained on 60s phone recording • Warm, reassuring aesthetic clinical cadence',
+    name: 'Dr. Sarah Jenkins — Neural Voice Model',
+    desc: 'Trained on 45s raw phone audio • Warm, reassuring aesthetic clinical cadence',
     speaker: 'Dr. Sarah (AI Clone):',
-    gender: 'female',
-    script: 'Hi there! This is Dr. Sarah from Radiance Aesthetics. I am in a treatment room right now, but I can check my live calendar, answer your questions about Botox, and book you directly into my schedule. What day works best for you?',
-    sample: 'Hey everyone, this is Dr. Sarah Jenkins. Welcome to Radiance Aesthetics. Here is a quick 30-second audio sample of my speaking voice from our latest clinic consultation.',
-    pitch: 1.2,
-    rate: 1.02
+    script: '“Hi there! This is Dr. Sarah from Radiance Aesthetics. I am in a treatment room right now, but I can check my live calendar, answer your questions about Botox, and book you directly into my schedule. What day works best for you?”',
+    sampleDesc: 'Raw 45-second acoustic phone recording (Before neural training)',
+    duration: 18
   },
   marcus: {
-    name: 'Marcus Vance, Esq. — Autonomous AI Voice Clone',
-    desc: 'Trained on podcast interview • Authoritative, articulate senior legal partner cadence',
+    name: 'Marcus Vance, Esq. — Neural Voice Model',
+    desc: 'Trained on 60s podcast audio • Authoritative, articulate senior legal partner cadence',
     speaker: 'Marcus Vance, Esq. (AI Clone):',
-    gender: 'male',
-    script: 'Good afternoon. This is Marcus Vance with Vance & Associates. I am currently in court, but our AI intake system has full access to my consultation schedule. Are you calling regarding a commercial contract dispute or corporate counsel?',
-    sample: 'Good day, my name is Marcus Vance, managing partner at Vance & Associates Legal. This is my direct spoken reference sample regarding our corporate advisory practice.',
-    pitch: 0.78,
-    rate: 0.96
+    script: '“Good afternoon. This is Marcus Vance with Vance & Associates. I am currently in court, but our AI intake system has full access to my consultation schedule. Are you calling regarding a commercial contract dispute or corporate counsel?”',
+    sampleDesc: 'Raw dictaphone voice memo (Before neural training)',
+    duration: 20
   },
   jax: {
-    name: 'Jax Reynolds — Autonomous AI Voice Clone',
-    desc: 'Trained on Instagram Reel • High-energy, warm barbershop owner cadence',
+    name: 'Jax Reynolds — Neural Voice Model',
+    desc: 'Trained on 30s Instagram audio • High-energy, warm luxury salon founder cadence',
     speaker: 'Jax Reynolds (AI Clone):',
-    gender: 'male',
-    script: "Yo! What's up, it's Jax from Crown & Blade Barbershop! I'm behind the chair with clippers right now, but you can book a fresh fade or beard sculpt with me or any of my barbers this Thursday. You want morning or afternoon?",
-    sample: "What's going on guys, it's Jax from Crown & Blade. Testing 1-2-3 for our shop voice cloning engine.",
-    pitch: 0.86,
-    rate: 1.08
+    script: '“Yo! What\'s up, it\'s Jax from Crown & Blade! I\'m behind the chair with clippers right now, but you can book a fresh fade or beard sculpt with me or any of my barbers this Thursday. You want morning or afternoon?”',
+    sampleDesc: 'Raw mobile video voice track (Before neural training)',
+    duration: 16
   }
 };
 
 let currentCloneId = 'sarah';
 let isClonePlaying = false;
 let isSamplePlaying = false;
-
-// Pre-load browser voices
-let availableVoices = [];
-function loadBrowserVoices() {
-  if ('speechSynthesis' in window) {
-    availableVoices = window.speechSynthesis.getVoices();
-  }
-}
-if ('speechSynthesis' in window) {
-  loadBrowserVoices();
-  window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
-}
+let cloneAudioTimer = null;
 
 function selectCloneProfile(id) {
   stopAllCloningAudio();
@@ -252,387 +372,80 @@ function selectCloneProfile(id) {
   document.getElementById('clone-speech-text').textContent = p.script;
 }
 
-// Find appropriate voice by gender and language
-function getMatchingVoice(gender) {
-  loadBrowserVoices();
-  if (!availableVoices || availableVoices.length === 0) return null;
-
-  if (gender === 'female') {
-    return availableVoices.find(v => (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Karen') || v.name.includes('Victoria') || v.name.includes('Zira') || v.name.includes('Google US English') || v.name.includes('Ava') || v.name.includes('Moira'))) || availableVoices[0];
-  } else {
-    return availableVoices.find(v => (v.name.includes('Male') || v.name.includes('Alex') || v.name.includes('David') || v.name.includes('Daniel') || v.name.includes('George') || v.name.includes('Fred') || v.name.includes('Google UK English Male'))) || availableVoices[0];
-  }
-}
-
-// Toggle Play / Pause for Active Cloned Voice
 function toggleActiveVoiceClone() {
-  const btn = document.getElementById('btn-play-clone');
-  const btnText = document.getElementById('btn-play-clone-text');
-  const waveform = document.getElementById('clone-waveform-bars');
-
   if (isClonePlaying) {
-    // Pause / Stop
     stopAllCloningAudio();
     return;
   }
 
   stopAllCloningAudio();
-  const p = CLONE_PROFILES[currentCloneId];
-  if (!p) return;
-
   isClonePlaying = true;
-  if (btnText) btnText.textContent = '⏸ Pause Cloned Voice';
-  if (waveform) waveform.classList.add('playing');
+
   playPhoneChime();
 
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(p.script);
-    utterance.pitch = p.pitch;
-    utterance.rate = p.rate;
+  const btnText = document.getElementById('btn-play-clone-text');
+  if (btnText) btnText.textContent = '⏸ Pause AI Neural Clone';
 
-    const matchedVoice = getMatchingVoice(p.gender);
-    if (matchedVoice) utterance.voice = matchedVoice;
+  const waveform = document.getElementById('clone-waveform-bars');
+  if (waveform) waveform.classList.add('playing');
 
-    utterance.onend = () => {
-      stopAllCloningAudio();
-    };
-    utterance.onerror = () => {
-      stopAllCloningAudio();
-    };
-
-    window.speechSynthesis.speak(utterance);
-  } else {
-    setTimeout(() => {
-      stopAllCloningAudio();
-    }, 5000);
-  }
+  const p = CLONE_PROFILES[currentCloneId];
+  cloneAudioTimer = setTimeout(() => {
+    stopAllCloningAudio();
+  }, (p?.duration || 18) * 1000);
 }
 
-// Toggle Play / Pause for Original Human Sample
 function toggleOriginalHumanSample() {
-  const btn = document.getElementById('btn-play-sample');
-  const btnText = document.getElementById('btn-play-sample-text');
-  const waveform = document.getElementById('clone-waveform-bars');
-
   if (isSamplePlaying) {
     stopAllCloningAudio();
     return;
   }
 
   stopAllCloningAudio();
-  const p = CLONE_PROFILES[currentCloneId];
-  if (!p) return;
-
   isSamplePlaying = true;
+
+  playPhoneChime();
+
+  const btnText = document.getElementById('btn-play-sample-text');
   if (btnText) btnText.textContent = '⏸ Pause Human Sample';
+
+  const waveform = document.getElementById('clone-waveform-bars');
   if (waveform) waveform.classList.add('playing');
 
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(p.sample);
-    utterance.pitch = p.pitch * 0.96;
-    utterance.rate = 0.98;
-
-    const matchedVoice = getMatchingVoice(p.gender);
-    if (matchedVoice) utterance.voice = matchedVoice;
-
-    utterance.onend = () => {
-      stopAllCloningAudio();
-    };
-    utterance.onerror = () => {
-      stopAllCloningAudio();
-    };
-
-    window.speechSynthesis.speak(utterance);
-  } else {
-    setTimeout(() => {
-      stopAllCloningAudio();
-    }, 4000);
+  const transcriptBox = document.getElementById('clone-transcript-box');
+  const p = CLONE_PROFILES[currentCloneId];
+  if (transcriptBox && p) {
+    transcriptBox.innerHTML = `<strong style="color: #f59e0b;">Original Human Audio Memo:</strong> "${p.sampleDesc} — Reference audio feed used to extract pitch, cadence, and timbre."`;
   }
+
+  cloneAudioTimer = setTimeout(() => {
+    stopAllCloningAudio();
+  }, 12000);
 }
 
-// Stop All Cloning Audio Playback
 function stopAllCloningAudio() {
   isClonePlaying = false;
   isSamplePlaying = false;
 
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
+  if (cloneAudioTimer) {
+    clearTimeout(cloneAudioTimer);
+    cloneAudioTimer = null;
   }
 
   const btnCloneText = document.getElementById('btn-play-clone-text');
-  if (btnCloneText) btnCloneText.textContent = '▶ Play Cloned Voice Demo';
+  if (btnCloneText) btnCloneText.textContent = '⚡ Play AI Neural Clone (Inbound Call)';
 
   const btnSampleText = document.getElementById('btn-play-sample-text');
-  if (btnSampleText) btnSampleText.textContent = '🎧 Original Human Sample';
+  if (btnSampleText) btnSampleText.textContent = '🎧 Play Original Human Audio Memo';
 
   const waveform = document.getElementById('clone-waveform-bars');
   if (waveform) waveform.classList.remove('playing');
-}
 
-// ================= USER 5-SECOND RECORDING & INSTANT CLONE ENGINE =================
-let mediaRecorder = null;
-let recordedAudioChunks = [];
-let userRecordedAudioBlob = null;
-let userAudioUrl = null;
-let userAudioPlayer = null;
-
-async function startUserVoiceRecording() {
-  const btn = document.getElementById('btn-record-user');
-  const resultBox = document.getElementById('user-recording-result');
-  const status = document.getElementById('user-rec-status');
-
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    alert('Microphone access is not supported in this browser. Please use Chrome or Safari.');
-    return;
+  const p = CLONE_PROFILES[currentCloneId];
+  const transcriptBox = document.getElementById('clone-transcript-box');
+  if (transcriptBox && p) {
+    transcriptBox.innerHTML = `<strong style="color: var(--cyan);" id="clone-speaker-tag">${p.speaker}</strong> "<span id="clone-speech-text">${p.script}</span>"`;
   }
-
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    recordedAudioChunks = [];
-    mediaRecorder = new MediaRecorder(stream);
-
-    mediaRecorder.ondataavailable = (e) => {
-      if (e.data.size > 0) recordedAudioChunks.push(e.data);
-    };
-
-    mediaRecorder.onstop = () => {
-      userRecordedAudioBlob = new Blob(recordedAudioChunks, { type: 'audio/webm' });
-      userAudioUrl = URL.createObjectURL(userRecordedAudioBlob);
-      stream.getTracks().forEach(track => track.stop());
-
-      btn.disabled = false;
-      btn.innerHTML = '<span>🎙️ Re-Record Voice Sample (5s)</span>';
-      if (resultBox) resultBox.style.display = 'block';
-      if (status) status.innerHTML = '🎉 <strong>Acoustic Profile Modeled (99.8% Match)!</strong> Listen to your original voice vs. your AI neural clone below:';
-    };
-
-    mediaRecorder.start();
-    btn.disabled = true;
-
-    // 5-second countdown timer
-    let count = 5;
-    btn.innerHTML = `<span>🔴 Recording... Speak now (${count}s)</span>`;
-    const countInterval = setInterval(() => {
-      count--;
-      if (count > 0) {
-        btn.innerHTML = `<span>🔴 Recording... Speak now (${count}s)</span>`;
-      } else {
-        clearInterval(countInterval);
-        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-          mediaRecorder.stop();
-        }
-      }
-    }, 1000);
-
-  } catch (err) {
-    console.error('Mic error:', err);
-    alert('Please allow microphone permissions to record your 5-second voice sample.');
-  }
-}
-
-// Play User's Raw Recorded Audio
-function playUserOriginalAudio() {
-  if (!userAudioUrl) return;
-  if (userAudioPlayer) {
-    userAudioPlayer.pause();
-    userAudioPlayer.currentTime = 0;
-  }
-  userAudioPlayer = new Audio(userAudioUrl);
-  userAudioPlayer.play();
-}
-
-// Play User's Neural Synthesized AI Voice Clone
-function playUserClonedAudio() {
-  const cloneSpeech = "Hello! This is your AI cloned voice agent. I have successfully cloned your vocal cadence and timbre. I am ready to answer incoming calls, quote your pricing, and book meetings on your calendar 24/7!";
-  
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(cloneSpeech);
-    utterance.pitch = 1.05;
-    utterance.rate = 1.02;
-
-    loadBrowserVoices();
-    if (availableVoices.length > 0) {
-      utterance.voice = availableVoices.find(v => v.name.includes('Natural') || v.name.includes('Samantha') || v.name.includes('Alex')) || availableVoices[0];
-    }
-    window.speechSynthesis.speak(utterance);
-  }
-}
-
-// ================= 2. LIVE VOICE RECEPTIONIST SIMULATOR (TAB 1) =================
-let isVoiceSimActive = false;
-let audioCtx = null;
-
-// Sound Effects for Phone Dialing / Connection
-function playPhoneChime() {
-  try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-    if (!audioCtx) audioCtx = new AudioContext();
-    
-    const now = audioCtx.currentTime;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(440, now);
-    osc.frequency.exponentialRampToValueAtTime(880, now + 0.15);
-    
-    gain.gain.setValueAtTime(0.08, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-    
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    
-    osc.start(now);
-    osc.stop(now + 0.15);
-  } catch (e) {
-    console.log('Audio chime not available');
-  }
-}
-
-// Speak AI Response with Natural Speech Synthesis
-function speakAI(text, onComplete) {
-  if (!('speechSynthesis' in window)) {
-    if (onComplete) onComplete();
-    return;
-  }
-
-  try {
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.resume();
-  } catch (e) {}
-  
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 1.02; // Natural conversational tempo
-  utterance.pitch = 1.15; // Elena warm tone
-  
-  loadBrowserVoices();
-  if (availableVoices && availableVoices.length > 0) {
-    const naturalVoice = availableVoices.find(v => (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Karen') || v.name.includes('Ava') || v.name.includes('Google US English')));
-    if (naturalVoice) utterance.voice = naturalVoice;
-  }
-
-  const pulse = document.getElementById('voice-pulse');
-  if (pulse) pulse.classList.add('speaking');
-
-  let finished = false;
-  const finish = () => {
-    if (finished) return;
-    finished = true;
-    if (pulse) pulse.classList.remove('speaking');
-    if (onComplete) onComplete();
-  };
-
-  utterance.onend = finish;
-  utterance.onerror = finish;
-
-  // Safety fallback timer so UI never gets stuck
-  setTimeout(() => {
-    finish();
-  }, Math.max(3500, text.length * 80));
-
-  window.speechSynthesis.speak(utterance);
-}
-
-// Toggle Live In-Browser Voice Demo Playback
-function toggleVoiceSimPlayback() {
-  const btn = document.getElementById('btn-call-sim');
-  const btnText = document.getElementById('btn-call-sim-text');
-  const stopBtn = document.getElementById('btn-stop-sim');
-  const transcript = document.getElementById('voice-transcript');
-  const status = document.getElementById('voice-audio-status');
-
-  if (isVoiceSimActive) {
-    stopVoiceSimPlayback();
-    return;
-  }
-
-  isVoiceSimActive = true;
-  playPhoneChime();
-
-  if (btnText) btnText.textContent = '⏸ Pause Voice Demo';
-  if (stopBtn) stopBtn.style.display = 'inline-flex';
-  if (status) status.innerHTML = '<span class="pulse-dot" style="background:#22c55e;"></span> <strong>Speaking with Elena:</strong> Turn up your sound to hear real-time AI responses!';
-
-  const greeting = "Thanks for calling Nexa Logic! I am Elena, your 24/7 Autonomous AI Voice Receptionist. I answer calls on the first ring, quote your exact pricing, check live calendar availability, and book appointments. Click any question below to hear me respond!";
-
-  transcript.innerHTML = `
-    <div class="msg ai-msg">
-      <strong>Elena (Nexa AI):</strong> "${greeting}"
-    </div>
-  `;
-
-  speakAI(greeting, () => {
-    if (btnText) btnText.textContent = '▶ Play In-Browser Voice AI Demo';
-    isVoiceSimActive = false;
-  });
-}
-
-function stopVoiceSimPlayback() {
-  isVoiceSimActive = false;
-  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-  
-  const pulse = document.getElementById('voice-pulse');
-  if (pulse) pulse.classList.remove('speaking');
-
-  const btnText = document.getElementById('btn-call-sim-text');
-  if (btnText) btnText.textContent = '▶ Play In-Browser Voice AI Demo';
-
-  const stopBtn = document.getElementById('btn-stop-sim');
-  if (stopBtn) stopBtn.style.display = 'none';
-
-  const status = document.getElementById('voice-audio-status');
-  if (status) status.innerHTML = '<span class="pulse-dot"></span> Voice paused. Click any question below to hear Elena answer!';
-}
-
-// Handle Interactive Voice Questions
-function askVoiceQuestion(question) {
-  isVoiceSimActive = true;
-  const btnText = document.getElementById('btn-call-sim-text');
-  const stopBtn = document.getElementById('btn-stop-sim');
-  if (btnText) btnText.textContent = '⏸ Pause Voice Demo';
-  if (stopBtn) stopBtn.style.display = 'inline-flex';
-
-  const transcript = document.getElementById('voice-transcript');
-  transcript.innerHTML += `
-    <div class="msg" style="color: #94a3b8; margin-top: 14px; font-style: italic;">
-      <strong>You (Caller):</strong> "${question}"
-    </div>
-  `;
-  transcript.scrollTop = transcript.scrollHeight;
-
-  let response = "";
-  const q = question.toLowerCase();
-
-  if (q.includes('calendar') || q.includes('integrate')) {
-    response = "We connect directly with Cal.com, Google Calendar, and your CRM. When callers speak with me, I check real-time open slots and lock in confirmed appointments instantly.";
-  } else if (q.includes('specialist') || q.includes('doctor') || q.includes('route')) {
-    response = "Yes, absolutely! I use semantic intent matching to route callers to specific doctors, attorneys, or sales specialists based on their requested service and location.";
-  } else if (q.includes('2 am') || q.includes('night') || q.includes('weekend')) {
-    response = "Over 60% of high-ticket customers call after-hours. I respond in under 0.5 seconds, 24 hours a day, 365 days a year—so you never lose revenue to closed voicemails!";
-  } else if (q.includes('consultation') || q.includes('schedule') || q.includes('book')) {
-    response = "I would love to get that scheduled for you! You can tap our telephone helpline at +971 58 551 7132 to test me on a live phone line, or pick a 15-minute slot on our calendar below.";
-    setTimeout(() => {
-      document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' });
-    }, 4000);
-  } else {
-    response = "That is a great question. Our systems are custom built for your business to eliminate missed calls and follow up on leads in seconds. Would you like to see a custom live demo?";
-  }
-
-  transcript.innerHTML += `
-    <div class="msg ai-msg" style="margin-top: 10px;">
-      <strong>Elena (Nexa AI):</strong> "${response}"
-    </div>
-  `;
-  transcript.scrollTop = transcript.scrollHeight;
-
-  speakAI(response, () => {
-    if (btnText) btnText.textContent = '▶ Play In-Browser Voice AI Demo';
-    isVoiceSimActive = false;
-  });
 }
 
 // 3. Showroom 2-Way Chatbot State Machine
@@ -1274,7 +1087,7 @@ function sendDrawerMessage() {
       botBubble.innerHTML = `📞 <strong>Direct Contact Channels:</strong><br><br>
         • <strong>24/7 Telephone AI Hotline:</strong> <a href="tel:+971585517132" style="color:#00f0ff; font-family:monospace; text-decoration:underline;">+971 58 551 7132</a> (Tap to dial from phone/Mac)<br>
         • <strong>Official WhatsApp Line:</strong> <code>+971 58 551 7132</code><br>
-        • <strong>Direct Email:</strong> <code>hello@nexalogic.co</code><br><br>
+        • <strong>Direct Email:</strong> <code>hello@getnexalogic.com</code><br><br>
         Elena is live on our phone line right now if you'd like to test an inbound call!`;
     }
     // 9. Integrations & CRM

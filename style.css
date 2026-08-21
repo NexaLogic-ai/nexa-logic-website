@@ -806,6 +806,48 @@ body {
 .clone-waveform.playing .wave-bar:nth-child(4n) { animation-delay: 0.3s; }
 .clone-waveform.playing .wave-bar:nth-child(5n) { animation-delay: 0.15s; }
 
+/* Studio Telephony Waveform & Scenario Buttons */
+.voice-scenario-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.voice-scenario-btn:hover {
+  border-color: rgba(0, 240, 255, 0.4);
+  background: rgba(0, 240, 255, 0.04);
+}
+
+.voice-scenario-btn.active {
+  background: rgba(0, 240, 255, 0.08);
+  border-color: var(--cyan);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.15);
+}
+
+.studio-waveform-box .wave-bar {
+  width: 4px;
+  height: 12px;
+  background: rgba(0, 240, 255, 0.35);
+  border-radius: 9999px;
+  transition: height 0.15s ease;
+}
+
+.studio-waveform-box.playing .wave-bar {
+  background: var(--emerald);
+  animation: waveAnim 0.75s ease-in-out infinite alternate;
+}
+
+.studio-waveform-box.playing .wave-bar:nth-child(2n) { animation-delay: 0.1s; }
+.studio-waveform-box.playing .wave-bar:nth-child(3n) { animation-delay: 0.2s; }
+.studio-waveform-box.playing .wave-bar:nth-child(4n) { animation-delay: 0.3s; }
+.studio-waveform-box.playing .wave-bar:nth-child(5n) { animation-delay: 0.15s; }
+
 @keyframes waveAnim {
   0% { height: 8px; }
   50% { height: 38px; }
@@ -816,8 +858,9 @@ body {
 .voice-sim-box {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 28px;
+  gap: 20px;
+  max-width: 780px;
+  margin: 0 auto;
 }
 
 .pulse-visualizer {
