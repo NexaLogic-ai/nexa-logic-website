@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexa Logic — Autonomous AI Workforce Solutions (Executive Proposal & Rate Card)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #04070b;
+      --bg-surface: #090e16;
+      --bg-card: #0d141f;
+      --cyan: #00f0ff;
+      --emerald: #00ff88;
+      --purple: #8b5cf6;
+      --gold: #f59e0b;
+      --text-primary: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      line-height: 1.5;
+      padding: 40px 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .deck-header {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 9999px;
+      padding: 6px 18px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    .deck-title {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 10px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #00f0ff 0%, #8b5cf6 50%, #00ff88 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .deck-subtitle {
+      font-size: 1.02rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* 3-Tier Grid */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 44px;
+    }
+
+    .pricing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      border: 2px solid var(--cyan);
+      box-shadow: 0 16px 40px rgba(0, 240, 255, 0.15);
+      background: linear-gradient(180deg, rgba(0, 240, 255, 0.04) 0%, var(--bg-card) 100%);
+      transform: scale(1.02);
+    }
+
+    .badge-pop {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #00f0ff, #7000ff);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 14px;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+
+    .tier-name {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .tier-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      min-height: 38px;
+    }
+
+    .price-box {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 16px 0;
+      margin-bottom: 20px;
+    }
+
+    .setup-price {
+      font-family: var(--font-display);
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .setup-label {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .retainer-price {
+      margin-top: 4px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--cyan);
+    }
+
+    /* Billing Terms Box */
+    .billing-notice {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.78rem;
+      margin-bottom: 20px;
+      line-height: 1.4;
+      border-left: 3px solid #64748b;
+    }
+
+    .billing-notice.covered {
+      background: rgba(0, 255, 136, 0.06);
+      border-left: 3px solid var(--emerald);
+      color: #e2e8f0;
+    }
+
+    .billing-notice.client-billed {
+      border-left: 3px solid var(--gold);
+      color: #e2e8f0;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.84rem;
+      margin-bottom: 24px;
+      flex-grow: 1;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .feature-list li span.check {
+      color: var(--emerald);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .feature-list li span.cross {
+      color: #64748b;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .btn-tier {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: #fff;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .btn-glow {
+      background: var(--cyan);
+      color: #030708;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+
+    /* Comparison Table */
+    .roi-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 36px;
+    }
+
+    .roi-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+
+    .compare-table th, .compare-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .compare-table th {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+
+    .text-emerald { color: var(--emerald); font-weight: 700; }
+    .text-danger { color: #f43f5e; }
+
+    /* Footer */
+    .deck-footer {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      .pricing-card.featured {
+        transform: scale(1);
+      }
+      .deck-footer {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Executive Deck Header -->
+    <header class="deck-header">
+      <div class="brand-pill">⚡ NEXA LOGIC • CONFIDENTIAL PROPOSAL & SCOPE OF WORK</div>
+      <h1 class="deck-title">Autonomous AI Workforce <span class="gradient-text">Investment Packages</span></h1>
+      <p class="deck-subtitle">Complete breakdown of setup deliverables, telephony minute terms, and ongoing engineering SLAs for UAE Medical, Dental & Luxury Practices.</p>
+      
+      <!-- Founding Partner 10-Client VIP Offer Box -->
+      <div style="background: linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 14px; padding: 14px 20px; max-width: 800px; margin: 22px auto 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div style="text-align: left;">
+          <div style="font-size: 0.76rem; font-weight: 800; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px;">🎁 Q3/Q4 Dubai Founding Partner Initiative</div>
+          <div style="font-size: 0.92rem; font-weight: 700; color: #fff;">First 10 Premier Clinics Receive <span style="color: var(--emerald);">4,000 AED Setup Credit + 1st Month Retainer Waived</span></div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">In exchange for a 60-second video case study & testimonial after 30 days of live call capture.</div>
+        </div>
+        <div style="background: rgba(0, 255, 136, 0.12); border: 1px solid var(--emerald); border-radius: 9999px; padding: 6px 14px; font-size: 0.76rem; font-weight: 800; color: var(--emerald); white-space: nowrap;">
+          ⚡ ONLY 3 SLOTS REMAINING
+        </div>
+      </div>
+    </header>
+
+    <!-- 3-Tier Rate Cards -->
+    <div class="pricing-grid">
+      
+      <!-- Tier 1: Starter -->
+      <div class="pricing-card">
+        <div class="tier-name">Starter Receptionist</div>
+        <div class="tier-desc">Entry-level AI phone assistant for single-practitioner clinics and boutique salons.</div>
+        
+        <div class="price-box">
+          <div class="setup-price">7,500 AED <span style="font-size: 0.9rem; color: var(--text-muted);">($2,000)</span></div>
+          <div class="setup-label">One-Time Architecture & Setup</div>
+          <div class="retainer-price">+ 1,500 AED / month retainer</div>
+        </div>
+
+        <div class="billing-notice client-billed">
+          ⚠️ <strong>Telephony & Usage Terms:</strong><br>
+          Software and minute usage (Twilio/carrier minutes ~$15–$25/mo) are <strong>billed directly to client's card</strong>.
+        </div>
+
+        <div class="section-label">🛠️ What We Build & Setup:</div>
+        <ul class="feature-list">
+          <li><span class="check">✓</span> 24/7 Autonomous AI Voice Receptionist (English)</li>
+          <li><span class="check">✓</span> Single Calendar Sync (Google / Cal.com)</li>
+          <li><span class="check">✓</span> Core Treatment FAQs & Pricing Quotes</li>
+          <li><span class="check">✓</span> After-Hours & Weekend Call Answering</li>
+          <li><span class="check">✓</span> Call Recording & Text Transcripts Dashboard</li>
+          <li><span class="check">✓</span> Turnkey Deployment in &lt; 7 Days</li>
+          <li><span class="cross">✕</span> <em>No Arabic Bilingual Auto-Switching</em></li>
+          <li><span class="cross">✕</span> <em>No Multi-Doctor Calendar Routing</em></li>
+          <li><span class="cross">✕</span> <em>No Voice Cloning or Google Review Engine</em></li>
+        </ul>
+
+        <a href="https://cal.com/nomena-khan-l63gmb/15min" class="btn-tier btn-outline">Select Starter Plan →</a>
+      </div>
+
+      <!-- Tier 2: Pro (Featured) -->
+      <div class="pricing-card featured">
+        <div class="badge-pop">⭐️ MOST POPULAR (80% of Clinics)</div>
+        <div class="tier-name" style="color: var(--cyan);">Pro Clinic Autopilot</div>
+        <div class="tier-desc">Full-scale autonomous front-desk workforce for high-volume clinics with multiple doctors.</div>
+        
+        <div class="price-box">
+          <div style="font-size: 0.8rem; text-decoration: line-through; color: #f43f5e; font-weight: 700;">Standard Setup: 16,500 AED ($4,500)</div>
+          <div class="setup-price" style="color: var(--cyan);">12,500 AED <span style="font-size: 0.85rem; color: var(--emerald); font-weight: 700;">(Founding Rate)</span></div>
+          <div class="setup-label">One-Time Architecture & Setup</div>
+          <div class="retainer-price" style="color: var(--emerald);">+ 2,200 AED / month retainer</div>
+          <div style="font-size: 0.74rem; color: var(--cyan); margin-top: 4px; font-weight: 700;">🎁 1st Month Retainer 100% Waived for First 10 Clinics!</div>
+        </div>
+
+        <div class="billing-notice covered">
+          💎 <strong>All-Inclusive Turnkey Coverage:</strong><br>
+          <strong>All telephony setup, model updates, and maintenance are 100% covered</strong> by Nexa Logic. Zero hidden fees.
+        </div>
+
+        <div class="section-label">🛠️ Full Scope Included by Nexa Logic:</div>
+        <ul class="feature-list">
+          <li><span class="check">✓</span> <strong>Bilingual Auto-Switching (Fluent English & Arabic)</strong></li>
+          <li><span class="check">✓</span> <strong>Multi-Doctor / Multi-Specialist Calendar Routing</strong></li>
+          <li><span class="check">✓</span> <strong>2-Way Rescheduling & Cancellation Handling</strong></li>
+          <li><span class="check">✓</span> <strong>Instant SMS Confirmation & Google Maps Link</strong></li>
+          <li><span class="check">✓</span> <strong>Instant Team Slack/WhatsApp Booking Alerts</strong></li>
+          <li><span class="check">✓</span> <strong>Live Call Transfer (<code style="color:var(--cyan)">transfer_call</code>) to Owner's Mobile</strong></li>
+          <li><span class="check">✓</span> 24-Hour "No-Show Killer" Automated SMS Reminders</li>
+          <li><span class="check">✓</span> Monthly Prompt Tuning & Model Upgrades</li>
+        </ul>
+
+        <a href="https://cal.com/nomena-khan-l63gmb/15min" class="btn-tier btn-glow">Deploy Pro System →</a>
+      </div>
+
+      <!-- Tier 3: Enterprise VIP -->
+      <div class="pricing-card">
+        <div class="tier-name">Enterprise VIP</div>
+        <div class="tier-desc">For premier surgical hospitals, luxury chains, and medical groups needing custom voice clones.</div>
+        
+        <div class="price-box">
+          <div class="setup-price">18,500 AED <span style="font-size: 0.9rem; color: var(--text-muted);">($5,000)</span></div>
+          <div class="setup-label">One-Time Architecture & Setup</div>
+          <div class="retainer-price">+ 3,500 AED / month retainer</div>
+        </div>
+
+        <div class="billing-notice covered">
+          👑 <strong>White-Glove VIP Infrastructure:</strong><br>
+          Dedicated cloud infrastructure, unlimited call scaling, and 1-hour priority engineering SLA included.
+        </div>
+
+        <div class="section-label">🛠️ Enterprise Scope & Deliverables:</div>
+        <ul class="feature-list">
+          <li><span class="check">✓</span> <strong>Hyper-Realistic Founder Voice Cloning</strong></li>
+          <li><span class="check">✓</span> <strong>Automated 5-Star Google Review Engine</strong></li>
+          <li><span class="check">✓</span> Multi-Branch PBX Telephone Integration</li>
+          <li><span class="check">✓</span> Custom CRM & Healthcare Software Sync</li>
+          <li><span class="check">✓</span> Post-Treatment Care Follow-up Sequences</li>
+          <li><span class="check">✓</span> Dedicated Account Engineer & 1-Hour SLA</li>
+          <li><span class="check">✓</span> Unlimited Concurrent Inbound Call Scaling</li>
+        </ul>
+
+        <a href="https://cal.com/nomena-khan-l63gmb/15min" class="btn-tier btn-outline">Select Enterprise Plan →</a>
+      </div>
+
+    </div>
+
+    <!-- ROI Comparison Matrix -->
+    <div class="roi-section">
+      <h3>The Financial Impact: Human Staff vs. Nexa Logic AI</h3>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Metric / Overhead</th>
+            <th>Traditional Human Staff in Dubai</th>
+            <th>Nexa Logic Pro Autopilot</th>
+            <th>Annual Impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Monthly Overhead</strong></td>
+            <td class="text-danger">8,500 – 12,000 AED / mo</td>
+            <td class="text-emerald">2,200 AED / mo</td>
+            <td class="text-emerald">Save 75,000+ AED / year</td>
+          </tr>
+          <tr>
+            <td><strong>Operating Availability</strong></td>
+            <td class="text-danger">8 Hours / Day (Misses evenings & weekends)</td>
+            <td class="text-emerald">24 Hours / 7 Days / 365 Days</td>
+            <td class="text-emerald">+30% More Lead Capture</td>
+          </tr>
+          <tr>
+            <td><strong>Language Capabilities</strong></td>
+            <td>Requires hiring multiple bilingual staff</td>
+            <td class="text-emerald">Native English + Arabic Included</td>
+            <td class="text-emerald">Zero Extra Staff Costs</td>
+          </tr>
+          <tr>
+            <td><strong>No-Show Reduction</strong></td>
+            <td class="text-danger">30% – 35% No-Show Rate</td>
+            <td class="text-emerald">&lt; 5% with Automated SMS Reminders</td>
+            <td class="text-emerald">Hundreds of Extra Clinic Hours</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Deck Footer -->
+    <footer class="deck-footer">
+      <div><strong>Nexa Logic AI Automation Agency</strong> • Dubai, United Arab Emirates</div>
+      <div>Direct Founder Contact: <a href="mailto:nomena@getnexalogic.com" style="color: var(--cyan); text-decoration: none;">nomena@getnexalogic.com</a> • <a href="https://getnexalogic.com" style="color: var(--cyan); text-decoration: none;">getnexalogic.com</a></div>
+    </footer>
+
+  </div>
+
+</body>
+</html>

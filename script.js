@@ -1278,9 +1278,9 @@ function sendDrawerMessage() {
         Elena is live on our phone line right now if you'd like to test an inbound call!`;
     }
     // 9. Integrations & CRM
-    else if (lower.includes('crm') || lower.includes('integrate') || lower.includes('hubspot') || lower.includes('gohighlevel') || lower.includes('calendly') || lower.includes('cal.com') || lower.includes('sheets') || lower.includes('zapier') || lower.includes('make')) {
+    else if (lower.includes('crm') || lower.includes('integrate') || lower.includes('hubspot') || lower.includes('gohighlevel') || lower.includes('cal.com') || lower.includes('sheets') || lower.includes('zapier') || lower.includes('make')) {
       botBubble.innerHTML = `⚡ <strong>Turnkey CRM & Workflow Integrations:</strong><br><br>
-        We integrate natively with <strong>Cal.com, Google Calendar, Calendly, GoHighLevel, HubSpot, Salesforce, Airtable, Notion, Make.com, and Zapier</strong>.<br><br>
+        We integrate natively with <strong>Cal.com, Google Calendar, GoHighLevel, HubSpot, Salesforce, Airtable, Notion, Make.com, and Zapier</strong>.<br><br>
         All call transcripts, caller recordings, qualified lead cards, and confirmed appointments sync in real time with zero manual data entry.`;
     }
     // 10. Intelligent Name Capture ("my name is X" / "I am X")

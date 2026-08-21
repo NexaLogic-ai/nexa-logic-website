@@ -255,7 +255,7 @@
           <div class="agent-avatar">🤖</div>
           <div class="agent-meta">
             <h4>Nexa Autonomous Booking Agent</h4>
-            <div class="agent-status"><span class="pulse-dot" style="background:#22c55e;"></span> Connected to Calendly API & Google Calendar</div>
+            <div class="agent-status"><span class="pulse-dot" style="background:#22c55e;"></span> Connected to Cal.com API & Google Calendar</div>
           </div>
         </div>
         <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;" onclick="resetChat()">Reset Demo ⟳</button>
@@ -351,7 +351,7 @@
           currentFlow.selectedDay = 'Thursday';
           currentFlow.state = 'AWAITING_TIME';
           appendBubble('bot', `
-            ⚙️ <em>Querying Calendly API for Thursday openings...</em><br><br>
+            ⚙️ <em>Querying Cal.com API for Thursday openings...</em><br><br>
             I found <strong>2 available openings</strong> for Thursday:
             <div class="slot-grid">
               <div class="slot-pill" onclick="handleSlotSelection('Thursday at 10:30 AM')">🕒 10:30 AM (Morning)</div>
@@ -366,7 +366,7 @@
           currentFlow.selectedDay = 'Friday';
           currentFlow.state = 'AWAITING_TIME';
           appendBubble('bot', `
-            ⚙️ <em>Querying Calendly API for Friday openings...</em><br><br>
+            ⚙️ <em>Querying Cal.com API for Friday openings...</em><br><br>
             I found <strong>2 available openings</strong> for Friday:
             <div class="slot-grid">
               <div class="slot-pill" onclick="handleSlotSelection('Friday at 11:00 AM')">🕒 11:00 AM (Morning)</div>
@@ -410,7 +410,7 @@
           currentFlow.state = 'CONFIRMED';
           appendBubble('bot', `
             ✅ <strong>All Set! Your Meeting is Confirmed!</strong><br><br>
-            ⚙️ <em>Executed tool: <code>createCalendlyContactMeeting(time="${currentFlow.selectedTime || 'Thursday at 2:00 PM'}", email="${currentFlow.userEmail}")</code></em><br><br>
+            ⚙️ <em>Executed tool: <code>createCalComMeeting(time="${currentFlow.selectedTime || 'Thursday at 2:00 PM'}", email="${currentFlow.userEmail}")</code></em><br><br>
             • 👤 <strong>Name:</strong> ${currentFlow.userName || 'Valued Client'}<br>
             • ✉️ <strong>Email:</strong> ${currentFlow.userEmail}<br>
             • 📅 <strong>Scheduled Time:</strong> ${currentFlow.selectedTime || 'Thursday at 2:00 PM'}<br>
@@ -424,7 +424,7 @@
         if (t.includes('book') || t.includes('schedule') || t.includes('appointment') || t.includes('consultation') || t.includes('meeting')) {
           currentFlow.state = 'AWAITING_TIME';
           appendBubble('bot', `
-            ⚙️ <em>Executing tool: <code>getCalendlyAvailability(multi_day=true)</code></em>...<br><br>
+            ⚙️ <em>Executing tool: <code>getCalComAvailability(multi_day=true)</code></em>...<br><br>
             I've checked our live schedule. Here are the soonest openings:
             <div class="slot-grid">
               <div class="slot-pill" onclick="handleSlotSelection('Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
@@ -477,16 +477,16 @@
         // 10. INTENT: RESCHEDULE OR CANCEL
         if (t.includes('reschedule') || t.includes('move') || t.includes('change') || t.includes('cancel')) {
           appendBubble('bot', `
-            ⚙️ <em>Executing tool: <code>updateCalendlyMeeting()</code></em>...<br><br>
+            ⚙️ <em>Executing tool: <code>updateCalComMeeting()</code></em>...<br><br>
             I can update or cancel your appointment on the fly without human staff. Please provide the <strong>email address</strong> used for your original booking, and what new day you'd like to switch to!
           `);
           return;
         }
 
         // 11. INTENT: HOW DOES IT WORK / CRM INTEGRATION
-        if (t.includes('crm') || t.includes('how it works') || t.includes('gohighlevel') || t.includes('hubspot') || t.includes('calendly') || t.includes('integrate')) {
+        if (t.includes('crm') || t.includes('how it works') || t.includes('gohighlevel') || t.includes('hubspot') || t.includes('cal.com') || t.includes('integrate')) {
           appendBubble('bot', `
-            We connect directly to Calendly, Google Calendar, GoHighLevel, and major CRMs. When a customer speaks with me, I perform real-time tool calling to check availability, lock in confirmed slots, and sync all contact data into your pipeline automatically!
+            We connect directly to Cal.com, Google Calendar, GoHighLevel, and major CRMs. When a customer speaks with me, I perform real-time tool calling to check availability, lock in confirmed slots, and sync all contact data into your pipeline automatically!
           `);
           return;
         }
