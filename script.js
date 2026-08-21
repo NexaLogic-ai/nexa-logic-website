@@ -1106,23 +1106,12 @@ function sendDrawerMessage() {
 
     const lower = text.toLowerCase();
 
-    // 1. Email Extraction & Formspree Dispatch
+    // 1. Email Extraction & Multi-Channel Dispatch
     const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
     if (emailMatch) {
       visitorData.email = emailMatch[0];
-      
-      // Dispatch Instant Lead to Google Sheets & Formspree
-      fetch(GOOGLE_SHEETS_ENDPOINT, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
-      if (emailMatch) {
-        visitorData.email = emailMatch[0];
-      }
 
+      // Dispatch Instant Lead to Google Sheets
       fetch(GOOGLE_SHEETS_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -1136,6 +1125,7 @@ function sendDrawerMessage() {
         })
       }).catch(e => console.error(e));
 
+      // Dispatch Instant Lead to Formspree
       fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
         headers: {
