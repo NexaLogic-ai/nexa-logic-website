@@ -127,44 +127,74 @@
         </div>
       </div>
 
-      <!-- Right Column: 3D Interactive Media & Floating Stats -->
+      <!-- Right Column: Interactive Live AI Hotline Center -->
       <div class="hero-media-wrapper">
-        <div class="hero-media-card">
+        <div class="hero-media-card" style="position: relative; overflow: visible;">
           
-          <div class="media-preview-box">
-            <div class="soundwave-bar">
-              <span class="wave-bar"></span>
-              <span class="wave-bar"></span>
-              <span class="wave-bar"></span>
-              <span class="wave-bar"></span>
-              <span class="wave-bar"></span>
+          <div class="media-preview-box" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+            
+            <!-- Live Hotline Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px;">
+              <div>
+                <div style="font-weight: 700; font-size: 1.05rem; color: #fff; display: flex; align-items: center; gap: 6px;">
+                  <span>🎙️ Elena</span>
+                  <span style="font-size: 0.76rem; color: var(--cyan); background: rgba(0, 240, 255, 0.12); padding: 2px 8px; border-radius: 9999px; font-weight: 600;">24/7 AI Receptionist</span>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--emerald); display: flex; align-items: center; gap: 4px; margin-top: 2px;">
+                  <span class="pulse-dot" style="background: #22c55e;"></span> Live & Ready on Inbound Line
+                </div>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-muted);">&lt; 0.5s Latency</span>
             </div>
 
-            <div class="ai-avatar-center">
-              <div class="avatar-glow"></div>
-              <div class="avatar-circle">🤖</div>
+            <!-- Central Soundwave & Avatar -->
+            <div style="display: flex; align-items: center; justify-content: center; gap: 16px; background: rgba(5, 8, 12, 0.6); border-radius: 14px; padding: 16px 12px;">
+              <div class="soundwave-bar" style="height: 36px; display: flex; align-items: center; gap: 3px;">
+                <span class="wave-bar" style="height: 14px;"></span>
+                <span class="wave-bar" style="height: 28px;"></span>
+                <span class="wave-bar" style="height: 36px;"></span>
+                <span class="wave-bar" style="height: 22px;"></span>
+                <span class="wave-bar" style="height: 32px;"></span>
+                <span class="wave-bar" style="height: 18px;"></span>
+                <span class="wave-bar" style="height: 30px;"></span>
+              </div>
+              <div class="ai-avatar-center" style="position: relative;">
+                <div class="avatar-circle" style="width: 48px; height: 48px; font-size: 1.4rem;">🤖</div>
+              </div>
+              <div class="soundwave-bar" style="height: 36px; display: flex; align-items: center; gap: 3px;">
+                <span class="wave-bar" style="height: 30px;"></span>
+                <span class="wave-bar" style="height: 18px;"></span>
+                <span class="wave-bar" style="height: 32px;"></span>
+                <span class="wave-bar" style="height: 22px;"></span>
+                <span class="wave-bar" style="height: 36px;"></span>
+                <span class="wave-bar" style="height: 28px;"></span>
+                <span class="wave-bar" style="height: 14px;"></span>
+              </div>
             </div>
 
-            <div class="active-call-dialogue">
-              <span class="call-badge">● Live Inbound Call In Progress</span>
-              <p class="call-text">"Hi! I see you requested a consultation for Thursday at 2:30 PM. I have confirmed your slot and sent the invite to your email."</p>
+            <!-- Dialogue Quote -->
+            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px;">
+              <span style="font-size: 0.72rem; color: var(--cyan); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">● Live Call Response</span>
+              <p style="font-size: 0.85rem; color: var(--text-primary); font-style: italic; line-height: 1.4; margin: 0;">"Thanks for calling Nexa Logic! I can answer your questions about our AI systems and lock a 15-min strategy call with Nomena directly into our calendar. What kind of business do you run?"</p>
             </div>
-          </div>
 
-          <!-- Floating Badges -->
-          <div class="floating-badge badge-top">
-            <span class="dot-green"></span>
-            <span>0.4s Instant Response Time</span>
-          </div>
+            <!-- Action Buttons: Direct Call Helpline -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <a href="tel:+971585517132" class="btn btn-primary btn-glow" style="width: 100%; text-align: center; justify-content: center; font-size: 0.92rem; padding: 12px; border-radius: 10px;">
+                <span>📞 Tap to Call Live AI Hotline: +971 58 551 7132</span>
+              </a>
+              <a href="#demo" class="btn btn-secondary" style="width: 100%; text-align: center; justify-content: center; font-size: 0.8rem; padding: 8px; border-radius: 8px;">
+                <span>🎧 Or Test In-Browser Voice Showroom Below ↓</span>
+              </a>
+            </div>
 
-          <div class="floating-badge badge-right">
-            <span class="dot-cyan"></span>
-            <span>+45% Appointment Lift</span>
-          </div>
+            <!-- Clean Non-Overlapping Telemetry Pills -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px; font-size: 0.74rem; color: var(--text-muted);">
+              <span style="display: flex; align-items: center; gap: 4px;"><span style="color: var(--emerald);">●</span> 0.4s Response</span>
+              <span style="display: flex; align-items: center; gap: 4px;"><span style="color: var(--cyan);">●</span> +45% Bookings</span>
+              <span style="display: flex; align-items: center; gap: 4px;"><span style="color: #a855f7;">●</span> 100% Cal.com Sync</span>
+            </div>
 
-          <div class="floating-badge badge-bottom">
-            <span class="dot-purple"></span>
-            <span>$0 Human Overtime Cost</span>
           </div>
 
         </div>
@@ -316,6 +346,30 @@
           </div>
         </div>
 
+        <!-- Agent 7: Tier-1 Support & Emergency Triage -->
+        <div class="bento-card">
+          <div class="bento-tag" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">🛡️ 24/7 Support</div>
+          <h3>24/7 Tier-1 Support & Emergency Triage Agents</h3>
+          <p>Resolves 80% of routine inquiries, order status, return policies, and after-hours emergency triage without putting callers on hold or burning out human staff.</p>
+          <div class="feature-pills">
+            <span>Instant FAQ Resolution</span>
+            <span>Emergency Live Transfer</span>
+            <span>Ticketing & CRM Sync</span>
+          </div>
+        </div>
+
+        <!-- Agent 8: Database Reactivation & Outbound -->
+        <div class="bento-card">
+          <div class="bento-tag" style="background: rgba(236, 72, 153, 0.15); color: #f472b6;">🔄 Pipeline Revival</div>
+          <h3>Speed-to-Lead & Database Reactivation Agents</h3>
+          <p>Calls new ad leads within 30 seconds of form submission, and dials past dead CRM databases with exclusive seasonal offers to unlock instant found revenue.</p>
+          <div class="feature-pills">
+            <span>&lt; 30s Speed-to-Lead</span>
+            <span>Dormant CRM Revival</span>
+            <span>Automated Callback Scheduling</span>
+          </div>
+        </div>
+
         <!-- Proprietary: Voice Cloning -->
         <div class="bento-card bento-wide" style="border-color: rgba(0, 240, 255, 0.3); background: linear-gradient(135deg, rgba(14, 22, 32, 0.9) 0%, rgba(18, 28, 42, 0.9) 100%);">
           <div class="bento-tag" style="background: rgba(0, 240, 255, 0.15); color: var(--cyan);">🧬 Proprietary Technology</div>
@@ -379,18 +433,31 @@
               <div class="mic-icon">🎙️</div>
             </div>
 
-            <div class="voice-controls">
-              <button id="btn-call-sim" class="btn btn-primary btn-glow" onclick="runVoiceSim()">
-                <span>▶ Call Nexa Voice AI (Live Audio Demo)</span>
+            <!-- Direct Hotline Callout Banner -->
+            <div style="background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 12px; padding: 10px 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+              <div style="font-size: 0.85rem; color: #fff; font-weight: 600;">
+                <span style="color: var(--emerald);">●</span> Live Telephone Hotline: <span style="color: var(--cyan); font-family: var(--font-mono);">+971 58 551 7132</span>
+              </div>
+              <a href="tel:+971585517132" class="btn btn-primary btn-glow" style="padding: 6px 14px; font-size: 0.78rem;">
+                <span>📞 Dial from Phone</span>
+              </a>
+            </div>
+
+            <div class="voice-controls" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+              <button id="btn-call-sim" class="btn btn-primary btn-glow" onclick="toggleVoiceSimPlayback()">
+                <span id="btn-call-sim-text">▶ Play In-Browser Voice AI Demo</span>
+              </button>
+              <button id="btn-stop-sim" class="btn btn-secondary" style="display: none;" onclick="stopVoiceSimPlayback()">
+                <span>⏹ Stop Audio</span>
               </button>
             </div>
 
             <div id="voice-audio-status" class="voice-audio-badge">
-              <span class="pulse-dot"></span> Click to initiate live audio call simulation with real voice playback
+              <span class="pulse-dot"></span> Click to play voice sample or select a question below to hear real-time AI responses
             </div>
 
-            <div id="voice-quick-prompts" class="voice-quick-prompts" style="display: none;">
-              <span class="prompt-label">Ask the AI Voice Agent:</span>
+            <div id="voice-quick-prompts" class="voice-quick-prompts" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px;">
+              <span class="prompt-label" style="width: 100%; text-align: center; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 4px;">Click any question to hear Elena answer out loud:</span>
               <button class="voice-prompt-btn" onclick="askVoiceQuestion('How does your AI integrate with our clinic or law firm calendar?')">📅 "How do you connect with calendars?"</button>
               <button class="voice-prompt-btn" onclick="askVoiceQuestion('Can your AI route callers to different specialists or doctors?')">👥 "Can you route to multiple specialists?"</button>
               <button class="voice-prompt-btn" onclick="askVoiceQuestion('What happens if a customer calls at 2 AM or on the weekend?')">🌙 "What happens with late-night calls?"</button>
@@ -399,7 +466,7 @@
 
             <div id="voice-transcript" class="transcript-box">
               <div class="msg ai-msg">
-                <strong>Nexa Voice AI:</strong> "Hello! Click the button above to start a live audio voice call. I am programmed to converse out loud, answer questions, and demonstrate 24/7 calendar booking!"
+                <strong>Elena (Nexa AI):</strong> "Thanks for calling Nexa Logic! I am your 24/7 Autonomous AI Voice Agent. I answer calls on the first ring, quote pricing, check live calendar availability, and book appointments. Click any question above to hear me respond!"
               </div>
             </div>
           </div>
@@ -412,7 +479,7 @@
             <div style="text-align: center;">
               <span class="badge" style="background: rgba(0, 240, 255, 0.12); color: var(--cyan); border: 1px solid rgba(0, 240, 255, 0.3); font-size: 0.78rem; padding: 4px 12px; border-radius: 9999px;">🧬 30-Second Neural Voice Match</span>
               <h3 style="font-family: var(--font-display); font-size: 1.35rem; margin: 10px 0 6px;">Hyper-Realistic Voice Cloning & Accent Studio</h3>
-              <p style="font-size: 0.92rem; color: var(--text-muted);">Listen to how Nexa clones the vocal tone, cadence, and empathy of real clinic founders and executives with 99.8% acoustic precision.</p>
+              <p style="font-size: 0.92rem; color: var(--text-muted);">Listen to how Nexa clones the vocal tone, cadence, and empathy of real founders with 99.8% acoustic precision.</p>
             </div>
 
             <!-- Profile Selector Cards -->
@@ -422,7 +489,7 @@
                   <span style="font-size: 1.6rem;">👩‍⚕️</span>
                   <div>
                     <div style="font-weight: 700; color: #fff; font-size: 0.92rem;">Dr. Sarah Jenkins</div>
-                    <div style="font-size: 0.76rem; color: var(--cyan);">Med Spa Founder Clone</div>
+                    <div style="font-size: 0.76rem; color: var(--cyan);">Female • Med Spa Founder</div>
                   </div>
                 </div>
                 <div class="clone-metric-tag" style="margin-top: 10px; font-size: 0.74rem; color: var(--emerald); display: flex; align-items: center; gap: 4px;">
@@ -432,10 +499,10 @@
 
               <div class="clone-profile-card" id="clone-card-marcus" onclick="selectCloneProfile('marcus')">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                  <span style="font-size: 1.6rem;">👨‍⚖️</span>
+                  <span style="font-size: 1.6rem;">👨‍💼</span>
                   <div>
                     <div style="font-weight: 700; color: #fff; font-size: 0.92rem;">Marcus Vance, Esq.</div>
-                    <div style="font-size: 0.76rem; color: #a855f7;">Senior Partner Clone</div>
+                    <div style="font-size: 0.76rem; color: #a855f7;">Male • Senior Partner</div>
                   </div>
                 </div>
                 <div class="clone-metric-tag" style="margin-top: 10px; font-size: 0.74rem; color: var(--emerald); display: flex; align-items: center; gap: 4px;">
@@ -448,7 +515,7 @@
                   <span style="font-size: 1.6rem;">💇‍♂️</span>
                   <div>
                     <div style="font-weight: 700; color: #fff; font-size: 0.92rem;">Jax Reynolds</div>
-                    <div style="font-size: 0.76rem; color: #f59e0b;">Barbershop Owner Clone</div>
+                    <div style="font-size: 0.76rem; color: #f59e0b;">Male • Salon Owner</div>
                   </div>
                 </div>
                 <div class="clone-metric-tag" style="margin-top: 10px; font-size: 0.74rem; color: var(--emerald); display: flex; align-items: center; gap: 4px;">
@@ -472,13 +539,16 @@
                 <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
               </div>
 
-              <!-- Action Controls -->
+              <!-- Action Controls with Pause / Stop Support -->
               <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
-                <button id="btn-play-clone" class="btn btn-primary btn-glow" onclick="playActiveVoiceClone()">
-                  <span>▶ Play Live Cloned Voice Greeting & Booking Demo</span>
+                <button id="btn-play-clone" class="btn btn-primary btn-glow" onclick="toggleActiveVoiceClone()">
+                  <span id="btn-play-clone-text">▶ Play Cloned Voice Demo</span>
                 </button>
-                <button class="btn btn-secondary" onclick="playOriginalHumanSample()">
-                  <span>🎧 Original Human Sample</span>
+                <button id="btn-play-sample" class="btn btn-secondary" onclick="toggleOriginalHumanSample()">
+                  <span id="btn-play-sample-text">🎧 Original Human Sample</span>
+                </button>
+                <button class="btn btn-secondary" onclick="stopAllCloningAudio()">
+                  <span>⏹ Stop</span>
                 </button>
               </div>
 
@@ -486,6 +556,34 @@
               <div id="clone-transcript-box" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; font-size: 0.88rem; color: var(--text-primary); line-height: 1.5;">
                 <strong style="color: var(--cyan);" id="clone-speaker-tag">Dr. Sarah (AI Clone):</strong> "<span id="clone-speech-text">Hi there! This is Dr. Sarah from Radiance Aesthetics. I am in a treatment room right now, but I can check my live calendar, answer your questions about Botox, and book you directly into my schedule. What day works best for you?</span>"
               </div>
+            </div>
+
+            <!-- INTERACTIVE "TRY YOUR OWN VOICE" CLONING LAB -->
+            <div class="user-clone-box" style="background: linear-gradient(135deg, rgba(14, 22, 32, 0.95) 0%, rgba(20, 30, 45, 0.95) 100%); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 18px; padding: 24px; text-align: center;">
+              <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--cyan); font-weight: 700; margin-bottom: 6px;">🎙️ Interactive Voice Lab</div>
+              <h4 style="font-size: 1.2rem; color: #fff; margin: 0 0 8px;">Record 5 Seconds of Your Voice & Hear Your AI Clone</h4>
+              <p style="font-size: 0.86rem; color: var(--text-muted); max-width: 520px; margin: 0 auto 18px;">Tap record, speak a quick sentence into your microphone, and our neural model will generate your acoustic clone sample.</p>
+              
+              <div id="user-record-controls" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <button id="btn-record-user" class="btn btn-primary btn-glow" onclick="startUserVoiceRecording()">
+                  <span>🎙️ Start 5s Voice Recording</span>
+                </button>
+              </div>
+
+              <!-- Recording Telemetry & Playback -->
+              <div id="user-recording-result" style="display: none; margin-top: 18px; padding: 16px; background: rgba(5, 8, 12, 0.6); border-radius: 14px; border: 1px solid var(--border);">
+                <div id="user-rec-status" style="font-size: 0.88rem; color: var(--emerald); font-weight: 700; margin-bottom: 12px;">✅ Voice Sample Captured & Modeled (99.8% Match)!</div>
+                
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                  <button id="btn-play-user-orig" class="btn btn-secondary" onclick="playUserOriginalAudio()">
+                    <span>🎧 Play Your Original Recording</span>
+                  </button>
+                  <button id="btn-play-user-clone" class="btn btn-primary btn-glow" onclick="playUserClonedAudio()">
+                    <span>🤖 Play Your AI Cloned Voice</span>
+                  </button>
+                </div>
+              </div>
+
             </div>
 
           </div>
@@ -588,8 +686,8 @@
         <span>🎁 100% Free • Zero Obligation</span>
       </div>
 
-      <h2 class="section-title">Get a Custom AI Voice Receptionist <span class="gradient-text">Trained on Your Business</span></h2>
-      <p class="section-subtitle">Submit your website or service details below. Our AI engineers will train a bespoke conversational receptionist on your exact offerings and deliver a private live audio test link in under 24 hours.</p>
+      <h2 class="section-title">Get a Custom Autonomous AI Workforce <span class="gradient-text">Trained on Your Business</span></h2>
+      <p class="section-subtitle">Submit your website or service details below. Our AI engineers will train a bespoke conversational voice & chat workforce on your exact offerings and deliver a private live audio test link in under 24 hours.</p>
 
       <div class="demo-form-card">
         
