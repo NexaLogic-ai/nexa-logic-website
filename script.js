@@ -869,21 +869,45 @@ function submitSpecialistBooking(name, service, slug, slot) {
   `;
 }
 
-// 4. Interactive ROI Calculator
-function calculateROI() {
-  const leads = parseInt(document.getElementById('leads-slider').value);
-  const clv = parseInt(document.getElementById('clv-slider').value);
+// 4. Interactive Speed-to-Lead Live Battle Simulator
+function runSpeedSimulation() {
+  const telemetry = document.getElementById('sim-telemetry');
+  const btn = document.getElementById('btn-run-sim');
+  const nexaTimer = document.getElementById('sim-nexa-timer');
+  const tradTimer = document.getElementById('sim-trad-timer');
 
-  document.getElementById('leads-val').innerText = `${leads} leads`;
-  document.getElementById('clv-val').innerText = `$${clv.toLocaleString()}`;
+  btn.disabled = true;
+  btn.innerHTML = '<span>⚡ Simulating Inbound Inbound Call Across Systems...</span>';
+  telemetry.style.display = 'grid';
 
-  // Average 25% after-hours / missed calls rate
-  const missedLeads = Math.round(leads * 0.25);
-  // Average 30% closing rate on recovered leads
-  const recoveredRevenue = Math.round(missedLeads * 0.30 * clv);
+  // Animate Nexa Logic AI Timer (0.00s -> 0.42s)
+  let nexaMs = 0;
+  nexaTimer.innerText = '0.00s';
+  const nexaInterval = setInterval(() => {
+    nexaMs += 35;
+    if (nexaMs >= 420) {
+      clearInterval(nexaInterval);
+      nexaTimer.innerText = '0.42s ⚡ (Answered & Booked!)';
+      btn.disabled = false;
+      btn.innerHTML = '<span>⚡ Re-Run Live Simulation</span>';
+    } else {
+      nexaTimer.innerText = (nexaMs / 1000).toFixed(2) + 's';
+    }
+  }, 30);
 
-  document.getElementById('missed-leads').innerText = `${missedLeads} leads`;
-  document.getElementById('recovered-rev').innerText = `$${recoveredRevenue.toLocaleString()} / mo`;
+  // Animate Traditional Timer (Counting up to 42 minutes)
+  let tradMin = 0;
+  let tradSec = 0;
+  const tradInterval = setInterval(() => {
+    tradMin += 3;
+    tradSec = Math.floor(Math.random() * 59);
+    if (tradMin >= 42) {
+      clearInterval(tradInterval);
+      tradTimer.innerText = '42m 18s ❌ (Missed / Voicemail)';
+    } else {
+      tradTimer.innerText = `${tradMin}m ${tradSec}s`;
+    }
+  }, 50);
 }
 
 // ================= 5. FLOATING AI AUTO-AGENT (WITH INSTANT FORMSPREE EMAIL ALERTS) =================
@@ -990,5 +1014,5 @@ function sendQuickChip(questionText) {
 
 // Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
-  calculateROI();
+  // Ready
 });

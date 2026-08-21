@@ -68,7 +68,7 @@
           </div>
         </a>
 
-        <a href="#calculator" class="island-item" data-tooltip="ROI Calculator" aria-label="ROI Calculator">
+        <a href="#showdown" class="island-item" data-tooltip="Live Showdown" aria-label="Live Showdown">
           <div class="island-icon-box">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           </div>
@@ -769,49 +769,81 @@
     </div>
   </section>
 
-  <!-- Interactive ROI Calculator -->
-  <section id="calculator" class="calc-section">
+  <!-- Interactive Showdown & Speed-to-Lead Simulator -->
+  <section id="showdown" class="calc-section">
     <div class="container">
-      <div class="section-badge green-badge">
-        <span class="green-dot"></span>
-        <span>Revenue Impact</span>
+      <div class="section-badge cyan-badge">
+        <span class="cyan-dot"></span>
+        <span>The Live Showdown</span>
       </div>
 
-      <h2 class="section-title">Calculate Your Lost Revenue from Missed Calls</h2>
-      <p class="section-subtitle">See how much pipeline value Nexa Logic can recover for your business each month.</p>
+      <h2 class="section-title">Human Front Desk vs. <span class="gradient-text">Autonomous AI Workforce</span></h2>
+      <p class="section-subtitle">See why premier clinics, high-ticket firms, and enterprise brands are replacing slow manual front desks with Nexa Logic.</p>
 
-      <div class="calc-card">
-        <div class="calc-inputs">
+      <!-- Head-to-Head Comparison Grid -->
+      <div class="showdown-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 32px;">
+        
+        <!-- Left Card: Traditional Front Desk -->
+        <div class="showdown-card traditional" style="background: rgba(244, 63, 94, 0.04); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: 20px; padding: 28px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+            <h3 style="color: #f43f5e; font-size: 1.25rem; font-weight: 700; margin: 0;">❌ Traditional Front Desk</h3>
+            <span style="background: rgba(244, 63, 94, 0.15); color: #f43f5e; font-size: 0.76rem; padding: 4px 10px; border-radius: 9999px; font-weight: 700;">High Friction & Cost</span>
+          </div>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; font-size: 0.9rem; color: #cbd5e1;">
+            <li style="display: flex; gap: 10px;"><span style="color: #f43f5e; font-weight: 800;">✕</span> <strong>8-Hour Daily Limit:</strong> 62% of high-value calls happen after-hours & hit dead-end voicemail.</li>
+            <li style="display: flex; gap: 10px;"><span style="color: #f43f5e; font-weight: 800;">✕</span> <strong>Slow Speed-to-Lead:</strong> Average callback time is 42+ minutes—losing 80% of leads to competitors.</li>
+            <li style="display: flex; gap: 10px;"><span style="color: #f43f5e; font-weight: 800;">✕</span> <strong>1 Call at a Time:</strong> Second caller gets a busy signal or endless hold music.</li>
+            <li style="display: flex; gap: 10px;"><span style="color: #f43f5e; font-weight: 800;">✕</span> <strong>Expensive Overhead:</strong> $45,000–$60,000/yr salary per employee + sick leave, visas & burnout.</li>
+            <li style="display: flex; gap: 10px;"><span style="color: #f43f5e; font-weight: 800;">✕</span> <strong>Human Error:</strong> Missed calendar notes, forgotten SMS reminders, and lost patient records.</li>
+          </ul>
+        </div>
+
+        <!-- Right Card: Nexa Logic Autonomous AI -->
+        <div class="showdown-card nexa" style="background: linear-gradient(135deg, rgba(0, 240, 255, 0.06) 0%, rgba(16, 185, 129, 0.06) 100%); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 20px; padding: 28px; box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+            <h3 style="color: var(--cyan); font-size: 1.25rem; font-weight: 700; margin: 0;">⚡ Nexa Logic Autonomous AI</h3>
+            <span style="background: rgba(0, 240, 255, 0.15); color: var(--cyan); font-size: 0.76rem; padding: 4px 10px; border-radius: 9999px; font-weight: 700;">24/7 Autopilot</span>
+          </div>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; font-size: 0.9rem; color: #f8fafc;">
+            <li style="display: flex; gap: 10px;"><span style="color: var(--emerald); font-weight: 800;">✓</span> <strong>24/7/365 Non-Stop Execution:</strong> Answers on the 1st ring at 2 AM, on weekends, and holidays.</li>
+            <li style="display: flex; gap: 10px;"><span style="color: var(--emerald); font-weight: 800;">✓</span> <strong>&lt; 500ms Instant Response:</strong> Sub-second conversational voice & chat (21x higher conversion).</li>
+            <li style="display: flex; gap: 10px;"><span style="color: var(--emerald); font-weight: 800;">✓</span> <strong>Infinite Concurrency:</strong> Handles 1,000+ simultaneous phone calls & chats with zero hold time.</li>
+            <li style="display: flex; gap: 10px;"><span style="color: var(--emerald); font-weight: 800;">✓</span> <strong>Fraction of the Cost:</strong> Zero salaries, zero benefits, zero sick days, zero visa fees.</li>
+            <li style="display: flex; gap: 10px;"><span style="color: var(--emerald); font-weight: 800;">✓</span> <strong>Real-Time Calendar Sync:</strong> Checks live free/busy slots & auto-books straight to Google/Calendly.</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Interactive Speed-to-Lead Simulator Widget -->
+      <div class="simulator-box" style="background: rgba(14, 22, 32, 0.9); border: 1px solid var(--border); border-radius: 20px; padding: 32px; text-align: center;">
+        <div style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--cyan); font-weight: 700; margin-bottom: 8px;">🎮 Interactive Speed-to-Lead Simulator</div>
+        <h3 style="font-size: 1.4rem; color: #fff; margin-bottom: 12px;">Test Inbound Response Speed in Real Time</h3>
+        <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 600px; margin: 0 auto 24px;">Click the button below to simulate an inbound high-ticket customer inquiry hitting your business lines right now.</p>
+        
+        <button id="btn-run-sim" class="btn btn-primary btn-glow" style="padding: 14px 32px; font-size: 1rem;" onclick="runSpeedSimulation()">
+          <span>⚡ Launch Inbound Lead Simulation</span>
+        </button>
+
+        <!-- Live Simulation Telemetry Meters -->
+        <div id="sim-telemetry" style="display: none; margin-top: 32px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
           
-          <div class="calc-group">
-            <div class="calc-label-row">
-              <label>Monthly Inbound Leads / Calls:</label>
-              <span id="leads-val" class="calc-highlight">150 leads</span>
-            </div>
-            <input type="range" id="leads-slider" min="30" max="1000" value="150" step="10" oninput="calculateROI()">
+          <div style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 16px; padding: 20px; text-align: left;">
+            <div style="font-size: 0.8rem; color: #f43f5e; font-weight: 700;">Traditional Front Desk Response:</div>
+            <div id="sim-trad-timer" style="font-family: var(--font-mono); font-size: 2.2rem; font-weight: 800; color: #f43f5e; margin: 8px 0;">42m 18s</div>
+            <div style="font-size: 0.84rem; color: #94a3b8;">⚠️ Outcome: Caller hit closed voicemail, hung up after 6 rings, and booked with competitor on Google.</div>
           </div>
 
-          <div class="calc-group">
-            <div class="calc-label-row">
-              <label>Average Customer Lifetime Value ($):</label>
-              <span id="clv-val" class="calc-highlight">$1,500</span>
-            </div>
-            <input type="range" id="clv-slider" min="200" max="10000" value="1500" step="100" oninput="calculateROI()">
+          <div style="background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 16px; padding: 20px; text-align: left;">
+            <div style="font-size: 0.8rem; color: var(--cyan); font-weight: 700;">Nexa Logic Autonomous AI Response:</div>
+            <div id="sim-nexa-timer" style="font-family: var(--font-mono); font-size: 2.2rem; font-weight: 800; color: var(--emerald); margin: 8px 0;">0.42s</div>
+            <div style="font-size: 0.84rem; color: #f8fafc;">🎉 Outcome: Answered on 1st ring, answered treatment FAQs, checked live calendar & locked booking into Google Meet!</div>
           </div>
 
         </div>
 
-        <div class="calc-results">
-          <div class="result-item">
-            <div class="result-label">Estimated Missed Leads / Month</div>
-            <div id="missed-leads" class="result-number text-danger">38 leads</div>
-          </div>
-          <div class="result-item highlight-box">
-            <div class="result-label">Recoverable Monthly Revenue</div>
-            <div id="recovered-rev" class="result-number text-emerald">$17,100 / mo</div>
-          </div>
-        </div>
       </div>
+
     </div>
   </section>
 
@@ -866,7 +898,7 @@
         <a href="#solutions">Solutions</a>
         <a href="#demo">AI Showroom</a>
         <a href="#process">How It Works</a>
-        <a href="#calculator">ROI Calculator</a>
+        <a href="#showdown">Live Showdown</a>
       </div>
 
       <div class="footer-contact">
