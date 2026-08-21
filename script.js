@@ -1,6 +1,5 @@
-// Nexa Logic — Interactive Client Experience Scripts
-
-// Formspree Lead Notification Webhook Endpoint
+// Master Lead Intake & Email Auto-Responder Endpoints (100% Free Google Sheets + Formspree)
+const GOOGLE_SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwJdbUFRvsCNf7qvjTah0b_Mhs-dczIKlv1mBTGqd_E_DA8Nmh4yRYL4xmOQ2nyYPDe/exec';
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xrpzaqpa';
 
 // 0. Dynamic Island Capsule Scroll Spy & Navigation
@@ -100,26 +99,32 @@ async function handleCustomDemoSubmit(e) {
   };
 
   try {
-    const response = await fetch(FORMSPREE_ENDPOINT, {
+    // 1. Send to Google Sheets (Appends row to Sheet + auto-sends confirmation email to customer + alerts Nomena)
+    fetch(GOOGLE_SHEETS_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    }).catch(e => console.error('Google Sheets dispatch error:', e));
+
+    // 2. Send to Formspree as backup
+    fetch(FORMSPREE_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
       body: JSON.stringify(payload)
-    });
+    }).catch(e => console.error('Formspree dispatch error:', e));
 
-    if (response.ok) {
-      form.style.display = 'none';
-      successBox.style.display = 'block';
-      document.getElementById('success-target-email').textContent = email;
-      document.getElementById('success-target-phone').textContent = phone;
-      playPhoneChime();
-    } else {
-      throw new Error('Submission failed');
-    }
+    form.style.display = 'none';
+    successBox.style.display = 'block';
+    document.getElementById('success-target-email').textContent = email;
+    document.getElementById('success-target-phone').textContent = phone;
+    playPhoneChime();
   } catch (err) {
-    // Graceful offline fallback
     form.style.display = 'none';
     successBox.style.display = 'block';
     document.getElementById('success-target-email').textContent = email;
@@ -1136,7 +1141,22 @@ function sendDrawerMessage() {
     if (emailMatch) {
       visitorData.email = emailMatch[0];
       
-      // Dispatch Instant Lead to Formspree
+      // Dispatch Instant Lead to Google Sheets & Formspree
+      fetch(GOOGLE_SHEETS_ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          business_email: visitorData.email,
+          full_name: visitorData.name || 'Website Chat Visitor',
+          business_name: 'Inbound Web Visitor',
+          special_requests: `Chat Inquiry: "${text}"`,
+          submitted_at: new Date().toLocaleString()
+        })
+      }).catch(e => console.error(e));
+
       fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
         headers: {
@@ -1151,7 +1171,7 @@ function sendDrawerMessage() {
         })
       }).catch(e => console.error(e));
 
-      botBubble.innerHTML = `✅ <strong>Got it!</strong> I've recorded your email as <code>${visitorData.email}</code>. Our engineering team has been notified. Would you like to <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">pick a 15-min slot on our calendar</a>, or do you have any questions about our pricing and turnaround?`;
+      botBubble.innerHTML = `✅ <strong>Got it!</strong> I've recorded your email as <code>${visitorData.email}</code> and sent a confirmation to your inbox. Would you like to <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">pick a 15-min slot on our calendar</a>, or ask any other questions?`;
     }
     // 2. Greetings & Pleasantries
     else if (lower === 'hi' || lower === 'hello' || lower === 'hey' || lower.includes('how are you') || lower.includes('who are you') || lower.includes('good morning') || lower.includes('good afternoon') || lower.includes('good evening')) {
