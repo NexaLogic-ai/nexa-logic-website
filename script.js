@@ -1191,10 +1191,10 @@ function sendDrawerMessage() {
     // 8. Contact Info / Phone Number / WhatsApp
     else if (lower.includes('phone') || lower.includes('number') || lower.includes('call you') || lower.includes('whatsapp') || lower.includes('hotline') || lower.includes('contact') || lower.includes('reach')) {
       botBubble.innerHTML = `📞 <strong>Direct Contact Channels:</strong><br><br>
-        • <strong>24/7 Telephone AI Hotline:</strong> <a href="tel:+971585517132" style="color:#00f0ff; font-family:monospace; text-decoration:underline;">+971 58 551 7132</a> (Tap to dial from phone/Mac)<br>
-        • <strong>Official WhatsApp Line:</strong> <code>+971 58 551 7132</code><br>
+        • <strong>Official WhatsApp Line:</strong> <a href="https://wa.me/971585517132" target="_blank" style="color:#25D366; font-family:monospace; font-weight:700; text-decoration:underline;">+971 58 551 7132</a> (Tap to chat or send voice note)<br>
+        • <strong>Live Strategy Consultations:</strong> <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">Pick a 15-min slot on Cal.com</a><br>
         • <strong>Direct Email:</strong> <code>hello@getnexalogic.com</code><br><br>
-        Elena is live on our phone line right now if you'd like to test an inbound call!`;
+        Our AI assistants are online 24/7 across WhatsApp and web!`;
     }
     // 9. Integrations & CRM
     else if (lower.includes('crm') || lower.includes('integrate') || lower.includes('hubspot') || lower.includes('gohighlevel') || lower.includes('cal.com') || lower.includes('sheets') || lower.includes('zapier') || lower.includes('make')) {
@@ -1215,7 +1215,7 @@ function sendDrawerMessage() {
         • Ask about <strong>pricing & packages</strong><br>
         • Ask about our <strong>7-day delivery timeline</strong><br>
         • Ask about our <strong>8 autonomous AI agent types</strong><br>
-        • Call our 24/7 hotline at <a href="tel:+971585517132" style="color:#00f0ff;">+971 58 551 7132</a><br>
+        • Message our 24/7 WhatsApp line at <a href="https://wa.me/971585517132" target="_blank" style="color:#25D366; font-weight:700;">+971 58 551 7132</a><br>
         • Or <a href="#booking" onclick="toggleFloatingAgent()" style="color:#00f0ff; text-decoration:underline; font-weight:700;">book a 15-min strategy session on our calendar</a>!`;
     }
 
