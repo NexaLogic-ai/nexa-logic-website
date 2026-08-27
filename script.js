@@ -673,8 +673,8 @@ function processShowroomAIResponse(userText) {
       // Dispatch lead to Google Sheets & Formspree
       const leadPayload = {
         full_name: showroomFlow.userName || 'Web Chat Lead',
-        business_name: 'ChatKit Prototype Reservation',
-        industry_niche: 'Web Chat Booking',
+        business_name: 'Nexa Logic AI Reservation',
+        industry_niche: 'Omnichannel AI Booking',
         business_email: showroomFlow.userEmail,
         phone_number: 'Provided via Web Chat',
         special_requests: `Selected Slot: ${showroomFlow.selectedTime || 'Thursday at 10:30 AM'}`,
@@ -1236,3 +1236,120 @@ function sendQuickChip(questionText) {
 document.addEventListener('DOMContentLoaded', () => {
   // Ready
 });
+
+// ======================================================================
+// NEXA LOGIC ENTERPRISE ANTI-INSPECTION & SOURCE PROTECTION SHIELD
+// ======================================================================
+(function initAntiTheftShield() {
+  // 1. Toast Notification Creator
+  let toastTimer = null;
+  function showSecurityToast(msg) {
+    let toast = document.getElementById('nexa-security-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'nexa-security-toast';
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: rgba(15, 23, 42, 0.95);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        color: #f8fafc;
+        padding: 12px 24px;
+        border-radius: 9999px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(6, 182, 212, 0.25);
+        backdrop-filter: blur(12px);
+        z-index: 9999999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: none;
+      `;
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = `<span style="color:#38bdf8;">🔒</span> ${msg}`;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-50%) translateY(20px)';
+    }, 2800);
+  }
+
+  // 2. Disable Right-Click (Context Menu)
+  document.addEventListener('contextmenu', (e) => {
+    if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    e.preventDefault();
+    showSecurityToast('Protected: Source code & design are copyrighted by Nexa Logic.');
+    return false;
+  }, { passive: false });
+
+  // 3. Block Developer & Inspect Keyboard Shortcuts
+  document.addEventListener('keydown', (e) => {
+    // F12 (DevTools)
+    if (e.keyCode === 123) {
+      e.preventDefault();
+      showSecurityToast('Developer inspection is restricted.');
+      return false;
+    }
+    // Ctrl+Shift+I / Cmd+Option+I (Inspect)
+    if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {
+      e.preventDefault();
+      showSecurityToast('Developer inspection is restricted.');
+      return false;
+    }
+    // Ctrl+Shift+J / Cmd+Option+J (Console)
+    if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {
+      e.preventDefault();
+      return false;
+    }
+    // Ctrl+Shift+C / Cmd+Option+C (Element Picker)
+    if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && (e.key === 'C' || e.key === 'c' || e.keyCode === 67)) {
+      e.preventDefault();
+      return false;
+    }
+    // Ctrl+U / Cmd+Option+U (View Source)
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'u' || e.key === 'U' || e.keyCode === 85)) {
+      e.preventDefault();
+      showSecurityToast('Source code is proprietary.');
+      return false;
+    }
+    // Ctrl+S / Cmd+S (Save Page)
+    if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.keyCode === 83)) {
+      e.preventDefault();
+      return false;
+    }
+  }, { passive: false });
+
+  // 4. Disable Dragging of Images & Visual Assets
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.tagName === 'IMG' || e.target.closest('.hero-visual') || e.target.closest('.solution-card')) {
+      e.preventDefault();
+      return false;
+    }
+  }, { passive: false });
+
+  // 5. Console Warning Banner for Intruders
+  try {
+    console.clear();
+    console.log(
+      "%c🛑 STOP — NEXA LOGIC SECURE ENVIRONMENT",
+      "color: #ef4444; font-size: 20px; font-weight: 900; background: #0f172a; padding: 6px 12px; border-radius: 6px;"
+    );
+    console.log(
+      "%c⚠️ NOTICE: All code, autonomous AI architectures, visual assets, and proprietary designs on getnexalogic.com are protected intellectual property of Nexa Logic.",
+      "color: #f59e0b; font-size: 13px; font-weight: 600;"
+    );
+    console.log(
+      "%cUnauthorized scraping, code reproduction, or reverse-engineering is monitored and prohibited under UAE Federal Decree-Law No. 34.",
+      "color: #94a3b8; font-size: 11px;"
+    );
+  } catch (err) {}
+})();
