@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexa Logic — Autonomous AI Workforce Solutions (Executive Proposal & Rate Card)</title>
+  <title>Nexa Logic — Autonomous AI Workforce Solutions (Executive Proposal & Global Rate Card)</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="alternate icon" href="assets/logo.jpg">
   <link rel="apple-touch-icon" href="favicon.svg">
@@ -42,14 +42,47 @@
     }
 
     .container {
-      max-width: 1140px;
+      max-width: 1180px;
       margin: 0 auto;
+    }
+
+    /* Top Nav */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-logo {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link {
+      font-size: 0.84rem;
+      color: var(--cyan);
+      text-decoration: none;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    .nav-link:hover {
+      opacity: 0.8;
     }
 
     /* Header */
     .deck-header {
       text-align: center;
-      margin-bottom: 44px;
+      margin-bottom: 32px;
     }
 
     .brand-pill {
@@ -69,7 +102,7 @@
 
     .deck-title {
       font-family: var(--font-display);
-      font-size: 2.4rem;
+      font-size: 2.35rem;
       font-weight: 700;
       letter-spacing: -1px;
       margin-bottom: 10px;
@@ -84,8 +117,78 @@
     .deck-subtitle {
       font-size: 1.02rem;
       color: var(--text-muted);
-      max-width: 720px;
+      max-width: 780px;
       margin: 0 auto;
+    }
+
+    /* Currency Switcher Bar */
+    .currency-switcher-wrapper {
+      margin: 28px auto 32px auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .currency-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .currency-switcher {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
+      padding: 4px;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .currency-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .currency-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .currency-btn.active {
+      background: var(--cyan);
+      color: #030708;
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.35);
+    }
+
+    /* VIP Offer Banner */
+    .vip-banner {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 14px;
+      padding: 16px 22px;
+      max-width: 880px;
+      margin: 0 auto 36px auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
     /* 3-Tier Grid */
@@ -193,6 +296,52 @@
       color: #e2e8f0;
     }
 
+    /* Free Value Bundle Box */
+    .free-bundle-box {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.08) 0%, rgba(0, 240, 255, 0.08) 100%);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+    }
+
+    .free-bundle-header {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--emerald);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .free-bundle-item {
+      font-size: 0.79rem;
+      color: #f1f5f9;
+      line-height: 1.4;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .free-bundle-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .free-tag {
+      background: rgba(0, 255, 136, 0.2);
+      color: var(--emerald);
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
     .section-label {
       font-size: 0.75rem;
       font-weight: 700;
@@ -247,10 +396,191 @@
       background: rgba(255, 255, 255, 0.02);
     }
 
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
     .btn-glow {
       background: var(--cyan);
       color: #030708;
       box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+
+    .btn-glow:hover {
+      background: #38f8ff;
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+    }
+
+    /* Expandable Tier Details */
+    .tier-details-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px dashed var(--border);
+      color: var(--cyan);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      margin: 14px 0 16px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--font-body);
+    }
+
+    .tier-details-btn:hover {
+      background: rgba(0, 240, 255, 0.08);
+      border-color: var(--cyan);
+    }
+
+    .tier-accordion {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-in-out, opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .tier-accordion.open {
+      max-height: 1800px;
+      opacity: 1;
+      margin-bottom: 20px;
+    }
+
+    .accordion-inner {
+      background: rgba(4, 7, 11, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-align: left;
+    }
+
+    .scope-block {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 12px;
+    }
+
+    .scope-block:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .scope-header {
+      font-weight: 800;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .scope-header.green { color: var(--emerald); }
+    .scope-header.cyan { color: var(--cyan); }
+    .scope-header.purple { color: #c084fc; }
+    .scope-header.gold { color: var(--gold); }
+    .scope-header.muted { color: #94a3b8; }
+
+    .scope-desc {
+      color: #cbd5e1;
+      line-height: 1.5;
+      font-size: 0.79rem;
+    }
+
+    /* Add-Ons & Infrastructure Section */
+    .addons-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 36px;
+    }
+
+    .addons-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .addons-header h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+
+    .addons-header p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .addons-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .addon-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .addon-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .addon-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+
+    .addon-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 12px;
+      font-size: 0.82rem;
+    }
+
+    .addon-price {
+      font-weight: 800;
+      color: var(--cyan);
+      font-family: var(--font-display);
+    }
+
+    .addon-status {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--emerald);
+      background: rgba(0, 255, 136, 0.1);
+      padding: 3px 8px;
+      border-radius: 4px;
     }
 
     /* Comparison Table */
@@ -310,29 +640,51 @@
       .pricing-card.featured {
         transform: scale(1);
       }
+      .addons-grid {
+        grid-template-columns: 1fr;
+      }
       .deck-footer {
         flex-direction: column;
         gap: 8px;
       }
     }
   </style>
-</head>
-<body>
+
 
   <div class="container">
     
+    <!-- Top Navigation -->
+    <div class="top-nav">
+      <a href="index.html" class="brand-logo">
+        <span style="color: var(--cyan);">⚡</span> Nexa Logic
+      </a>
+      <a href="index.html" class="nav-link">← Return to Interactive Voice Lab</a>
+    </div>
+
     <!-- Executive Deck Header -->
     <header class="deck-header">
-      <div class="brand-pill">⚡ NEXA LOGIC • CONFIDENTIAL PROPOSAL & SCOPE OF WORK</div>
+      <div class="brand-pill">⚡ NEXA LOGIC • GLOBAL CLIENT PROPOSAL & SCOPE OF WORK</div>
       <h1 class="deck-title">Autonomous AI Workforce <span class="gradient-text">Investment Packages</span></h1>
-      <p class="deck-subtitle">Complete breakdown of setup deliverables, telephony minute terms, and ongoing engineering SLAs for UAE Medical, Dental & Luxury Practices.</p>
+      <p class="deck-subtitle">Transparent breakdown of engineering deliverables, multi-currency terms, telephony infrastructure, and ongoing maintenance SLAs for premier businesses worldwide.</p>
       
-      <!-- Founding Partner 10-Client VIP Offer Box -->
-      <div style="background: linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 14px; padding: 14px 20px; max-width: 800px; margin: 22px auto 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+      <!-- Currency Switcher -->
+      <div class="currency-switcher-wrapper">
+        <div class="currency-label">🌐 Select Preferred Billing Currency:</div>
+        <div class="currency-switcher">
+          <button class="currency-btn active" onclick="setCurrency('AED')">🇦🇪 AED (Dirham)</button>
+          <button class="currency-btn" onclick="setCurrency('USD')">🇺🇸 USD ($)</button>
+          <button class="currency-btn" onclick="setCurrency('GBP')">🇬🇧 GBP (£)</button>
+          <button class="currency-btn" onclick="setCurrency('CAD')">🇨🇦 CAD (CA$)</button>
+          <button class="currency-btn" onclick="setCurrency('AUD')">🇦🇺 AUD (A$)</button>
+        </div>
+      </div>
+
+      <!-- Founding Partner VIP Offer Box -->
+      <div class="vip-banner">
         <div style="text-align: left;">
-          <div style="font-size: 0.76rem; font-weight: 800; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px;">🎁 Q3/Q4 Dubai Founding Partner Initiative</div>
-          <div style="font-size: 0.92rem; font-weight: 700; color: #fff;">First 10 Premier Clinics Receive <span style="color: var(--emerald);">4,000 AED Setup Credit + 1st Month Retainer Waived</span></div>
-          <div style="font-size: 0.78rem; color: var(--text-muted);">In exchange for a 60-second video case study & testimonial after 30 days of live call capture.</div>
+          <div style="font-size: 0.76rem; font-weight: 800; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px;">🎁 Global Founding Partner Initiative</div>
+          <div style="font-size: 0.92rem; font-weight: 700; color: #fff;" id="banner-headline">First 10 Founding Partner Businesses Receive <span style="color: var(--emerald);">4,000 AED Setup Credit + 1st Month Retainer 100% Waived</span></div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">In exchange for a 60-second video case study & testimonial after 30 days of live operation.</div>
         </div>
         <div style="background: rgba(0, 255, 136, 0.12); border: 1px solid var(--emerald); border-radius: 9999px; padding: 6px 14px; font-size: 0.76rem; font-weight: 800; color: var(--emerald); white-space: nowrap;">
           ⚡ ONLY 3 SLOTS REMAINING
@@ -346,65 +698,158 @@
       <!-- Tier 1: Starter -->
       <div class="pricing-card">
         <div class="tier-name">Starter Receptionist</div>
-        <div class="tier-desc">Entry-level AI phone assistant for single-practitioner clinics and boutique salons.</div>
+        <div class="tier-desc">Entry-level autonomous AI phone receptionist for boutique practices, salons & solo consultants.</div>
         
         <div class="price-box">
-          <div class="setup-price">7,500 AED <span style="font-size: 0.9rem; color: var(--text-muted);">($2,000)</span></div>
+          <div class="setup-price" id="t1-setup">6,500 AED</div>
           <div class="setup-label">One-Time Architecture & Setup</div>
-          <div class="retainer-price">+ 1,500 AED / month retainer</div>
+          <div class="retainer-price" id="t1-retainer">+ 1,300 AED / month retainer</div>
+          <div style="font-size: 0.74rem; color: var(--emerald); margin-top: 4px; font-weight: 700;" id="t1-waive">🎁 Month 1 Retainer 100% Waived (0 AED First 30 Days!)</div>
         </div>
 
         <div class="billing-notice client-billed">
-          ⚠️ <strong>Telephony & Usage Terms:</strong><br>
-          Software and minute usage (Twilio/carrier minutes ~$15–$25/mo) are <strong>billed directly to client's card</strong>.
+          ⚠️ <strong>Base Telephony Terms:</strong><br>
+          Assumes connection to client's existing phone line. Carrier minutes (<span id="t1-min-cost">~55–90 AED/mo</span>) are direct wholesale pass-through.
         </div>
 
-        <div class="section-label">🛠️ What We Build & Setup:</div>
+        <div class="section-label">🛠️ Core Capabilities Included:</div>
         <ul class="feature-list">
           <li><span class="check">✓</span> 24/7 Autonomous AI Voice Receptionist (English)</li>
-          <li><span class="check">✓</span> Single Calendar Sync (Google / Cal.com)</li>
-          <li><span class="check">✓</span> Core Treatment FAQs & Pricing Quotes</li>
-          <li><span class="check">✓</span> After-Hours & Weekend Call Answering</li>
+          <li><span class="check">✓</span> Single Calendar Sync (Google / Cal.com / Outlook)</li>
+          <li><span class="check">✓</span> Core Service FAQs & Live Pricing Quotes</li>
+          <li><span class="check">✓</span> After-Hours & Weekend Lead Capture</li>
           <li><span class="check">✓</span> Call Recording & Text Transcripts Dashboard</li>
           <li><span class="check">✓</span> Turnkey Deployment in &lt; 7 Days</li>
-          <li><span class="cross">✕</span> <em>No Arabic Bilingual Auto-Switching</em></li>
-          <li><span class="cross">✕</span> <em>No Multi-Doctor Calendar Routing</em></li>
-          <li><span class="cross">✕</span> <em>No Voice Cloning or Google Review Engine</em></li>
+          <li><span class="cross">✕</span> <em>No Multi-Staff Calendar Routing</em></li>
+          <li><span class="cross">✕</span> <em>No Included Landing Page or Bonuses</em></li>
         </ul>
+
+        <!-- Expandable Full Breakdown Button -->
+        <button class="tier-details-btn" onclick="toggleTierDetails('tier-1-details', this)">
+          <span>🔍 Show More Details & Technical Scope ▼</span>
+        </button>
+
+        <!-- Tier 1 Expandable Accordion Body -->
+        <div id="tier-1-details" class="tier-accordion">
+          <div class="accordion-inner">
+            <div class="scope-block">
+              <div class="scope-header green">🟢 What We Engineer & Deliver (Nexa Logic Scope):</div>
+              <div class="scope-desc">
+                Custom prompt architecture, business knowledge base ingestion, 2-way Google/Cal.com live calendar booking, caller transcript logging, latency tuning (&lt;500ms), and end-to-end phone testing.
+              </div>
+            </div>
+
+            <div class="scope-block">
+              <div class="scope-header cyan">📞 Telephony & Phone Connection (How It Connects):</div>
+              <div class="scope-desc">
+                • <strong>Existing Phone Line:</strong> Forwards seamlessly from your existing office/mobile line via telecom call forwarding.<br>
+                • <strong>Dedicated Clean Number (Optional):</strong> We can provision a dedicated local virtual landline/number for your region (see Add-Ons below).<br>
+                • <strong>Wholesale Minutes:</strong> Raw carrier audio minutes (<span id="t1-min-accordion">~55–90 AED/mo</span>) are billed directly to client card with zero markup.
+              </div>
+            </div>
+
+            <div class="scope-block">
+              <div class="scope-header gold">🎁 Month 1 Retainer 100% Waived (Launch Perk):</div>
+              <div class="scope-desc">
+                <strong id="t1-waive-desc">First month retainer (1,300 AED) is 100% Waived.</strong> All initial prompt adjustments, monitoring, and live fine-tuning are included free during your first 30 days. Monthly retainer begins only in Month 2.
+              </div>
+            </div>
+
+            <div class="scope-block">
+              <div class="scope-header muted">⚪ Client-Side Requirements:</div>
+              <div class="scope-desc">
+                Client provides service/pricing catalog, business FAQs, and Google Calendar / Cal.com account access.
+              </div>
+            </div>
+          </div>
+        </div>
 
         <a href="https://cal.com/nomena-khan-l63gmb/15min" class="btn-tier btn-outline">Select Starter Plan →</a>
       </div>
 
       <!-- Tier 2: Pro (Featured) -->
       <div class="pricing-card featured">
-        <div class="badge-pop">⭐️ MOST POPULAR (80% of Clinics)</div>
-        <div class="tier-name" style="color: var(--cyan);">Pro Clinic Autopilot</div>
-        <div class="tier-desc">Full-scale autonomous front-desk workforce for high-volume clinics with multiple doctors.</div>
+        <div class="badge-pop">⭐️ MOST POPULAR (80% of Clients)</div>
+        <div class="tier-name" style="color: var(--cyan);">Pro Business Autopilot</div>
+        <div class="tier-desc">Full-scale autonomous front-desk workforce for high-volume practices with multiple staff/doctors.</div>
         
         <div class="price-box">
-          <div style="font-size: 0.8rem; text-decoration: line-through; color: #f43f5e; font-weight: 700;">Standard Setup: 16,500 AED ($4,500)</div>
-          <div class="setup-price" style="color: var(--cyan);">12,500 AED <span style="font-size: 0.85rem; color: var(--emerald); font-weight: 700;">(Founding Rate)</span></div>
+          <div style="font-size: 0.8rem; text-decoration: line-through; color: #f43f5e; font-weight: 700;" id="t2-std">Standard Setup: 14,500 AED</div>
+          <div class="setup-price" style="color: var(--cyan);" id="t2-setup">11,000 AED <span style="font-size: 0.85rem; color: var(--emerald); font-weight: 700;">(Founding Rate)</span></div>
           <div class="setup-label">One-Time Architecture & Setup</div>
-          <div class="retainer-price" style="color: var(--emerald);">+ 2,200 AED / month retainer</div>
-          <div style="font-size: 0.74rem; color: var(--cyan); margin-top: 4px; font-weight: 700;">🎁 1st Month Retainer 100% Waived for First 10 Clinics!</div>
+          <div class="retainer-price" style="color: var(--emerald);" id="t2-retainer">+ 1,850 AED / month retainer</div>
+          <div style="font-size: 0.74rem; color: var(--cyan); margin-top: 4px; font-weight: 700;" id="t2-waive">🎁 1st Month Retainer 100% Waived for First 10 Partners!</div>
+        </div>
+
+        <!-- FREE Bundled Value Box for Tier 2 -->
+        <div class="free-bundle-box">
+          <div class="free-bundle-header" id="t2-bonus-title">🎁 FREE BUNDLED VALUE (Worth 6,500 AED / $1,800):</div>
+          <div class="free-bundle-item">
+            <span class="free-tag">FREE</span>
+            <span><strong>Custom Booking Landing Page:</strong> Mobile-responsive, high-converting lead funnel coded & deployed for your business.</span>
+          </div>
+          <div class="free-bundle-item">
+            <span class="free-tag">FREE</span>
+            <span><strong>WhatsApp Smart QR Desk Stand Kit:</strong> Printable QR code display for your front desk to route physical visitors straight to AI.</span>
+          </div>
         </div>
 
         <div class="billing-notice covered">
-          💎 <strong>All-Inclusive Turnkey Coverage:</strong><br>
-          <strong>All telephony setup, model updates, and maintenance are 100% covered</strong> by Nexa Logic. Zero hidden fees.
+          💎 <strong>Turnkey Omnichannel Coverage:</strong><br>
+          <strong>All telephony setup, model updates, multi-staff routing, and maintenance are 100% covered</strong> by Nexa Logic. Zero hidden fees.
         </div>
 
-        <div class="section-label">🛠️ Full Scope Included by Nexa Logic:</div>
+        <div class="section-label">🛠️ Core Capabilities Included:</div>
         <ul class="feature-list">
-          <li><span class="check">✓</span> <strong>Bilingual Auto-Switching (Fluent English & Arabic)</strong></li>
-          <li><span class="check">✓</span> <strong>Multi-Doctor / Multi-Specialist Calendar Routing</strong></li>
+          <li><span class="check">✓</span> <strong>Omnichannel Inbound Voice & WhatsApp AI Assistants</strong></li>
+          <li><span class="check">✓</span> <strong>Multi-Staff / Multi-Doctor Dynamic Calendar Routing</strong></li>
           <li><span class="check">✓</span> <strong>2-Way Rescheduling & Cancellation Handling</strong></li>
           <li><span class="check">✓</span> <strong>Instant SMS Confirmation & Google Maps Link</strong></li>
           <li><span class="check">✓</span> <strong>Instant Team Slack/WhatsApp Booking Alerts</strong></li>
-          <li><span class="check">✓</span> <strong>Live Call Transfer (<code style="color:var(--cyan)">transfer_call</code>) to Owner's Mobile</strong></li>
+          <li><span class="check">✓</span> <strong>Live Call Transfer (<code style="color:var(--cyan)">transfer_call</code>) to Owner/Manager</strong></li>
           <li><span class="check">✓</span> 24-Hour "No-Show Killer" Automated SMS Reminders</li>
           <li><span class="check">✓</span> Monthly Prompt Tuning & Model Upgrades</li>
         </ul>
+
+        <!-- Expandable Full Breakdown Button -->
+        <button class="tier-details-btn" onclick="toggleTierDetails('tier-2-details', this)" style="border-color: var(--cyan); background: rgba(0, 240, 255, 0.08);">
+          <span>🔍 Show More Details & Technical Scope ▼</span>
+        </button>
+
+        <!-- Tier 2 Expandable Accordion Body -->
+        <div id="tier-2-details" class="tier-accordion">
+          <div class="accordion-inner">
+            <div class="scope-block">
+              <div class="scope-header green">🟢 Full Omnichannel Scope (Nexa Logic Side):</div>
+              <div class="scope-desc">
+                Complete engineering of 24/7 Voice Phone Hotline, WhatsApp Business, and Instagram AI Agents. Includes intelligent language detection, multi-doctor/staff calendar routing, live call transfers, automated SMS no-show reduction sequences, and <strong>Free Custom Booking Landing Page creation</strong>.
+              </div>
+            </div>
+
+            <div class="scope-block">
+              <div class="scope-header cyan">📞 Telephony & PBX Integration (Zero Disruption):</div>
+              <div class="scope-desc">
+                • <strong>Existing Business PBX:</strong> Seamlessly connects to your existing phone system (3CX, Cisco, Avaya, Cloud PBX) via high-speed <strong>SIP Trunking</strong> with zero hardware change.<br>
+                • <strong>Dedicated Landline (Optional):</strong> We can provision a dedicated local regional landline (04 / +1 / +44) with multi-call concurrency.<br>
+                • <strong>Infrastructure:</strong> Telephony routing setup and continuous latency optimization (&lt;500ms) are fully managed by Nexa Logic.
+              </div>
+            </div>
+
+            <div class="scope-block">
+              <div class="scope-header gold">🎁 1st Month Retainer 100% Waived (Founding Partner Perk):</div>
+              <div class="scope-desc">
+                <strong id="t2-waive-desc">Your entire first-month retainer (1,850 AED) is 100% Waived!</strong> We provide 30 days of white-glove live monitoring, weekly prompt refinements, and conversation tuning at zero ongoing maintenance cost. Retainer billing begins only in Month 2.
+              </div>
+            </div>
+
+            <div class="scope-block">
+              <div class="scope-header muted">⚪ Client-Side Requirements:</div>
+              <div class="scope-desc">
+                Staff/doctor rosters, treatment pricing catalog, WhatsApp Business verification access, and CRM/calendar logins.
+              </div>
+            </div>
+          </div>
+        </div>
 
         <a href="https://cal.com/nomena-khan-l63gmb/15min" class="btn-tier btn-glow">Deploy Pro System →</a>
       </div>
@@ -412,53 +857,171 @@
       <!-- Tier 3: Enterprise VIP -->
       <div class="pricing-card">
         <div class="tier-name">Enterprise VIP</div>
-        <div class="tier-desc">For premier surgical hospitals, luxury chains, and medical groups needing custom voice clones.</div>
+        <div class="tier-desc">For premier surgical hospitals, luxury chains, real estate firms & enterprises needing custom voice clones.</div>
         
         <div class="price-box">
-          <div class="setup-price">18,500 AED <span style="font-size: 0.9rem; color: var(--text-muted);">($5,000)</span></div>
+          <div class="setup-price" id="t3-setup">16,500 AED</div>
           <div class="setup-label">One-Time Architecture & Setup</div>
-          <div class="retainer-price">+ 3,500 AED / month retainer</div>
+          <div class="retainer-price" id="t3-retainer">+ 3,100 AED / month retainer</div>
+          <div style="font-size: 0.74rem; color: #c084fc; margin-top: 4px; font-weight: 700;" id="t3-waive">🎁 1st Month Retainer 100% Waived (0 AED First 30 Days!)</div>
+        </div>
+
+        <!-- FREE Bundled Value Box for Tier 3 -->
+        <div class="free-bundle-box" style="border-color: rgba(192, 132, 252, 0.4); background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(0, 240, 255, 0.08) 100%);">
+          <div class="free-bundle-header" style="color: #c084fc;" id="t3-bonus-title">👑 VIP BUNDLED VALUE (Worth 14,500 AED / $4,000):</div>
+          <div class="free-bundle-item">
+            <span class="free-tag" style="background: rgba(192, 132, 252, 0.2); color: #c084fc;">FREE</span>
+            <span><strong>Full Modern Website Redesign:</strong> Multi-page luxury website with embedded voice lab & automated SEO lead capture.</span>
+          </div>
+          <div class="free-bundle-item">
+            <span class="free-tag" style="background: rgba(192, 132, 252, 0.2); color: #c084fc;">FREE</span>
+            <span><strong>5-Star Google Review Growth Engine:</strong> Automated SMS review funnel + contactless NFC Tap Stand setup.</span>
+          </div>
+          <div class="free-bundle-item">
+            <span class="free-tag" style="background: rgba(192, 132, 252, 0.2); color: #c084fc;">FREE</span>
+            <span><strong>Executive AI Voice Avatar:</strong> Studio-grade simulation sandbox for founder/executive voice cloning.</span>
+          </div>
         </div>
 
         <div class="billing-notice covered">
           👑 <strong>White-Glove VIP Infrastructure:</strong><br>
-          Dedicated cloud infrastructure, unlimited call scaling, and 1-hour priority engineering SLA included.
+          Dedicated cloud infrastructure, unlimited concurrent call scaling, custom voice clone, and 1-hour priority engineering SLA included.
         </div>
 
-        <div class="section-label">🛠️ Enterprise Scope & Deliverables:</div>
+        <div class="section-label">🛠️ Core Capabilities Included:</div>
         <ul class="feature-list">
-          <li><span class="check">✓</span> <strong>Hyper-Realistic Founder Voice Cloning</strong></li>
+          <li><span class="check">✓</span> <strong>Hyper-Realistic Founder/Director Voice Cloning</strong></li>
           <li><span class="check">✓</span> <strong>Automated 5-Star Google Review Engine</strong></li>
           <li><span class="check">✓</span> Multi-Branch PBX Telephone Integration</li>
-          <li><span class="check">✓</span> Custom CRM & Healthcare Software Sync</li>
-          <li><span class="check">✓</span> Post-Treatment Care Follow-up Sequences</li>
+          <li><span class="check">✓</span> Custom CRM, EHR/EMR & Database Sync</li>
+          <li><span class="check">✓</span> Post-Service Follow-up & Care Sequences</li>
           <li><span class="check">✓</span> Dedicated Account Engineer & 1-Hour SLA</li>
           <li><span class="check">✓</span> Unlimited Concurrent Inbound Call Scaling</li>
         </ul>
+
+        <!-- Expandable Full Breakdown Button -->
+        <button class="tier-details-btn" onclick="toggleTierDetails('tier-3-details', this)">
+          <span>🔍 Show More Details & Technical Scope ▼</span>
+        </button>
+
+        <!-- Tier 3 Expandable Accordion Body -->
+        <div id="tier-3-details" class="tier-accordion">
+          <div class="accordion-inner">
+            <div class="scope-block">
+              <div class="scope-header purple">👑 Enterprise White-Glove Scope (Nexa Logic Side):</div>
+              <div class="scope-desc">
+                Studio-grade 30-second Neural Voice Cloning of the founder or executive, multi-location branch routing, bespoke CRM & EHR/EMR software integrations, automated Google review multipliers, <strong>Full Website Redesign & SEO lead hub</strong>, and dedicated priority engineer SLA.
+              </div>
+            </div>
+
+            <div class="scope-block">
+              <div class="scope-header cyan">📞 Enterprise Multi-Branch Telephony:</div>
+              <div class="scope-desc">
+                • <strong>Multi-Location SIP:</strong> Connects across multiple branches/locations with dynamic IVR department routing.<br>
+                • <strong>Unlimited Concurrency:</strong> Scales to handle dozens of simultaneous incoming calls during peak hours without busy signals.
+              </div>
+            </div>
+
+            <div class="scope-block">
+              <div class="scope-header gold">🎁 Month 1 Retainer 100% Waived:</div>
+              <div class="scope-desc">
+                <strong id="t3-waive-desc">Your entire first-month retainer (3,500 AED) is 100% Waived!</strong> Dedicated architecture deployment, integration testing, and 24/7 live monitoring are fully covered in Month 1.
+              </div>
+            </div>
+
+            <div class="scope-block">
+              <div class="scope-header muted">⚪ Client-Side Requirements:</div>
+              <div class="scope-desc">
+                Voice audio recording sample (for cloning), multi-branch phone line access, and custom database API keys.
+              </div>
+            </div>
+          </div>
+        </div>
 
         <a href="https://cal.com/nomena-khan-l63gmb/15min" class="btn-tier btn-outline">Select Enterprise Plan →</a>
       </div>
 
     </div>
 
+    <!-- Transparent Add-Ons & Infrastructure Section -->
+    <div class="addons-section">
+      <div class="addons-header">
+        <div class="brand-pill" style="margin-bottom: 8px;">🛡️ ZERO OUT-OF-POCKET TRANSPARENCY</div>
+        <h3>Telephony, Landlines & Procured Add-Ons</h3>
+        <p>Our base setup pricing covers 100% of custom AI software engineering, LLM logic, and integration. If your business requires dedicated phone lines, PBX SIP trunking, or custom database procurement, we set them up at transparent pass-through rates.</p>
+      </div>
+
+      <div class="addons-grid">
+        
+        <!-- Add-on 1: Dedicated Local Landline -->
+        <div class="addon-card">
+          <div>
+            <div class="addon-title">📞 Dedicated Virtual Regional Landline</div>
+            <div class="addon-desc">If your business doesn't have an existing landline or wants a clean dedicated number (e.g. Dubai 04, US/Canada +1, UK +44, Australia +61) with multi-call concurrency.</div>
+          </div>
+          <div class="addon-meta">
+            <div class="addon-price" id="addon-landline-price">~150 – 250 AED / mo</div>
+            <div class="addon-status">Direct Pass-Through</div>
+          </div>
+        </div>
+
+        <!-- Add-on 2: Wholesale Carrier Minutes -->
+        <div class="addon-card">
+          <div>
+            <div class="addon-title">⏱️ Wholesale Telephony Carrier Minutes</div>
+            <div class="addon-desc">Raw acoustic phone carrier minutes (Twilio / Retell SIP). Billed at exact wholesale cost ($0.08–$0.12/min). Nexa Logic charges zero markup on carrier telephony.</div>
+          </div>
+          <div class="addon-meta">
+            <div class="addon-price" id="addon-min-price">~55 – 120 AED / mo (Usage)</div>
+            <div class="addon-status">Client Card / Usage</div>
+          </div>
+        </div>
+
+        <!-- Add-on 3: Managed SaaS Subscriptions -->
+        <div class="addon-card">
+          <div>
+            <div class="addon-title">☁️ Managed SaaS & Cloud Tool Subscriptions</div>
+            <div class="addon-desc">If Nexa Logic manages third-party software licenses (WhatsApp Cloud API, CRM seats, SMS gateway) on your behalf, costs are bundled directly into your monthly retainer.</div>
+          </div>
+          <div class="addon-meta">
+            <div class="addon-price">Included in Managed Retainer</div>
+            <div class="addon-status" style="color: var(--cyan); background: rgba(0, 240, 255, 0.1);">100% Covered</div>
+          </div>
+        </div>
+
+        <!-- Add-on 4: Custom CRM / EHR Database Setup -->
+        <div class="addon-card">
+          <div>
+            <div class="addon-title">🗄️ Custom CRM & Database Architecture</div>
+            <div class="addon-desc">If you have zero existing CRM/booking software and need Nexa Logic to architect a full cloud database (GoHighLevel, HubSpot, or Custom SQL) from scratch.</div>
+          </div>
+          <div class="addon-meta">
+            <div class="addon-price" id="addon-crm-price">1,850 AED (One-Time)</div>
+            <div class="addon-status">Optional Add-On</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- ROI Comparison Matrix -->
     <div class="roi-section">
-      <h3>The Financial Impact: Human Staff vs. Nexa Logic AI</h3>
+      <h3 id="roi-title">The Financial Impact: Human Staff vs. Nexa Logic AI</h3>
       <table class="compare-table">
         <thead>
           <tr>
             <th>Metric / Overhead</th>
-            <th>Traditional Human Staff in Dubai</th>
+            <th>Traditional Human Staff</th>
             <th>Nexa Logic Pro Autopilot</th>
-            <th>Annual Impact</th>
+            <th>Annual Financial Impact</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>Monthly Overhead</strong></td>
-            <td class="text-danger">8,500 – 12,000 AED / mo</td>
-            <td class="text-emerald">2,200 AED / mo</td>
-            <td class="text-emerald">Save 75,000+ AED / year</td>
+            <td class="text-danger" id="roi-human-cost">8,500 – 12,000 AED / mo</td>
+            <td class="text-emerald" id="roi-ai-cost">2,200 AED / mo</td>
+            <td class="text-emerald" id="roi-savings">Save 75,000+ AED / year</td>
           </tr>
           <tr>
             <td><strong>Operating Availability</strong></td>
@@ -468,15 +1031,15 @@
           </tr>
           <tr>
             <td><strong>Language Capabilities</strong></td>
-            <td>Requires hiring multiple bilingual staff</td>
-            <td class="text-emerald">Native English + Arabic Included</td>
+            <td>Requires hiring multiple language staff</td>
+            <td class="text-emerald">Bilingual / Multilingual Auto-Switching</td>
             <td class="text-emerald">Zero Extra Staff Costs</td>
           </tr>
           <tr>
             <td><strong>No-Show Reduction</strong></td>
-            <td class="text-danger">30% – 35% No-Show Rate</td>
+            <td class="text-danger">25% – 35% No-Show Rate</td>
             <td class="text-emerald">&lt; 5% with Automated SMS Reminders</td>
-            <td class="text-emerald">Hundreds of Extra Clinic Hours</td>
+            <td class="text-emerald">Dozens of Recovered Appointments</td>
           </tr>
         </tbody>
       </table>
@@ -484,11 +1047,265 @@
 
     <!-- Deck Footer -->
     <footer class="deck-footer">
-      <div><strong>Nexa Logic AI Automation Agency</strong> • Dubai, United Arab Emirates</div>
+      <div><strong>Nexa Logic Global AI Automation Agency</strong> • Confidential Executive Scope</div>
       <div>Direct Founder Contact: <a href="mailto:nomena@getnexalogic.com" style="color: var(--cyan); text-decoration: none;">nomena@getnexalogic.com</a> • <a href="https://getnexalogic.com" style="color: var(--cyan); text-decoration: none;">getnexalogic.com</a></div>
     </footer>
 
   </div>
 
+  <script>
+    const currencyData = {
+      AED: {
+        symbol: 'AED',
+        bannerHeadline: 'First 10 Founding Partner Businesses Receive <span style="color: var(--emerald);">3,500 AED Setup Credit + 1st Month Retainer 100% Waived</span>',
+        t1: {
+          setup: '6,500 AED',
+          retainer: '+ 1,300 AED / month retainer',
+          waive: '🎁 Month 1 Retainer 100% Waived (0 AED First 30 Days!)',
+          minCost: '~55–90 AED/mo',
+          minAccordion: '~55–90 AED/mo',
+          waiveDesc: 'First month retainer (1,300 AED) is 100% Waived. All initial prompt adjustments, monitoring, and live fine-tuning are included free during your first 30 days. Monthly retainer begins only in Month 2.'
+        },
+        t2: {
+          std: 'Standard Setup: 14,500 AED',
+          setup: '11,000 AED <span style="font-size: 0.85rem; color: var(--emerald); font-weight: 700;">(Founding Rate)</span>',
+          retainer: '+ 1,850 AED / month retainer',
+          waive: '🎁 1st Month Retainer 100% Waived for First 10 Partners!',
+          bonusTitle: '🎁 FREE BUNDLED VALUE (Worth 6,500 AED):',
+          waiveDesc: 'Your entire first-month retainer (1,850 AED) is 100% Waived! We provide 30 days of white-glove live monitoring, weekly prompt refinements, and conversation tuning at zero ongoing maintenance cost. Retainer billing begins only in Month 2.'
+        },
+        t3: {
+          setup: '16,500 AED',
+          retainer: '+ 3,100 AED / month retainer',
+          waive: '🎁 1st Month Retainer 100% Waived (0 AED First 30 Days!)',
+          bonusTitle: '👑 VIP BUNDLED VALUE (Worth 14,500 AED):',
+          waiveDesc: 'Your entire first-month retainer (3,100 AED) is 100% Waived! Dedicated architecture deployment, integration testing, and 24/7 live monitoring are fully covered in Month 1.'
+        },
+        addons: {
+          landline: '~150 – 250 AED / mo',
+          min: '~55 – 120 AED / mo (Usage)',
+          crm: '1,500 AED (One-Time)'
+        },
+        roi: {
+          human: '8,500 – 12,000 AED / mo',
+          ai: '1,850 AED / mo',
+          savings: 'Save 80,000+ AED / year'
+        }
+      },
+      USD: {
+        symbol: '$',
+        bannerHeadline: 'First 10 Founding Partner Businesses Receive <span style="color: var(--emerald);">$900 Setup Credit + 1st Month Retainer 100% Waived</span>',
+        t1: {
+          setup: '$1,750 USD',
+          retainer: '+ $350 USD / month retainer',
+          waive: '🎁 Month 1 Retainer 100% Waived ($0 First 30 Days!)',
+          minCost: '~$15–$25/mo',
+          minAccordion: '~$15–$25/mo',
+          waiveDesc: 'First month retainer ($350) is 100% Waived. All initial prompt adjustments, monitoring, and live fine-tuning are included free during your first 30 days. Monthly retainer begins only in Month 2.'
+        },
+        t2: {
+          std: 'Standard Setup: $3,900 USD',
+          setup: '$3,000 USD <span style="font-size: 0.85rem; color: var(--emerald); font-weight: 700;">(Founding Rate)</span>',
+          retainer: '+ $500 USD / month retainer',
+          waive: '🎁 1st Month Retainer 100% Waived for First 10 Partners!',
+          bonusTitle: '🎁 FREE BUNDLED VALUE (Worth $1,800 USD):',
+          waiveDesc: 'Your entire first-month retainer ($500) is 100% Waived! We provide 30 days of white-glove live monitoring, weekly prompt refinements, and conversation tuning at zero ongoing maintenance cost. Retainer billing begins only in Month 2.'
+        },
+        t3: {
+          setup: '$4,500 USD',
+          retainer: '+ $850 USD / month retainer',
+          waive: '🎁 1st Month Retainer 100% Waived ($0 First 30 Days!)',
+          bonusTitle: '👑 VIP BUNDLED VALUE (Worth $4,000 USD):',
+          waiveDesc: 'Your entire first-month retainer ($850) is 100% Waived! Dedicated architecture deployment, integration testing, and 24/7 live monitoring are fully covered in Month 1.'
+        },
+        addons: {
+          landline: '~$40 – $65 / mo',
+          min: '~$15 – $35 / mo (Usage)',
+          crm: '$400 USD (One-Time)'
+        },
+        roi: {
+          human: '$3,000 – $4,500 / mo',
+          ai: '$500 / mo',
+          savings: 'Save $32,000+ / year'
+        }
+      },
+      GBP: {
+        symbol: '£',
+        bannerHeadline: 'First 10 Founding Partner Businesses Receive <span style="color: var(--emerald);">£750 Setup Credit + 1st Month Retainer 100% Waived</span>',
+        t1: {
+          setup: '£1,400 GBP',
+          retainer: '+ £280 GBP / month retainer',
+          waive: '🎁 Month 1 Retainer 100% Waived (£0 First 30 Days!)',
+          minCost: '~£12–£20/mo',
+          minAccordion: '~£12–£20/mo',
+          waiveDesc: 'First month retainer (£280) is 100% Waived. All initial prompt adjustments, monitoring, and live fine-tuning are included free during your first 30 days. Monthly retainer begins only in Month 2.'
+        },
+        t2: {
+          std: 'Standard Setup: £3,100 GBP',
+          setup: '£2,350 GBP <span style="font-size: 0.85rem; color: var(--emerald); font-weight: 700;">(Founding Rate)</span>',
+          retainer: '+ £390 GBP / month retainer',
+          waive: '🎁 1st Month Retainer 100% Waived for First 10 Partners!',
+          bonusTitle: '🎁 FREE BUNDLED VALUE (Worth £1,400 GBP):',
+          waiveDesc: 'Your entire first-month retainer (£390) is 100% Waived! We provide 30 days of white-glove live monitoring, weekly prompt refinements, and conversation tuning at zero ongoing maintenance cost. Retainer billing begins only in Month 2.'
+        },
+        t3: {
+          setup: '£3,550 GBP',
+          retainer: '+ £670 GBP / month retainer',
+          waive: '🎁 1st Month Retainer 100% Waived (£0 First 30 Days!)',
+          bonusTitle: '👑 VIP BUNDLED VALUE (Worth £3,200 GBP):',
+          waiveDesc: 'Your entire first-month retainer (£670) is 100% Waived! Dedicated architecture deployment, integration testing, and 24/7 live monitoring are fully covered in Month 1.'
+        },
+        addons: {
+          landline: '~£30 – £50 / mo',
+          min: '~£12 – £25 / mo (Usage)',
+          crm: '£320 GBP (One-Time)'
+        },
+        roi: {
+          human: '£2,400 – £3,500 / mo',
+          ai: '£390 / mo',
+          savings: 'Save £26,000+ / year'
+        }
+      },
+      CAD: {
+        symbol: 'CA$',
+        bannerHeadline: 'First 10 Founding Partner Businesses Receive <span style="color: var(--emerald);">CA$1,200 Setup Credit + 1st Month Retainer 100% Waived</span>',
+        t1: {
+          setup: 'CA$2,400',
+          retainer: '+ CA$480 / month retainer',
+          waive: '🎁 Month 1 Retainer 100% Waived (CA$0 First 30 Days!)',
+          minCost: '~CA$20–CA$35/mo',
+          minAccordion: '~CA$20–CA$35/mo',
+          waiveDesc: 'First month retainer (CA$480) is 100% Waived. All initial prompt adjustments, monitoring, and live fine-tuning are included free during your first 30 days. Monthly retainer begins only in Month 2.'
+        },
+        t2: {
+          std: 'Standard Setup: CA$5,200',
+          setup: 'CA$4,000 <span style="font-size: 0.85rem; color: var(--emerald); font-weight: 700;">(Founding Rate)</span>',
+          retainer: '+ CA$680 / month retainer',
+          waive: '🎁 1st Month Retainer 100% Waived for First 10 Partners!',
+          bonusTitle: '🎁 FREE BUNDLED VALUE (Worth CA$2,400):',
+          waiveDesc: 'Your entire first-month retainer (CA$680) is 100% Waived! We provide 30 days of white-glove live monitoring, weekly prompt refinements, and conversation tuning at zero ongoing maintenance cost. Retainer billing begins only in Month 2.'
+        },
+        t3: {
+          setup: 'CA$6,000',
+          retainer: '+ CA$1,150 / month retainer',
+          waive: '🎁 1st Month Retainer 100% Waived (CA$0 First 30 Days!)',
+          bonusTitle: '👑 VIP BUNDLED VALUE (Worth CA$5,500):',
+          waiveDesc: 'Your entire first-month retainer (CA$1,150) is 100% Waived! Dedicated architecture deployment, integration testing, and 24/7 live monitoring are fully covered in Month 1.'
+        },
+        addons: {
+          landline: '~CA$55 – CA$90 / mo',
+          min: '~CA$20 – CA$45 / mo (Usage)',
+          crm: 'CA$550 (One-Time)'
+        },
+        roi: {
+          human: 'CA$4,000 – CA$6,000 / mo',
+          ai: 'CA$680 / mo',
+          savings: 'Save CA$42,000+ / year'
+        }
+      },
+      AUD: {
+        symbol: 'A$',
+        bannerHeadline: 'First 10 Founding Partner Businesses Receive <span style="color: var(--emerald);">A$1,400 Setup Credit + 1st Month Retainer 100% Waived</span>',
+        t1: {
+          setup: 'A$2,650',
+          retainer: '+ A$530 / month retainer',
+          waive: '🎁 Month 1 Retainer 100% Waived (A$0 First 30 Days!)',
+          minCost: '~A$25–A$40/mo',
+          minAccordion: '~A$25–A$40/mo',
+          waiveDesc: 'First month retainer (A$530) is 100% Waived. All initial prompt adjustments, monitoring, and live fine-tuning are included free during your first 30 days. Monthly retainer begins only in Month 2.'
+        },
+        t2: {
+          std: 'Standard Setup: A$5,900',
+          setup: 'A$4,500 <span style="font-size: 0.85rem; color: var(--emerald); font-weight: 700;">(Founding Rate)</span>',
+          retainer: '+ A$760 / month retainer',
+          waive: '🎁 1st Month Retainer 100% Waived for First 10 Partners!',
+          bonusTitle: '🎁 FREE BUNDLED VALUE (Worth A$2,700):',
+          waiveDesc: 'Your entire first-month retainer (A$760) is 100% Waived! We provide 30 days of white-glove live monitoring, weekly prompt refinements, and conversation tuning at zero ongoing maintenance cost. Retainer billing begins only in Month 2.'
+        },
+        t3: {
+          setup: 'A$6,800',
+          retainer: '+ A$1,300 / month retainer',
+          waive: '🎁 1st Month Retainer 100% Waived (A$0 First 30 Days!)',
+          bonusTitle: '👑 VIP BUNDLED VALUE (Worth A$6,000):',
+          waiveDesc: 'Your entire first-month retainer (A$1,300) is 100% Waived! Dedicated architecture deployment, integration testing, and 24/7 live monitoring are fully covered in Month 1.'
+        },
+        addons: {
+          landline: '~A$60 – A$100 / mo',
+          min: '~A$25 – A$50 / mo (Usage)',
+          crm: 'A$600 (One-Time)'
+        },
+        roi: {
+          human: 'A$4,500 – A$6,500 / mo',
+          ai: 'A$760 / mo',
+          savings: 'Save A$48,000+ / year'
+        }
+      }
+    };
+
+    function setCurrency(currKey) {
+      const data = currencyData[currKey];
+      if (!data) return;
+
+      // Update switcher active state
+      const buttons = document.querySelectorAll('.currency-btn');
+      buttons.forEach(btn => {
+        if (btn.innerText.includes(currKey)) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      // Update Banner
+      document.getElementById('banner-headline').innerHTML = data.bannerHeadline;
+
+      // Update Tier 1
+      document.getElementById('t1-setup').innerText = data.t1.setup;
+      document.getElementById('t1-retainer').innerText = data.t1.retainer;
+      document.getElementById('t1-waive').innerText = data.t1.waive;
+      document.getElementById('t1-min-cost').innerText = data.t1.minCost;
+      document.getElementById('t1-min-accordion').innerText = data.t1.minAccordion;
+      document.getElementById('t1-waive-desc').innerText = data.t1.waiveDesc;
+
+      // Update Tier 2
+      document.getElementById('t2-std').innerText = data.t2.std;
+      document.getElementById('t2-setup').innerHTML = data.t2.setup;
+      document.getElementById('t2-retainer').innerText = data.t2.retainer;
+      document.getElementById('t2-waive').innerText = data.t2.waive;
+      document.getElementById('t2-bonus-title').innerText = data.t2.bonusTitle;
+      document.getElementById('t2-waive-desc').innerText = data.t2.waiveDesc;
+
+      // Update Tier 3
+      document.getElementById('t3-setup').innerText = data.t3.setup;
+      document.getElementById('t3-retainer').innerText = data.t3.retainer;
+      document.getElementById('t3-waive').innerText = data.t3.waive;
+      document.getElementById('t3-bonus-title').innerText = data.t3.bonusTitle;
+      document.getElementById('t3-waive-desc').innerText = data.t3.waiveDesc;
+
+      // Update Add-ons
+      document.getElementById('addon-landline-price').innerText = data.addons.landline;
+      document.getElementById('addon-min-price').innerText = data.addons.min;
+      document.getElementById('addon-crm-price').innerText = data.addons.crm;
+
+      // Update ROI Table
+      document.getElementById('roi-human-cost').innerText = data.roi.human;
+      document.getElementById('roi-ai-cost').innerText = data.roi.ai;
+      document.getElementById('roi-savings').innerText = data.roi.savings;
+    }
+
+    function toggleTierDetails(tierId, btn) {
+      const target = document.getElementById(tierId);
+      if (!target) return;
+      
+      const isOpen = target.classList.contains('open');
+      if (isOpen) {
+        target.classList.remove('open');
+        btn.innerHTML = '<span>🔍 Show More Details & Technical Scope ▼</span>';
+      } else {
+        target.classList.add('open');
+        btn.innerHTML = '<span>▲ Hide Technical Scope & Breakdown</span>';
+      }
+    }
+  </script>
 </body>
 </html>
