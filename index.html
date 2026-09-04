@@ -386,25 +386,25 @@
 
       <div class="demo-widget-card" id="demo-swipe-card">
         
-        <!-- 5 Switchable Showroom Tabs -->
-        <div class="demo-tabs" id="demo-tabs-container">
-          <button class="demo-tab active" id="tab-btn-voice" onclick="switchDemo('voice')">🎙️ Voice Phone Agent</button>
-          <button class="demo-tab" id="tab-btn-cloning" onclick="switchDemo('cloning')">🧬 Voice Cloning Studio</button>
-          <button class="demo-tab" id="tab-btn-chat" onclick="switchDemo('chat')">💬 WhatsApp & Web AI Assistant</button>
-          <button class="demo-tab" id="tab-btn-routing" onclick="switchDemo('routing')">👥 Multi-Staff Router</button>
-          <button class="demo-tab" id="tab-btn-reviews" onclick="switchDemo('reviews')">⭐ Review Collector</button>
+        <!-- 5 Switchable Showroom Tabs for 4 Core Services + Voice Cloning -->
+        <div class="demo-tabs" id="demo-tabs-container" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px;">
+          <button class="demo-tab active" id="tab-btn-voice" onclick="switchDemo('voice')">🎙️ 1. Voice AI Phone Lab</button>
+          <button class="demo-tab" id="tab-btn-whatsapp" onclick="switchDemo('whatsapp')">💬 2. WhatsApp Cloud Lab</button>
+          <button class="demo-tab" id="tab-btn-instagram" onclick="switchDemo('instagram')">📸 3. Instagram DM & Vision Lab</button>
+          <button class="demo-tab" id="tab-btn-chatkit" onclick="switchDemo('chatkit')">🌐 4. Web ChatKit & CRM Stream</button>
+          <button class="demo-tab" id="tab-btn-cloning" onclick="switchDemo('cloning')">🧬 5. Voice Cloning Studio</button>
         </div>
 
         <!-- Mobile Demo Pagination Dots -->
         <div class="mobile-demo-dots" id="mobile-demo-dots">
           <span class="m-dot active" onclick="switchDemo('voice')"></span>
+          <span class="m-dot" onclick="switchDemo('whatsapp')"></span>
+          <span class="m-dot" onclick="switchDemo('instagram')"></span>
+          <span class="m-dot" onclick="switchDemo('chatkit')"></span>
           <span class="m-dot" onclick="switchDemo('cloning')"></span>
-          <span class="m-dot" onclick="switchDemo('chat')"></span>
-          <span class="m-dot" onclick="switchDemo('routing')"></span>
-          <span class="m-dot" onclick="switchDemo('reviews')"></span>
         </div>
 
-        <!-- 1. Voice Demo View -->
+        <!-- 1. Voice AI Phone Demo View -->
         <div id="voice-demo-view" class="demo-view active">
           <div class="voice-sim-box">
             
@@ -412,13 +412,13 @@
             <div style="background: linear-gradient(135deg, rgba(37, 211, 102, 0.08) 0%, rgba(14, 165, 233, 0.12) 100%); border: 1px solid rgba(37, 211, 102, 0.35); border-radius: 18px; padding: 22px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);">
               <div>
                 <div style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--emerald); font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-                  <span class="pulse-dot" style="background: #22c55e;"></span> 24/7 OMNICHANNEL AI WORKFORCE
+                  <span class="pulse-dot" style="background: #22c55e;"></span> 24/7 AUTONOMOUS VOICE RECEPTIONIST
                 </div>
-                <h3 style="font-size: 1.25rem; color: #fff; margin: 0 0 4px; font-family: var(--font-display);">Test Elena on Live Scenarios or WhatsApp</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Play the interactive studio voice demos below or message our official WhatsApp line directly.</p>
+                <h3 style="font-size: 1.25rem; color: #fff; margin: 0 0 4px; font-family: var(--font-display);">Test Elena on Inbound Practice Calls</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Experience how Elena answers in &lt;500ms, quotes pricing, and locks appointments into Google Calendar.</p>
               </div>
               <a href="https://wa.me/971585517132" target="_blank" rel="noopener" class="btn btn-primary" style="padding: 12px 24px; font-size: 0.95rem; font-weight: 700; white-space: nowrap; background: #25D366; border-color: #25D366; color: #000;">
-                <span>💬 WhatsApp +971 58 551 7132</span>
+                <span>💬 WhatsApp Line: +971 58 551 7132</span>
               </a>
             </div>
 
@@ -499,7 +499,199 @@
           </div>
         </div>
 
-        <!-- 2. Voice Cloning Lab Demo View (Luxury Before & After Showcase) -->
+        <!-- 2. WhatsApp Business Cloud AI Demo View -->
+        <div id="whatsapp-demo-view" class="demo-view">
+          <div class="whatsapp-sim-box" style="display: flex; flex-direction: column; gap: 20px; max-width: 780px; margin: 0 auto;">
+            
+            <div style="text-align: center;">
+              <span class="badge" style="background: rgba(37, 211, 102, 0.15); color: #25D366; border: 1px solid rgba(37, 211, 102, 0.3); font-size: 0.78rem; padding: 4px 12px; border-radius: 9999px;">💬 Official Meta WhatsApp Cloud API</span>
+              <h3 style="font-family: var(--font-display); font-size: 1.35rem; margin: 10px 0 6px;">WhatsApp Business 24/7 Consultation Booking Lab</h3>
+              <p style="font-size: 0.92rem; color: var(--text-muted); max-width: 600px; margin: 0 auto;">Simulate how our WhatsApp AI automatically transcribes patient voice notes, dispatches treatment brochures, and books consultation slots in real time.</p>
+            </div>
+
+            <!-- WhatsApp Simulated Device Container -->
+            <div style="background: #0b141a; border: 1px solid rgba(37, 211, 102, 0.3); border-radius: 20px; overflow: hidden; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);">
+              
+              <!-- WhatsApp Header Bar -->
+              <div style="background: #1f2c34; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div style="width: 40px; height: 40px; border-radius: 50%; background: #00a884; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                    🏥
+                  </div>
+                  <div>
+                    <div style="font-weight: 700; color: #e9edef; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+                      <span>Smile Studio Dubai</span>
+                      <span style="color: #00a884; font-size: 0.85rem;">✓</span>
+                    </div>
+                    <div style="font-size: 0.74rem; color: #8696a0;">Official WhatsApp Business Account • Online</div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.74rem;" onclick="resetWhatsAppDemoChat()">Reset Chat ⟳</button>
+              </div>
+
+              <!-- WhatsApp Chat Stream Window -->
+              <div id="wa-demo-chat-window" style="padding: 18px; height: 340px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' opacity=\'0.03\'><path d=\'M20 20 L80 80 M80 20 L20 80\' stroke=\'%23ffffff\' stroke-width=\'2\'/></svg>') #0b141a;">
+                
+                <div style="background: #202c33; color: #e9edef; padding: 10px 14px; border-radius: 8px 8px 8px 0; max-width: 82%; font-size: 0.88rem; line-height: 1.45; align-self: flex-start; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                  👋 Hello! Welcome to Smile Studio Dubai. I am your 24/7 AI Concierge. How can I help you today?
+                  <div style="font-size: 0.68rem; color: #8696a0; text-align: right; margin-top: 4px;">10:00 AM</div>
+                </div>
+
+                <div style="background: #005c4b; color: #e9edef; padding: 10px 14px; border-radius: 8px 8px 0 8px; max-width: 82%; font-size: 0.88rem; line-height: 1.45; align-self: flex-end; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                  Hi! How much are porcelain veneers, and do you have any consultations available with Dr. Jaco this Saturday?
+                  <div style="font-size: 0.68rem; color: #8696a0; text-align: right; margin-top: 4px;">10:01 AM ✓✓</div>
+                </div>
+
+                <div style="background: #202c33; color: #e9edef; padding: 10px 14px; border-radius: 8px 8px 8px 0; max-width: 85%; font-size: 0.88rem; line-height: 1.45; align-self: flex-start; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                  Porcelain veneers start from 1,200 AED per tooth. Dr. Jaco has two consultation openings this Saturday:
+                  <br><br>
+                  • <strong>11:30 AM</strong><br>
+                  • <strong>3:00 PM</strong><br><br>
+                  📄 <em>Attached: Smile_Makeover_Brochure.pdf (2.4 MB)</em><br><br>
+                  Which time would you like me to lock into Dr. Jaco's calendar for you?
+                  <div style="font-size: 0.68rem; color: #8696a0; text-align: right; margin-top: 4px;">10:01 AM</div>
+                </div>
+
+              </div>
+
+              <!-- WhatsApp Quick Action Starters & Input -->
+              <div style="background: #202c33; padding: 12px 16px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <button class="starter-btn" onclick="sendWhatsAppQuickReply('Let\'s book Saturday at 11:30 AM with Dr. Jaco!')">📅 Book Saturday 11:30 AM</button>
+                  <button class="starter-btn" onclick="sendWhatsAppQuickReply('Do you offer 0% interest payment plans?')">💳 Inquire about Payment Plans</button>
+                  <button class="starter-btn" onclick="sendWhatsAppQuickReply('Can I send a voice note with my question?')">🎧 Send Voice Note</button>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="wa-demo-input" placeholder="Type a WhatsApp reply (e.g., 'book 11:30 am', 'where are you located')..." style="flex: 1; background: #2a3942; border: 1px solid #3b4a54; border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 0.88rem;" onkeydown="if(event.key==='Enter') sendWhatsAppDemoMessage()">
+                  <button class="btn btn-primary" style="background: #00a884; border-color: #00a884; color: #fff; padding: 0 18px; border-radius: 8px;" onclick="sendWhatsAppDemoMessage()">Send →</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Instagram DM & Multimodal Vision AI Demo View -->
+        <div id="instagram-demo-view" class="demo-view">
+          <div class="instagram-sim-box" style="display: flex; flex-direction: column; gap: 20px; max-width: 780px; margin: 0 auto;">
+            
+            <div style="text-align: center;">
+              <span class="badge" style="background: rgba(244, 63, 94, 0.15); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); font-size: 0.78rem; padding: 4px 12px; border-radius: 9999px;">📸 Multimodal Vision & DM Automation</span>
+              <h3 style="font-family: var(--font-display); font-size: 1.35rem; margin: 10px 0 6px;">Instagram DM & Patient Vision AI Lab</h3>
+              <p style="font-size: 0.92rem; color: var(--text-muted); max-width: 600px; margin: 0 auto;">See how our Instagram AI turns Reel comments into instant DMs, analyzes patient smile/skin photos with Vision, and confirms appointments.</p>
+            </div>
+
+            <!-- Instagram Dark Mode Interface -->
+            <div style="background: #000; border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 20px; overflow: hidden; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);">
+              
+              <!-- IG Top Bar -->
+              <div style="background: #121212; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                    ✨
+                  </div>
+                  <div>
+                    <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">@radiance.aesthetics.miami</div>
+                    <div style="font-size: 0.74rem; color: #8e8e8e;">Active now • Verified Clinic</div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.74rem;" onclick="resetInstagramDemoChat()">Reset ⟳</button>
+              </div>
+
+              <!-- IG Chat Stream -->
+              <div id="ig-demo-chat-window" style="padding: 18px; height: 340px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #000;">
+                
+                <div style="background: #262626; color: #fff; padding: 10px 14px; border-radius: 18px 18px 18px 4px; max-width: 80%; font-size: 0.88rem; line-height: 1.45; align-self: flex-start;">
+                  👋 Hey! Thanks for commenting <strong>"VENEERS"</strong> on our Reel! I am Dr. Sarah's AI concierge. Are you looking for smile alignment or a full porcelain makeover?
+                </div>
+
+                <div style="background: #3797f0; color: #fff; padding: 10px 14px; border-radius: 18px 18px 4px 18px; max-width: 80%; font-size: 0.88rem; line-height: 1.45; align-self: flex-end;">
+                  I have a small gap between my two front teeth. Here is a photo! 📸 [Smile_Photo.jpg]
+                </div>
+
+                <div style="background: #262626; color: #fff; padding: 10px 14px; border-radius: 18px 18px 18px 4px; max-width: 85%; font-size: 0.88rem; line-height: 1.45; align-self: flex-start;">
+                  👁️ <em>AI Vision Analysis:</em><br>
+                  I see the mild midline diastema on your upper front incisors! Dr. Sarah can easily close this with either a <strong>1-visit composite bonding</strong> or <strong>2 porcelain veneers</strong>.
+                  <br><br>
+                  Would you like to come in for a free 3D smile scan this Thursday at 2:00 PM or Friday at 10:30 AM?
+                </div>
+
+              </div>
+
+              <!-- IG Quick Buttons & Input -->
+              <div style="background: #121212; padding: 12px 16px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <button class="starter-btn" onclick="sendInstagramQuickReply('Thursday at 2:00 PM works perfectly!')">📅 Book Thursday 2:00 PM Scan</button>
+                  <button class="starter-btn" onclick="sendInstagramQuickReply('How much is composite bonding vs porcelain?')">💰 Compare Pricing Options</button>
+                  <button class="starter-btn" onclick="sendInstagramQuickReply('Simulate photo upload: [New_Skin_Photo.jpg]')">📸 Upload Another Photo</button>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="ig-demo-input" placeholder="Type an Instagram DM (e.g., 'book thursday', 'what is the cost')..." style="flex: 1; background: #262626; border: 1px solid #363636; border-radius: 20px; padding: 10px 16px; color: #fff; font-size: 0.88rem;" onkeydown="if(event.key==='Enter') sendInstagramDemoMessage()">
+                  <button class="btn btn-primary" style="background: #3797f0; border-color: #3797f0; color: #fff; padding: 0 18px; border-radius: 20px;" onclick="sendInstagramDemoMessage()">Send</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Full-Width Web ChatKit & Live CRM Stream View -->
+        <div id="chatkit-demo-view" class="demo-view">
+          <div class="chatkit-sim-box" style="display: flex; flex-direction: column; gap: 20px; max-width: 900px; margin: 0 auto;">
+            
+            <div style="text-align: center;">
+              <span class="badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); font-size: 0.78rem; padding: 4px 12px; border-radius: 9999px;">🌐 OpenAI ChatKit + Live Webhook Stream</span>
+              <h3 style="font-family: var(--font-display); font-size: 1.35rem; margin: 10px 0 6px;">Web ChatKit & Live CRM Webhook Stream</h3>
+              <p style="font-size: 0.92rem; color: var(--text-muted); max-width: 650px; margin: 0 auto;">Watch live as visitors chat on your website (left) while qualified leads and booking dates auto-stream directly into your CRM & Google Sheets in real time (right)!</p>
+            </div>
+
+            <!-- Split Screen: Left (ChatKit) / Right (Live CRM Log) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+              
+              <!-- Left: ChatKit Window -->
+              <div style="background: rgba(10, 16, 26, 0.95); border: 1px solid var(--border); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; height: 380px;">
+                <div style="font-size: 0.82rem; font-weight: 700; color: var(--cyan); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+                  <span>💻 OpenAI ChatKit Widget</span>
+                  <span style="color: var(--emerald); font-size: 0.74rem;">● Streaming Active</span>
+                </div>
+                <div id="chatkit-demo-stream" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 0.88rem; color: #f1f5f9; padding-right: 4px;">
+                  <div style="background: rgba(255, 255, 255, 0.04); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                    👋 Welcome! Ask me anything about our treatments, pricing, or book a consultation instantly.
+                  </div>
+                </div>
+                <div style="display: flex; gap: 6px; margin-top: 10px;">
+                  <input type="text" id="chatkit-demo-input" placeholder="Ask: 'How much is Invisalign?' or 'Book 3pm'..." style="flex: 1; background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 0.84rem;" onkeydown="if(event.key==='Enter') sendChatKitStreamMessage()">
+                  <button class="btn btn-primary" style="padding: 0 14px; font-size: 0.84rem;" onclick="sendChatKitStreamMessage()">Send</button>
+                </div>
+              </div>
+
+              <!-- Right: Live CRM & Google Sheets Webhook Log -->
+              <div style="background: #060b10; border: 1px solid rgba(168, 85, 247, 0.35); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; height: 380px;">
+                <div style="font-size: 0.82rem; font-weight: 700; color: #c084fc; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+                  <span>📊 Connected Practice CRM / Google Sheets</span>
+                  <span style="color: var(--emerald); font-size: 0.74rem; font-family: var(--font-mono);">Webhook: 200 OK</span>
+                </div>
+                <div id="crm-demo-webhook-log" style="flex: 1; overflow-y: auto; font-family: var(--font-mono); font-size: 0.76rem; color: #94a3b8; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25); padding: 8px 10px; border-radius: 6px; color: #86efac;">
+                    [LIVE SYNC] Webhook listener connected.<br>
+                    Target: Google Sheets & Jane App EHR.
+                  </div>
+                  <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); padding: 8px 10px; border-radius: 6px;">
+                    [15:24:10] Visitor arrived from Google Ads.<br>
+                    Channel: Web ChatKit
+                  </div>
+                </div>
+                <div style="margin-top: 10px; font-size: 0.74rem; color: var(--text-muted); text-align: center;">
+                  ⚡ Auto-appends new lead rows without Zapier fees
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 5. Voice Cloning Lab Demo View -->
         <div id="cloning-demo-view" class="demo-view">
           <div class="cloning-sim-box" style="display: flex; flex-direction: column; gap: 24px; max-width: 780px; margin: 0 auto;">
             
@@ -603,101 +795,6 @@
               </div>
             </div>
 
-            <!-- VIP BESPOKE VOICE CLONE INTAKE BANNER -->
-            <div style="background: linear-gradient(135deg, rgba(14, 22, 32, 0.95) 0%, rgba(20, 30, 45, 0.95) 100%); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 18px; padding: 24px; text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.5);">
-              <div style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--cyan); font-weight: 700; margin-bottom: 6px;">👑 VIP Custom Voice Modeling</div>
-              <h4 style="font-size: 1.25rem; color: #fff; margin: 0 0 8px; font-family: var(--font-display);">Want to Hear Your Own Voice Cloned by Nexa Logic?</h4>
-              <p style="font-size: 0.88rem; color: var(--text-muted); max-width: 540px; margin: 0 auto 18px;">Submit your details in our Custom Prototype Request form below, and our engineering team will train a private neural clone of your voice in under 24 hours.</p>
-              
-              <a href="#request-demo" class="btn btn-primary btn-glow" style="padding: 10px 24px; font-size: 0.9rem; font-weight: 700;">
-                <span>⚡ Request Free Bespoke AI Voice Clone ↓</span>
-              </a>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- 3. Multimodal WhatsApp & Web AI Assistant View -->
-        <div id="chat-demo-view" class="demo-view">
-          <div class="chat-sim-box">
-            <div class="chatkit-topbar" style="background: rgba(10, 16, 26, 0.9); border-bottom: 1px solid var(--border); padding: 12px 18px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.3rem;">🤖</span>
-                <div>
-                  <div style="font-size: 0.88rem; font-weight: 700; color: #fff;">Nexa 2-Way Booking Agent</div>
-                  <div style="font-size: 0.74rem; color: var(--emerald); display: flex; align-items: center; gap: 4px;"><span class="pulse-dot" style="background:#22c55e;"></span> Synced with Cal.com & Google Calendar</div>
-                </div>
-              </div>
-              <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.74rem;" onclick="resetShowroomChat()">Reset ⟳</button>
-            </div>
-
-            <div id="showroom-chat-window" class="chat-window" style="height: 320px;">
-              <div class="chat-bubble bot">
-                👋 Hi there! I am your 24/7 AI Receptionist. I can check open appointment slots, lock in confirmed meetings, reschedule, or answer any questions about our systems.
-                
-                <div class="quick-starters" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;">
-                  <button class="starter-btn" onclick="handleShowroomQuickClick('📅 Book an appointment')">📅 Book an appointment</button>
-                  <button class="starter-btn" onclick="handleShowroomQuickClick('🕒 What times are available this week?')">🕒 Check open slots</button>
-                  <button class="starter-btn" onclick="handleShowroomQuickClick('👥 Can you route to multiple doctors/specialists?')">👥 Multi-staff routing</button>
-                  <button class="starter-btn" onclick="handleShowroomQuickClick('🔄 I need to reschedule my meeting')">🔄 Reschedule</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="chat-input-bar">
-              <input type="text" id="showroom-chat-input" placeholder="Type a message (e.g. 'thursday', 'book 2pm', or 'pricing')..." onkeydown="if(event.key==='Enter') sendShowroomChat()">
-              <button class="btn-send" onclick="sendShowroomChat()">Send →</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. Multi-Staff Specialist Routing View -->
-        <div id="routing-demo-view" class="demo-view">
-          <div class="routing-sim-box" style="display: flex; flex-direction: column; gap: 20px;">
-            <div style="text-align: center; max-width: 640px; margin: 0 auto;">
-              <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 8px;">Semantic Specialist & Multi-Calendar Router</h3>
-              <p style="font-size: 0.92rem; color: var(--text-muted);">Select a practice niche below to see how our AI listens to caller requirements and routes directly to the correct team member's personal calendar.</p>
-            </div>
-
-            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-              <button class="btn btn-secondary active-niche" id="btn-niche-medspa" onclick="selectRoutingNiche('medspa')">💉 Med Spa / Aesthetics</button>
-              <button class="btn btn-secondary" id="btn-niche-legal" onclick="selectRoutingNiche('legal')">⚖️ Law Firm / Legal Intake</button>
-              <button class="btn btn-secondary" id="btn-niche-realestate" onclick="selectRoutingNiche('realestate')">🏡 Real Estate Brokerage</button>
-            </div>
-
-            <div id="routing-matrix-card" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 20px;">
-              <!-- Dynamic Niche Content Loaded by JS -->
-            </div>
-          </div>
-        </div>
-
-        <!-- 4. Review Collector & Reactivation View -->
-        <div id="reviews-demo-view" class="demo-view">
-          <div class="reviews-sim-box" style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
-            <div style="text-align: center; max-width: 640px;">
-              <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 8px;">Automated 5-Star Google Review Engine</h3>
-              <p style="font-size: 0.92rem; color: var(--text-muted);">1 hour after an appointment ends, our AI automatically texts the client to collect 5-star reviews on Google Maps, boosting local search SEO.</p>
-            </div>
-
-            <div style="width: 100%; max-width: 480px; background: #0b1118; border: 2px solid var(--border); border-radius: 24px; padding: 20px; box-shadow: 0 16px 40px rgba(0,0,0,0.6);">
-              <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 16px;">
-                <div style="font-weight: 700; font-size: 0.9rem; color: #fff;">📱 SMS Notification Simulator</div>
-                <span class="badge" style="background: rgba(34, 197, 94, 0.15); color: var(--emerald); font-size: 0.72rem; padding: 4px 8px; border-radius: 9999px;">● Automated Flow</span>
-              </div>
-
-              <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.88rem;">
-                <div style="background: #1e293b; padding: 12px 16px; border-radius: 16px 16px 16px 4px; color: #fff; line-height: 1.5;">
-                  "Hi Sarah! 🌟 Thank you for visiting Nexa Aesthetics today. How was your treatment with Dr. Sarah?"
-                </div>
-                <div style="background: rgba(0, 240, 255, 0.15); border: 1px solid rgba(0, 240, 255, 0.3); padding: 10px 14px; border-radius: 16px 16px 4px 16px; color: #fff; align-self: flex-end;">
-                  "It was fantastic! Dr. Sarah was amazing."
-                </div>
-                <div style="background: #1e293b; padding: 12px 16px; border-radius: 16px 16px 16px 4px; color: #fff; line-height: 1.5;">
-                  "That makes our day! 🙌 Would you mind taking 30 seconds to share your feedback on Google? It means the world to our team:<br><br>
-                  <a href="#" style="color: var(--cyan); text-decoration: underline;">⭐️ g.page/review/nexa-demo</a>"
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
