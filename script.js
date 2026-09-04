@@ -137,7 +137,7 @@ async function handleCustomDemoSubmit(e) {
 const DEMO_ORDER = ['voice', 'whatsapp', 'instagram', 'chatkit', 'cloning'];
 let currentDemoIndex = 0;
 
-function switchDemo(type) {
+function switchDemo(type, shouldScrollTab = false) {
   const targetType = type || 'voice';
 
   // 1. Deactivate all tabs, views, and mobile dots
@@ -156,9 +156,17 @@ function switchDemo(type) {
   const tabBtn = document.getElementById(`tab-btn-${targetType}`) || document.querySelector(`.demo-tab[onclick*="${targetType}"]`);
   if (tabBtn) {
     tabBtn.classList.add('active');
-    try {
-      tabBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-    } catch (e) {}
+    if (shouldScrollTab) {
+      try {
+        const container = document.getElementById('demo-tabs-container');
+        if (container) {
+          const tabOffsetLeft = tabBtn.offsetLeft;
+          const tabWidth = tabBtn.offsetWidth;
+          const containerWidth = container.offsetWidth;
+          container.scrollTo({ left: tabOffsetLeft - (containerWidth / 2) + (tabWidth / 2), behavior: 'smooth' });
+        }
+      } catch (e) {}
+    }
   }
 
   // 3. Activate target view by ID
@@ -1079,7 +1087,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn) {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        switchDemo(tabMapping[id]);
+        switchDemo(tabMapping[id], true);
       });
     }
   });
@@ -1105,11 +1113,11 @@ document.addEventListener('DOMContentLoaded', () => {
           // Swipe Right -> Prev Tab
           currentDemoIndex = (currentDemoIndex - 1 + DEMO_ORDER.length) % DEMO_ORDER.length;
         }
-        switchDemo(DEMO_ORDER[currentDemoIndex]);
+        switchDemo(DEMO_ORDER[currentDemoIndex], true);
       }
     }, { passive: true });
   }
 
-  // Ensure initial Voice Lab tab is active and visible
-  switchDemo('voice');
+  // Ensure initial Voice Lab tab is active without scrolling window
+  switchDemo('voice', false);
 });

@@ -780,7 +780,7 @@ img {
 }
 
 .demo-view.active {
-  display: block;
+  display: block !important;
 }
 
 /* Voice Cloning Lab Styles */
