@@ -4,7 +4,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xrpzaqpa';
 
 // 0. Dynamic Island Capsule Scroll Spy & Navigation
 document.addEventListener('DOMContentLoaded', () => {
-  const sections = document.querySelectorAll('header#hero, section#solutions, section#demo, section#request-demo, section#process, section#calculator, section#booking');
+  const sections = document.querySelectorAll('header#hero, section#solutions, section#demo, section#request-demo, section#process, section#showdown, section#booking');
   const islandItems = document.querySelectorAll('.island-item');
 
   function updateActiveIslandItem() {
@@ -58,7 +58,7 @@ function toggleNoWebsiteFields() {
   }
 }
 
-// Handle Custom Demo Lead Form Submission (Formspree)
+// Handle Custom Demo Lead Form Submission (Formspree + Google Sheets)
 async function handleCustomDemoSubmit(e) {
   e.preventDefault();
   const form = document.getElementById('custom-demo-request-form');
@@ -132,50 +132,51 @@ async function handleCustomDemoSubmit(e) {
   }
 }
 
-// 1. Switch Showroom Tabs (Voice, Cloning, Chat, Routing, Reviews) with Touch & Auto-Scroll
-const DEMO_ORDER = ['voice', 'cloning', 'chat', 'routing', 'reviews'];
+// ================= MASTER SIMULATION LAB TAB SWITCHER =================
+// 5 Tabs: Voice, WhatsApp, Instagram, ChatKit/CRM, Voice Cloning
+const DEMO_ORDER = ['voice', 'whatsapp', 'instagram', 'chatkit', 'cloning'];
 let currentDemoIndex = 0;
 
 function switchDemo(type) {
-  const tabs = document.querySelectorAll('.demo-tab');
-  const views = document.querySelectorAll('.demo-view');
-  const dots = document.querySelectorAll('.m-dot');
+  const targetType = type || 'voice';
 
-  tabs.forEach(t => t.classList.remove('active'));
-  views.forEach(v => v.classList.remove('active'));
-  dots.forEach(d => d.classList.remove('active'));
+  // 1. Deactivate all tabs, views, and mobile dots
+  const allTabs = document.querySelectorAll('.demo-tab');
+  const allViews = document.querySelectorAll('.demo-view');
+  const allDots = document.querySelectorAll('.m-dot');
 
-  const index = DEMO_ORDER.indexOf(type);
-  if (index !== -1) {
-    currentDemoIndex = index;
-    if (dots[index]) dots[index].classList.add('active');
+  allTabs.forEach(t => t.classList.remove('active'));
+  allViews.forEach(v => {
+    v.classList.remove('active');
+    v.style.display = 'none'; // Explicit inline style override prevents CSS conflicts
+  });
+  allDots.forEach(d => d.classList.remove('active'));
+
+  // 2. Activate target tab by ID or data attribute or onclick matching
+  const tabBtn = document.getElementById(`tab-btn-${targetType}`) || document.querySelector(`.demo-tab[onclick*="${targetType}"]`);
+  if (tabBtn) {
+    tabBtn.classList.add('active');
+    try {
+      tabBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    } catch (e) {}
   }
 
-  if (type === 'voice') {
-    tabs[0]?.classList.add('active');
-    document.getElementById('voice-demo-view')?.classList.add('active');
-    tabs[0]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-  } else if (type === 'cloning') {
-    tabs[1]?.classList.add('active');
-    document.getElementById('cloning-demo-view')?.classList.add('active');
-    tabs[1]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-  } else if (type === 'chat') {
-    tabs[2]?.classList.add('active');
-    document.getElementById('chat-demo-view')?.classList.add('active');
-    tabs[2]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-  } else if (type === 'routing') {
-    tabs[3]?.classList.add('active');
-    document.getElementById('routing-demo-view')?.classList.add('active');
-    tabs[3]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-    if (!document.getElementById('routing-matrix-card')?.innerHTML.trim()) {
-      selectRoutingNiche('medspa');
-    }
-  } else if (type === 'reviews') {
-    tabs[4]?.classList.add('active');
-    document.getElementById('reviews-demo-view')?.classList.add('active');
-    tabs[4]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  // 3. Activate target view by ID
+  const viewEl = document.getElementById(`${targetType}-demo-view`);
+  if (viewEl) {
+    viewEl.classList.add('active');
+    viewEl.style.display = 'block'; // Explicit inline style override ensures visibility
+  }
+
+  // 4. Update dot index
+  const idx = DEMO_ORDER.indexOf(targetType);
+  if (idx !== -1) {
+    currentDemoIndex = idx;
+    if (allDots[idx]) allDots[idx].classList.add('active');
   }
 }
+
+window.switchDemo = switchDemo;
 
 // Jump and switch to specific Simulation Lab tab
 function jumpToDemo(type) {
@@ -185,6 +186,8 @@ function jumpToDemo(type) {
     demoSection.scrollIntoView({ behavior: 'smooth' });
   }
 }
+
+window.jumpToDemo = jumpToDemo;
 
 // ================= 1. STUDIO SCENARIO TELEPHONY ENGINE (TAB 1) =================
 const SCENARIOS = {
@@ -200,7 +203,7 @@ const SCENARIOS = {
     subtitle: 'After-hours call transfer to on-call doc',
     duration: 24,
     speaker: 'Elena (AI Triage Agent):',
-    transcript: '“Hello, thanks for calling Radiance Clinic after-hours emergency line. I understand you have post-procedure swelling. I have logged your patient chart and am immediately connecting you to Dr. Sarah\'s on-call priority line right now. Please hold for one second while I initiate the direct transfer.”'
+    transcript: "“Hello, thanks for calling Radiance Clinic after-hours emergency line. I understand you have post-procedure swelling. I have logged your patient chart and am immediately connecting you to Dr. Sarah's on-call priority line right now. Please hold for one second while I initiate the direct transfer.”"
   },
   3: {
     title: '2-Way Rescheduling',
@@ -240,57 +243,52 @@ function getBestSpeechVoice(gender = 'female') {
       const match = availableVoices.find(v => v.name.includes(name));
       if (match) return match;
     }
-    return availableVoices.find(v => v.name.toLowerCase().includes('female') || v.lang.startsWith('en')) || availableVoices[0];
+    return availableVoices.find(v => v.lang.startsWith('en')) || availableVoices[0];
   } else {
-    const preferred = ['Alex', 'Daniel', 'Tom', 'David', 'George', 'Fred', 'Google UK English Male', 'Google US English', 'Microsoft David'];
+    const preferred = ['Daniel', 'Oliver', 'Alex', 'Fred', 'Google UK English Male', 'David', 'George', 'Arthur'];
     for (const name of preferred) {
       const match = availableVoices.find(v => v.name.includes(name));
       if (match) return match;
     }
-    return availableVoices.find(v => v.name.toLowerCase().includes('male') || v.lang.startsWith('en')) || availableVoices[0];
+    return availableVoices.find(v => v.lang.startsWith('en')) || availableVoices[0];
   }
 }
 
-// Sound Effects for Studio Playback
 function playPhoneChime() {
   try {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     if (!AudioContext) return;
     if (!audioCtx) audioCtx = new AudioContext();
     if (audioCtx.state === 'suspended') audioCtx.resume();
-    
-    const now = audioCtx.currentTime;
+
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(520, now);
-    osc.frequency.exponentialRampToValueAtTime(1040, now + 0.18);
-    
-    gain.gain.setValueAtTime(0.08, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
-    
+    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12); // A5
+
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.28);
+
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-    
-    osc.start(now);
-    osc.stop(now + 0.18);
-  } catch (e) {
-    console.log('Audio chime not available');
-  }
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.3);
+  } catch (e) {}
 }
 
 function switchVoiceScenario(id) {
   stopScenarioAudioPlayback();
   currentScenarioId = id;
 
-  for (let i = 1; i <= 3; i++) {
-    const btn = document.getElementById(`btn-scen-${i}`);
-    if (btn) {
-      if (i === id) btn.classList.add('active');
-      else btn.classList.remove('active');
+  const btns = [1, 2, 3];
+  btns.forEach(i => {
+    const b = document.getElementById(`btn-scen-${i}`);
+    if (b) {
+      if (i === id) b.classList.add('active');
+      else b.classList.remove('active');
     }
-  }
+  });
 
   const sc = SCENARIOS[id];
   if (!sc) return;
@@ -383,7 +381,302 @@ function stopScenarioAudioPlayback() {
   if (timer && sc) timer.textContent = `0:00 / 0:${sc.duration < 10 ? '0' + sc.duration : sc.duration}`;
 }
 
-// ================= 2. EXECUTIVE NEURAL VOICE CLONING STUDIO (TAB 2) =================
+
+// ================= 2. WHATSAPP BUSINESS CLOUD AI LAB (TAB 2) =================
+function getDubaiCurrentTime() {
+  const now = new Date();
+  let hours = now.getHours();
+  const minutes = now.getMinutes();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12 || 12;
+  return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+}
+
+function appendWhatsAppBubble(sender, contentHtml) {
+  const chatWin = document.getElementById('wa-demo-chat-window');
+  if (!chatWin) return;
+
+  const bubble = document.createElement('div');
+  const timeStr = getDubaiCurrentTime();
+
+  if (sender === 'user') {
+    bubble.style.cssText = 'background: #005c4b; color: #e9edef; padding: 10px 14px; border-radius: 8px 8px 0 8px; max-width: 82%; font-size: 0.88rem; line-height: 1.45; align-self: flex-end; box-shadow: 0 2px 4px rgba(0,0,0,0.3);';
+    bubble.innerHTML = `${contentHtml}<div style="font-size: 0.68rem; color: #8696a0; text-align: right; margin-top: 4px;">${timeStr} ✓✓</div>`;
+  } else {
+    bubble.style.cssText = 'background: #202c33; color: #e9edef; padding: 10px 14px; border-radius: 8px 8px 8px 0; max-width: 85%; font-size: 0.88rem; line-height: 1.45; align-self: flex-start; box-shadow: 0 2px 4px rgba(0,0,0,0.3);';
+    bubble.innerHTML = `${contentHtml}<div style="font-size: 0.68rem; color: #8696a0; text-align: right; margin-top: 4px;">${timeStr}</div>`;
+  }
+
+  chatWin.appendChild(bubble);
+  chatWin.scrollTop = chatWin.scrollHeight;
+}
+
+function sendWhatsAppQuickReply(text) {
+  appendWhatsAppBubble('user', text);
+  processWhatsAppAIResponse(text);
+}
+
+function sendWhatsAppDemoMessage() {
+  const input = document.getElementById('wa-demo-input');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  appendWhatsAppBubble('user', text);
+  processWhatsAppAIResponse(text);
+}
+
+function processWhatsAppAIResponse(userText) {
+  const lower = userText.toLowerCase();
+
+  setTimeout(() => {
+    // 1. Saturday 11:30 AM Booking
+    if (lower.includes('saturday') || lower.includes('11:30') || lower.includes('book') || lower.includes('lock') || lower.includes('reserve') || lower.includes('jaco')) {
+      appendWhatsAppBubble('bot', `
+        🎉 <strong>Confirmed & Locked In!</strong><br><br>
+        I have booked your smile consultation with <strong>Dr. Jaco</strong> for <strong>Saturday at 11:30 AM</strong> at our Dubai Marina clinic.<br><br>
+        • <strong>Doctor:</strong> Dr. Jaco (Lead Aesthetic Prosthodontist)<br>
+        • <strong>Service:</strong> Comprehensive Smile & Veneer Assessment<br>
+        • <strong>Location:</strong> Smile Studio Dubai, Marina Plaza Level 14<br><br>
+        📲 An instant SMS calendar invite and Google Map pin have been dispatched to your mobile. Please bring your Emirates ID or Passport upon arrival. See you Saturday!
+      `);
+    }
+    // 2. Payment Plans
+    else if (lower.includes('payment') || lower.includes('plan') || lower.includes('finance') || lower.includes('tabby') || lower.includes('tamara') || lower.includes('installment') || lower.includes('0%') || lower.includes('interest')) {
+      appendWhatsAppBubble('bot', `
+        💳 <strong>Yes, 100% 0% Interest Financing!</strong><br><br>
+        We partner directly with <strong>Tabby and Tamara</strong> to split your treatment across <strong>4 easy monthly installments</strong> with zero interest and zero hidden processing fees.<br><br>
+        • Porcelain Veneers: from <strong>300 AED / month</strong> (4 installments)<br>
+        • Full Hollywood Smile: from <strong>3,200 AED / month</strong><br><br>
+        Would you like to reserve our remaining Saturday consultation slot at <strong>11:30 AM</strong> or <strong>3:00 PM</strong> to get your personalized financing breakdown?
+      `);
+    }
+    // 3. Voice Note
+    else if (lower.includes('voice') || lower.includes('note') || lower.includes('audio') || lower.includes('listen')) {
+      appendWhatsAppBubble('bot', `
+        🎧 <strong>Voice Note Processed in 1.4s:</strong><br><br>
+        <em>"Voice memo transcribed: 'Hi, I have dental anxiety and wanted to know if you provide conscious sedation for veneer preparation?'"</em><br><br>
+        Yes! We offer <strong>certified conscious sleep sedation</strong> administered by licensed anesthetists, ensuring 100% pain-free and anxiety-free veneer appointments.<br><br>
+        Would you like me to note sedation preference on your Saturday chart with Dr. Jaco?
+      `);
+    }
+    // 4. Pricing & Veneers General
+    else if (lower.includes('price') || lower.includes('cost') || lower.includes('how much') || lower.includes('veneer') || lower.includes('invisalign') || lower.includes('whitening')) {
+      appendWhatsAppBubble('bot', `
+        ✨ <strong>Smile Studio Dubai 2026 Price Overview:</strong><br><br>
+        • <strong>Emax Porcelain Veneers:</strong> 1,200 AED / tooth<br>
+        • <strong>Composite Smile Bonding:</strong> 450 AED / tooth<br>
+        • <strong>Laser In-Clinic Teeth Whitening:</strong> 850 AED<br>
+        • <strong>Comprehensive 3D Smile Scan:</strong> FREE with treatment<br><br>
+        Would you like to come in this Saturday at <strong>11:30 AM</strong> or <strong>3:00 PM</strong> for your free 3D smile scan?
+      `);
+    }
+    // 5. Default Fallback
+    else {
+      appendWhatsAppBubble('bot', `
+        Thanks for asking! Our clinic is located at <strong>Dubai Marina Plaza, Level 14</strong>, open 7 days a week from 9:00 AM to 9:00 PM.<br><br>
+        I can lock in your consultation with Dr. Jaco this Saturday, answer pricing questions, or send treatment brochures. How would you like to proceed?
+      `);
+    }
+  }, 450);
+}
+
+function resetWhatsAppDemoChat() {
+  const chatWin = document.getElementById('wa-demo-chat-window');
+  if (!chatWin) return;
+  chatWin.innerHTML = `
+    <div style="background: #202c33; color: #e9edef; padding: 10px 14px; border-radius: 8px 8px 8px 0; max-width: 82%; font-size: 0.88rem; line-height: 1.45; align-self: flex-start; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+      👋 Hello! Welcome to Smile Studio Dubai. I am your 24/7 AI Concierge. How can I help you today?
+      <div style="font-size: 0.68rem; color: #8696a0; text-align: right; margin-top: 4px;">10:00 AM</div>
+    </div>
+
+    <div style="background: #005c4b; color: #e9edef; padding: 10px 14px; border-radius: 8px 8px 0 8px; max-width: 82%; font-size: 0.88rem; line-height: 1.45; align-self: flex-end; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+      Hi! How much are porcelain veneers, and do you have any consultations available with Dr. Jaco this Saturday?
+      <div style="font-size: 0.68rem; color: #8696a0; text-align: right; margin-top: 4px;">10:01 AM ✓✓</div>
+    </div>
+
+    <div style="background: #202c33; color: #e9edef; padding: 10px 14px; border-radius: 8px 8px 8px 0; max-width: 85%; font-size: 0.88rem; line-height: 1.45; align-self: flex-start; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+      Porcelain veneers start from 1,200 AED per tooth. Dr. Jaco has two consultation openings this Saturday:
+      <br><br>
+      • <strong>11:30 AM</strong><br>
+      • <strong>3:00 PM</strong><br><br>
+      📄 <em>Attached: Smile_Makeover_Brochure.pdf (2.4 MB)</em><br><br>
+      Which time would you like me to lock into Dr. Jaco's calendar for you?
+      <div style="font-size: 0.68rem; color: #8696a0; text-align: right; margin-top: 4px;">10:01 AM</div>
+    </div>
+  `;
+}
+
+
+// ================= 3. INSTAGRAM DM & MULTIMODAL VISION AI LAB (TAB 3) =================
+function appendInstagramBubble(sender, contentHtml) {
+  const chatWin = document.getElementById('ig-demo-chat-window');
+  if (!chatWin) return;
+
+  const bubble = document.createElement('div');
+
+  if (sender === 'user') {
+    bubble.style.cssText = 'background: #3797f0; color: #fff; padding: 10px 14px; border-radius: 18px 18px 4px 18px; max-width: 80%; font-size: 0.88rem; line-height: 1.45; align-self: flex-end;';
+    bubble.innerHTML = contentHtml;
+  } else {
+    bubble.style.cssText = 'background: #262626; color: #fff; padding: 10px 14px; border-radius: 18px 18px 18px 4px; max-width: 85%; font-size: 0.88rem; line-height: 1.45; align-self: flex-start;';
+    bubble.innerHTML = contentHtml;
+  }
+
+  chatWin.appendChild(bubble);
+  chatWin.scrollTop = chatWin.scrollHeight;
+}
+
+function sendInstagramQuickReply(text) {
+  appendInstagramBubble('user', text);
+  processInstagramAIResponse(text);
+}
+
+function sendInstagramDemoMessage() {
+  const input = document.getElementById('ig-demo-input');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  appendInstagramBubble('user', text);
+  processInstagramAIResponse(text);
+}
+
+function processInstagramAIResponse(userText) {
+  const lower = userText.toLowerCase();
+
+  setTimeout(() => {
+    // 1. Thursday 2:00 PM Booking
+    if (lower.includes('thursday') || lower.includes('2:00') || lower.includes('2pm') || lower.includes('book') || lower.includes('scan') || lower.includes('schedule')) {
+      appendInstagramBubble('bot', `
+        🎉 <strong>You're on the schedule!</strong><br><br>
+        Dr. Sarah's surgical coordinator has locked in your <strong>Free 3D Smile Assessment</strong> for <strong>Thursday at 2:00 PM</strong> at Radiance Aesthetics (Miami Design District).<br><br>
+        📍 <em>Location: 3841 NE 2nd Ave, Suite 300, Miami, FL</em><br>
+        📩 We just dispatched a calendar invite and fast-track intake pass directly to your DMs. See you Thursday!
+      `);
+    }
+    // 2. Pricing Comparison (Composite vs Porcelain)
+    else if (lower.includes('compare') || lower.includes('composite') || lower.includes('porcelain') || lower.includes('cost') || lower.includes('price') || lower.includes('bonding')) {
+      appendInstagramBubble('bot', `
+        💎 <strong>Composite Bonding vs. Porcelain Veneers Comparison:</strong><br><br>
+        • <strong>Direct Composite Bonding:</strong> $350–$600 per tooth. Completed in a single 1-hour visit. Great for closing minor gaps or chips.<br>
+        • <strong>Custom Porcelain Veneers:</strong> $1,200–$1,800 per tooth. Ultra-high durability (15–20 years) with custom stain-resistant ceramic luster.<br><br>
+        Would you like to come in this Thursday at 2:00 PM to see a free 3D digital simulation of both options on your smile?
+      `);
+    }
+    // 3. Multimodal Photo Upload Simulation
+    else if (lower.includes('photo') || lower.includes('upload') || lower.includes('image') || lower.includes('skin') || lower.includes('pic')) {
+      appendInstagramBubble('bot', `
+        📸 <em>[AI Multimodal Vision Processor Activated]</em><br><br>
+        👁️ <strong>Diagnostic Analysis of [New_Skin_Photo.jpg]:</strong><br>
+        • <strong>Skin Tone & Texture:</strong> Fitzpatrick Type III, mild localized hyperpigmentation around malar cheeks.<br>
+        • <strong>Recommended Protocol:</strong> 3-Session Pico Laser Toning + SkinVive hydration booster.<br>
+        • <strong>Expected Result:</strong> 85% reduction in pigmentation with zero downtime.<br><br>
+        Would you like to book a complimentary 15-minute clinical skin scan with Dr. Sarah this Thursday or Friday?
+      `);
+    }
+    // 4. Default Concierge Response
+    else {
+      appendInstagramBubble('bot', `
+        Thanks for messaging! Dr. Sarah specializes in bespoke smile makeovers and facial aesthetics at our Miami Design District clinic.<br><br>
+        I can book your free 3D scan for this Thursday at 2:00 PM, compare treatment packages, or analyze a photo of your smile. What would you like to explore?
+      `);
+    }
+  }, 450);
+}
+
+function resetInstagramDemoChat() {
+  const chatWin = document.getElementById('ig-demo-chat-window');
+  if (!chatWin) return;
+  chatWin.innerHTML = `
+    <div style="background: #262626; color: #fff; padding: 10px 14px; border-radius: 18px 18px 18px 4px; max-width: 80%; font-size: 0.88rem; line-height: 1.45; align-self: flex-start;">
+      👋 Hey! Thanks for commenting <strong>"VENEERS"</strong> on our Reel! I am Dr. Sarah's AI concierge. Are you looking for smile alignment or a full porcelain makeover?
+    </div>
+
+    <div style="background: #3797f0; color: #fff; padding: 10px 14px; border-radius: 18px 18px 4px 18px; max-width: 80%; font-size: 0.88rem; line-height: 1.45; align-self: flex-end;">
+      I have a small gap between my two front teeth. Here is a photo! 📸 [Smile_Photo.jpg]
+    </div>
+
+    <div style="background: #262626; color: #fff; padding: 10px 14px; border-radius: 18px 18px 18px 4px; max-width: 85%; font-size: 0.88rem; line-height: 1.45; align-self: flex-start;">
+      👁️ <em>AI Vision Analysis:</em><br>
+      I see the mild midline diastema on your upper front incisors! Dr. Sarah can easily close this with either a <strong>1-visit composite bonding</strong> or <strong>2 porcelain veneers</strong>.
+      <br><br>
+      Would you like to come in for a free 3D smile scan this Thursday at 2:00 PM or Friday at 10:30 AM?
+    </div>
+  `;
+}
+
+
+// ================= 4. WEB CHATKIT & LIVE CRM WEBHOOK STREAM (TAB 4) =================
+function sendChatKitStreamMessage() {
+  const input = document.getElementById('chatkit-demo-input');
+  const chatStream = document.getElementById('chatkit-demo-stream');
+  const crmLog = document.getElementById('crm-demo-webhook-log');
+  if (!input || !chatStream) return;
+
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  // 1. Append user message to ChatKit Stream (Left)
+  const userEl = document.createElement('div');
+  userEl.style.cssText = 'background: rgba(0, 240, 255, 0.12); border: 1px solid rgba(0, 240, 255, 0.25); padding: 10px 14px; border-radius: 12px; align-self: flex-end; color: #fff; max-width: 85%;';
+  userEl.innerHTML = text;
+  chatStream.appendChild(userEl);
+  chatStream.scrollTop = chatStream.scrollHeight;
+
+  const lower = text.toLowerCase();
+  const timeStr = new Date().toLocaleTimeString();
+
+  // 2. Stream AI Response & Simultaneously Dispatch Real-Time CRM Webhook Log (Right)
+  setTimeout(() => {
+    let botReply = '';
+    let intentType = 'GENERAL_INQUIRY';
+    let leadField = 'treatment_inquiry';
+
+    if (lower.includes('invisalign') || lower.includes('align') || lower.includes('braces')) {
+      botReply = '🦷 <strong>Invisalign Full Treatment</strong> starts from $3,800 or $149/month with 0% financing. Would you like me to book your complimentary 3D iTero scan with Dr. Sarah for Thursday at 3:00 PM?';
+      intentType = 'PRICING_INVISALIGN';
+      leadField = 'Invisalign Package ($3,800)';
+    } else if (lower.includes('3pm') || lower.includes('3:00') || lower.includes('book') || lower.includes('schedule') || lower.includes('appointment')) {
+      botReply = "✅ <strong>Booked for 3:00 PM!</strong> I have reserved your consultation and synced your appointment directly with Dr. Sarah's Google Calendar & EHR chart.";
+      intentType = 'APPOINTMENT_CONFIRMED';
+      leadField = 'Booked: Thursday 3:00 PM';
+    } else if (lower.includes('price') || lower.includes('cost') || lower.includes('how much')) {
+      botReply = '💰 Our treatments range from <strong>$450 for Composite Bonding</strong> to <strong>$1,200/tooth for Handcrafted Porcelain Veneers</strong>. I can lock in your free 3D smile assessment today!';
+      intentType = 'PRICING_REQUEST';
+      leadField = 'Pricing Breakdown Sent';
+    } else {
+      botReply = '👋 Thanks for inquiring! Nexa Logic AI Receptionists respond in &lt;500ms, answer custom clinic FAQs, and auto-sync qualified appointments to your CRM in real time.';
+      intentType = 'LIVE_CHATKIT_INTERACTION';
+      leadField = 'Interactive Lead Session';
+    }
+
+    // Append bot bubble to Left ChatKit
+    const botEl = document.createElement('div');
+    botEl.style.cssText = 'background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 14px; border-radius: 12px; color: #f1f5f9; max-width: 90%;';
+    botEl.innerHTML = botReply;
+    chatStream.appendChild(botEl);
+    chatStream.scrollTop = chatStream.scrollHeight;
+
+    // Append Real-Time Webhook Log to Right CRM Window
+    if (crmLog) {
+      const logEntry = document.createElement('div');
+      logEntry.style.cssText = 'background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.3); padding: 8px 10px; border-radius: 6px; color: #e9d5ff; font-family: var(--font-mono); font-size: 0.74rem; line-height: 1.4;';
+      logEntry.innerHTML = `
+        <span style="color:#22c55e;">[${timeStr}] POST /api/v1/crm/webhook (200 OK)</span><br>
+        <span style="color:#a855f7;">• Event:</span> ${intentType}<br>
+        <span style="color:#00f0ff;">• Payload:</span> "${text}"<br>
+        <span style="color:#fbbf24;">• Action:</span> Appended Row #51 to Google Sheets & Jane EHR
+      `;
+      crmLog.appendChild(logEntry);
+      crmLog.scrollTop = crmLog.scrollHeight;
+    }
+  }, 350);
+}
+
+
+// ================= 5. EXECUTIVE NEURAL VOICE CLONING STUDIO (TAB 5) =================
 const CLONE_PROFILES = {
   sarah: {
     name: 'Dr. Sarah Jenkins — Neural Voice Model',
@@ -408,8 +701,8 @@ const CLONE_PROFILES = {
     desc: 'Trained on 30s Instagram audio • High-energy, warm luxury salon founder cadence',
     speaker: 'Jax Reynolds (AI Clone):',
     gender: 'male',
-    script: '“Yo! What\'s up, it\'s Jax from Crown & Blade! I\'m behind the chair with clippers right now, but you can book a fresh fade or beard sculpt with me or any of my barbers this Thursday. You want morning or afternoon?”',
-    sampleText: '“What\'s going on guys, it\'s Jax from Crown & Blade. Testing 1-2-3 for our shop voice cloning reference audio.”',
+    script: "“Yo! What's up, it's Jax from Crown & Blade! I'm behind the chair with clippers right now, but you can book a fresh fade or beard sculpt with me or any of my barbers this Thursday. You want morning or afternoon?”",
+    sampleText: "“What's going on guys, it's Jax from Crown & Blade. Testing 1-2-3 for our shop voice cloning reference audio.”",
     duration: 16
   }
 };
@@ -554,531 +847,75 @@ function stopAllCloningAudio() {
   }
 }
 
-// 3. Showroom 2-Way Chatbot State Machine
-let showroomFlow = {
-  state: 'IDLE',
-  selectedDay: '',
-  selectedTime: '',
-  userName: '',
-  userEmail: ''
-};
-
-function appendShowroomBubble(sender, text) {
-  const box = document.getElementById('showroom-chat-window');
-  if (!box) return;
-  const b = document.createElement('div');
-  b.className = `chat-bubble ${sender}`;
-  b.innerHTML = text;
-  box.appendChild(b);
-  box.scrollTop = box.scrollHeight;
-}
-
-function handleShowroomQuickClick(text) {
-  appendShowroomBubble('user', text);
-  processShowroomAIResponse(text);
-}
-
-function sendShowroomChat() {
-  const input = document.getElementById('showroom-chat-input');
-  if (!input) return;
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  appendShowroomBubble('user', text);
-  processShowroomAIResponse(text);
-}
-
-function processShowroomAIResponse(userText) {
-  const t = userText.toLowerCase().trim();
-
-  setTimeout(() => {
-    // 1. Handling "yes", "sure", "ok"
-    if (['yes', 'yeah', 'yep', 'sure', 'ok', 'okay', 'please', 'sounds good', 'let\'s do it', 'lets do it'].includes(t)) {
-      appendShowroomBubble('bot', `
-        Awesome! Which of these available slots works best for your schedule?
-        <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
-          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
-          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 2:00 PM')">📅 Thu, 2:00 PM</div>
-          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 11:00 AM')">📅 Fri, 11:00 AM</div>
-          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 3:30 PM')">📅 Fri, 3:30 PM</div>
-        </div>
-      `);
-      showroomFlow.state = 'AWAITING_TIME';
-      return;
-    }
-
-    // 2. Day choices: Thursday vs Friday
-    if (t.includes('thursday') || t.includes('thu')) {
-      showroomFlow.selectedDay = 'Thursday';
-      showroomFlow.state = 'AWAITING_TIME';
-      appendShowroomBubble('bot', `
-        ⚙️ <em>Querying Cal.com API for Thursday openings...</em><br><br>
-        I found <strong>2 available openings</strong> for Thursday:
-        <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
-          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 10:30 AM')">🕒 10:30 AM (Morning)</div>
-          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 2:00 PM')">🕒 2:00 PM (Afternoon)</div>
-        </div>
-        <br>Which of these two times suits you best?
-      `);
-      return;
-    }
-
-    if (t.includes('friday') || t.includes('fri')) {
-      showroomFlow.selectedDay = 'Friday';
-      showroomFlow.state = 'AWAITING_TIME';
-      appendShowroomBubble('bot', `
-        ⚙️ <em>Querying Cal.com API for Friday openings...</em><br><br>
-        I found <strong>2 available openings</strong> for Friday:
-        <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
-          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 11:00 AM')">🕒 11:00 AM (Morning)</div>
-          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 3:30 PM')">🕒 3:30 PM (Afternoon)</div>
-        </div>
-        <br>Which time works best for you?
-      `);
-      return;
-    }
-
-    // 3. Time specific matching
-    if (t.includes('10:30') || t.includes('10:30am') || (t.includes('morning') && showroomFlow.selectedDay === 'Thursday')) {
-      handleShowroomSlotSelection('Thursday at 10:30 AM');
-      return;
-    }
-    if (t.includes('2pm') || t.includes('2:00') || t.includes('2:00pm') || t === '2' || (t.includes('afternoon') && showroomFlow.selectedDay === 'Thursday')) {
-      handleShowroomSlotSelection('Thursday at 2:00 PM');
-      return;
-    }
-    if (t.includes('11:00') || t.includes('11am') || t === '11' || (t.includes('morning') && showroomFlow.selectedDay === 'Friday')) {
-      handleShowroomSlotSelection('Friday at 11:00 AM');
-      return;
-    }
-    if (t.includes('3:30') || t.includes('3:30pm') || (t.includes('afternoon') && showroomFlow.selectedDay === 'Friday')) {
-      handleShowroomSlotSelection('Friday at 3:30 PM');
-      return;
-    }
-
-    // 4. Name / Email intake
-    if (showroomFlow.state === 'AWAITING_NAME') {
-      showroomFlow.userName = userText;
-      showroomFlow.state = 'AWAITING_EMAIL';
-      appendShowroomBubble('bot', `
-        Pleasure to meet you, <strong>${showroomFlow.userName}</strong>! What is your best <strong>business email address</strong> to send the calendar invite and Google Meet link to?
-      `);
-      return;
-    }
-
-    if (showroomFlow.state === 'AWAITING_EMAIL' || (t.includes('@') && t.includes('.'))) {
-      showroomFlow.userEmail = userText;
-      showroomFlow.state = 'CONFIRMED';
-
-      // Dispatch lead to Google Sheets & Formspree
-      const leadPayload = {
-        full_name: showroomFlow.userName || 'Web Chat Lead',
-        business_name: 'Nexa Logic AI Reservation',
-        industry_niche: 'Omnichannel AI Booking',
-        business_email: showroomFlow.userEmail,
-        phone_number: 'Provided via Web Chat',
-        special_requests: `Selected Slot: ${showroomFlow.selectedTime || 'Thursday at 10:30 AM'}`,
-        submitted_at: new Date().toLocaleString()
-      };
-
-      fetch(GOOGLE_SHEETS_ENDPOINT, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(leadPayload)
-      }).catch(e => console.error(e));
-
-      fetch(FORMSPREE_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify(leadPayload)
-      }).catch(e => console.error(e));
-
-      appendShowroomBubble('bot', `
-        ✅ <strong>All Set! Your Meeting is Confirmed!</strong><br><br>
-        ⚙️ <em>Executed tool: <code>createCalComMeeting(slot="${showroomFlow.selectedTime || 'Thursday at 10:30 AM'}", email="${showroomFlow.userEmail}")</code></em><br><br>
-        • 👤 <strong>Name:</strong> ${showroomFlow.userName || 'Valued Client'}<br>
-        • ✉️ <strong>Email:</strong> ${showroomFlow.userEmail}<br>
-        • 📅 <strong>Scheduled Time:</strong> ${showroomFlow.selectedTime || 'Thursday at 10:30 AM'}<br>
-        • 🔗 <strong>Location:</strong> Google Meet (Invite synced with Google Calendar)<br><br>
-        <a href="https://cal.com/nomena-khan-l63gmb/15min" target="_blank" style="background:#00f0ff; color:#030708; font-weight:700; padding:8px 16px; border-radius:6px; text-decoration:none; display:inline-block; margin-top:6px;">📅 Lock Time on Live Cal.com Calendar →</a>
-      `);
-      return;
-    }
-
-    // 5. Booking / General Slots
-    if (t.includes('book') || t.includes('schedule') || t.includes('appointment') || t.includes('consultation')) {
-      showroomFlow.state = 'AWAITING_TIME';
-      appendShowroomBubble('bot', `
-        ⚙️ <em>Executing tool: <code>getCalComAvailability(multi_day=true)</code></em>...<br><br>
-        I've checked our live schedule. Here are our soonest openings:
-        <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
-          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
-          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Thursday at 2:00 PM')">📅 Thu, 2:00 PM</div>
-          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 11:00 AM')">📅 Fri, 11:00 AM</div>
-          <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="handleShowroomSlotSelection('Friday at 3:30 PM')">📅 Fri, 3:30 PM</div>
-        </div>
-        <br>Click any slot above or type your preferred time!
-      `);
-      return;
-    }
-
-    if (t.includes('available') || t.includes('open') || t.includes('times') || t.includes('when')) {
-      showroomFlow.state = 'AWAITING_TIME';
-      appendShowroomBubble('bot', `
-        We have 4 openings synchronized directly across our calendar this week:<br>
-        • <strong>Thursday:</strong> 10:30 AM & 2:00 PM<br>
-        • <strong>Friday:</strong> 11:00 AM & 3:30 PM<br><br>
-        Which day would you prefer to reserve? (Say <strong>Thursday</strong> or <strong>Friday</strong>)
-      `);
-      return;
-    }
-
-    // 6. Greetings
-    if (t.includes('hi') || t.includes('hello') || t.includes('hey') || t === 'hi') {
-      appendShowroomBubble('bot', `
-        Hello! 👋 I am the Nexa Logic autonomous receptionist. I can check live calendar availability, book meetings, or answer questions about our AI phone & chat systems. How can I help you today?
-      `);
-      return;
-    }
-
-    // 7. Pricing & Packages
-    if (t.includes('price') || t.includes('cost') || t.includes('package') || t.includes('fee') || t.includes('how much') || t.includes('rate') || t.includes('charge')) {
-      appendShowroomBubble('bot', `
-        💰 <strong>Pricing & Solutions Overview:</strong><br><br>
-        Our AI systems are customized to your monthly volume, channels (Phone, WhatsApp, Instagram), and CRM setup.<br><br>
-        Please type your <strong>Email Address</strong> below to receive our complete Pricing Overview directly in your inbox, or say <strong>"Book a meeting"</strong> to pick a time on our live calendar!
-      `);
-      return;
-    }
-
-    // 8. Default fallback
-    appendShowroomBubble('bot', `
-      I can help you check real-time calendar availability, schedule a meeting, or demonstrate multi-staff routing. Would you like to view our open slots for <strong>Thursday</strong> or <strong>Friday</strong>?
-    `);
-
-  }, 400);
-}
-
-function handleShowroomSlotSelection(slot) {
-  showroomFlow.selectedTime = slot;
-  showroomFlow.state = 'AWAITING_NAME';
-  appendShowroomBubble('bot', `
-    Selected: <strong>${slot}</strong> 🕒<br><br>
-    To finalize the calendar invite on Google Calendar and reserve this slot, what is your <strong>Full Name</strong>?
-  `);
-}
-
-function resetShowroomChat() {
-  showroomFlow = {
-    state: 'IDLE',
-    selectedDay: '',
-    selectedTime: '',
-    userName: '',
-    userEmail: ''
-  };
-  const box = document.getElementById('showroom-chat-window');
-  if (box) {
-    box.innerHTML = `
-      <div class="chat-bubble bot">
-        👋 Hi there! I am your 24/7 AI Receptionist. I can check open appointment slots, lock in confirmed meetings, reschedule, or answer any questions about our systems.
-        
-        <div class="quick-starters" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;">
-          <button class="starter-btn" onclick="handleShowroomQuickClick('📅 Book an appointment')">📅 Book an appointment</button>
-          <button class="starter-btn" onclick="handleShowroomQuickClick('🕒 What times are available this week?')">🕒 Check open slots</button>
-          <button class="starter-btn" onclick="handleShowroomQuickClick('👥 Can you route to multiple doctors/specialists?')">👥 Multi-staff routing</button>
-          <button class="starter-btn" onclick="handleShowroomQuickClick('🔄 I need to reschedule my meeting')">🔄 Reschedule</button>
-        </div>
-      </div>
-    `;
-  }
-}
-
-// 4. Multi-Staff Routing Niche Matrix Switcher with Live Interactive Booking
-function selectRoutingNiche(niche) {
-  const btnMed = document.getElementById('btn-niche-medspa');
-  const btnLeg = document.getElementById('btn-niche-legal');
-  const btnRe = document.getElementById('btn-niche-realestate');
-  const card = document.getElementById('routing-matrix-card');
-  if (!card) return;
-
-  [btnMed, btnLeg, btnRe].forEach(b => { if (b) b.classList.remove('active-niche', 'btn-primary'); });
-
-  if (niche === 'medspa') {
-    if (btnMed) btnMed.classList.add('active-niche', 'btn-primary');
-    card.innerHTML = `
-      <div style="font-size: 0.9rem; margin-bottom: 14px; color: var(--cyan); font-weight: 700;">💉 AESTHETICS CLINIC SPECIALIST MATRIX (CLICK TO TEST ROUTING)</div>
-      <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left;">
-        <tr style="border-bottom: 1px solid var(--border); color: var(--text-dim);">
-          <th style="padding: 8px;">Specialist</th>
-          <th style="padding: 8px;">Service / Treatment</th>
-          <th style="padding: 8px;">Duration</th>
-          <th style="padding: 8px;">Action</th>
-        </tr>
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-          <td style="padding: 10px; color: #fff;"><strong>Dr. Sarah Jenkins</strong></td>
-          <td style="padding: 10px; color: var(--cyan);">Botox & Dermal Fillers</td>
-          <td style="padding: 10px;">45 mins</td>
-          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--cyan); color:var(--cyan);" onclick="simulateSpecialistRouting('Dr. Sarah Jenkins', 'Botox & Dermal Fillers', 'dr-sarah-injectables', '45 mins')">⚡ Book with Dr. Sarah</button></td>
-        </tr>
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-          <td style="padding: 10px; color: #fff;"><strong>Jessica Miller, LE</strong></td>
-          <td style="padding: 10px; color: var(--purple);">Laser Resurfacing & Peels</td>
-          <td style="padding: 10px;">60 mins</td>
-          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--purple); color:var(--purple);" onclick="simulateSpecialistRouting('Jessica Miller, LE', 'Laser Resurfacing & Peels', 'jessica-laser-skin', '60 mins')">⚡ Book with Jessica</button></td>
-        </tr>
-        <tr>
-          <td style="padding: 10px; color: #fff;"><strong>Nurse Elena</strong></td>
-          <td style="padding: 10px; color: var(--emerald);">IV Hydration Therapy</td>
-          <td style="padding: 10px;">30 mins</td>
-          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--emerald); color:var(--emerald);" onclick="simulateSpecialistRouting('Nurse Elena', 'IV Hydration Therapy', 'elena-iv-therapy', '30 mins')">⚡ Book with Elena</button></td>
-        </tr>
-      </table>
-      
-      <!-- Interactive Live Routing Sandbox Box -->
-      <div id="specialist-live-sandbox" style="margin-top: 16px; display: none; background: #070c12; border: 1px solid var(--border); border-radius: 12px; padding: 16px;"></div>
-    `;
-  } else if (niche === 'legal') {
-    if (btnLeg) btnLeg.classList.add('active-niche', 'btn-primary');
-    card.innerHTML = `
-      <div style="font-size: 0.9rem; margin-bottom: 14px; color: var(--cyan); font-weight: 700;">⚖️ LAW FIRM PRACTICE AREA MATRIX (CLICK TO TEST ROUTING)</div>
-      <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left;">
-        <tr style="border-bottom: 1px solid var(--border); color: var(--text-dim);">
-          <th style="padding: 8px;">Attorney</th>
-          <th style="padding: 8px;">Practice Area</th>
-          <th style="padding: 8px;">Consult Fee</th>
-          <th style="padding: 8px;">Action</th>
-        </tr>
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-          <td style="padding: 10px; color: #fff;"><strong>David Vance, Esq.</strong></td>
-          <td style="padding: 10px; color: var(--cyan);">Personal Injury & Accidents</td>
-          <td style="padding: 10px;">Free Consult</td>
-          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--cyan); color:var(--cyan);" onclick="simulateSpecialistRouting('David Vance, Esq.', 'Personal Injury Consult', 'vance-pi-consult', '30 mins')">⚡ Route to Vance</button></td>
-        </tr>
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-          <td style="padding: 10px; color: #fff;"><strong>Marcus Reed, Esq.</strong></td>
-          <td style="padding: 10px; color: var(--purple);">Criminal Defense & DUI</td>
-          <td style="padding: 10px;">$250 Consult</td>
-          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--purple); color:var(--purple);" onclick="simulateSpecialistRouting('Marcus Reed, Esq.', 'Criminal Defense Intake', 'reed-criminal-defense', '45 mins')">⚡ Route to Reed</button></td>
-        </tr>
-        <tr>
-          <td style="padding: 10px; color: #fff;"><strong>Sarah Sterling, Esq.</strong></td>
-          <td style="padding: 10px; color: var(--emerald);">Estate Planning & Trusts</td>
-          <td style="padding: 10px;">Free 15-Min</td>
-          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--emerald); color:var(--emerald);" onclick="simulateSpecialistRouting('Sarah Sterling, Esq.', 'Estate Planning Consult', 'sterling-estate-planning', '15 mins')">⚡ Route to Sterling</button></td>
-        </tr>
-      </table>
-
-      <!-- Interactive Live Routing Sandbox Box -->
-      <div id="specialist-live-sandbox" style="margin-top: 16px; display: none; background: #070c12; border: 1px solid var(--border); border-radius: 12px; padding: 16px;"></div>
-    `;
-  } else if (niche === 'realestate') {
-    if (btnRe) btnRe.classList.add('active-niche', 'btn-primary');
-    card.innerHTML = `
-      <div style="font-size: 0.9rem; margin-bottom: 14px; color: var(--cyan); font-weight: 700;">🏡 REAL ESTATE BROKERAGE MATRIX (CLICK TO TEST ROUTING)</div>
-      <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left;">
-        <tr style="border-bottom: 1px solid var(--border); color: var(--text-dim);">
-          <th style="padding: 8px;">Agent</th>
-          <th style="padding: 8px;">Specialty / Role</th>
-          <th style="padding: 8px;">Territory</th>
-          <th style="padding: 8px;">Action</th>
-        </tr>
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-          <td style="padding: 10px; color: #fff;"><strong>Brandon Hayes</strong></td>
-          <td style="padding: 10px; color: var(--cyan);">Luxury Listing Specialist</td>
-          <td style="padding: 10px;">Downtown & Waterfront</td>
-          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--cyan); color:var(--cyan);" onclick="simulateSpecialistRouting('Brandon Hayes', 'Luxury Listing Valuation', 'brandon-luxury-listings', '45 mins')">⚡ Route to Brandon</button></td>
-        </tr>
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-          <td style="padding: 10px; color: #fff;"><strong>Chloe Bennett</strong></td>
-          <td style="padding: 10px; color: var(--purple);">First-Time Home Buyers</td>
-          <td style="padding: 10px;">Suburbs & North County</td>
-          <td style="padding: 10px;"><button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; border-color:var(--purple); color:var(--purple);" onclick="simulateSpecialistRouting('Chloe Bennett', 'First-Time Buyer Consult', 'chloe-buyer-consult', '30 mins')">⚡ Route to Chloe</button></td>
-        </tr>
-      </table>
-
-      <!-- Interactive Live Routing Sandbox Box -->
-      <div id="specialist-live-sandbox" style="margin-top: 16px; display: none; background: #070c12; border: 1px solid var(--border); border-radius: 12px; padding: 16px;"></div>
-    `;
-  }
-}
-
-// Live Specialist Routing Simulator Handler (Step 1: Choose Slot)
-function simulateSpecialistRouting(name, service, slug, duration) {
-  const box = document.getElementById('specialist-live-sandbox');
-  if (!box) return;
-  box.style.display = 'block';
-
-  box.innerHTML = `
-    <div style="font-size: 0.84rem; color: var(--cyan); margin-bottom: 8px;">
-      🤖 <strong>AI Semantic Intent Analyzer:</strong> Inbound inquiry for <em>"${service}"</em> detected!
-    </div>
-    <div style="background: rgba(18,28,42,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 0.88rem; line-height: 1.5; color: #fff;">
-      ⚙️ <em>Executing tool: <code>getCalComAvailability(specialist="${slug}", duration="${duration}")</code></em><br><br>
-      "I have routed you to <strong>${name}</strong>'s personal calendar. Here are their soonest available appointments:"
-      
-      <div class="slot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
-        <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="promptSpecialistDetails('${name}', '${service}', '${slug}', 'Thursday at 10:30 AM')">📅 Thu, 10:30 AM</div>
-        <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="promptSpecialistDetails('${name}', '${service}', '${slug}', 'Thursday at 2:00 PM')">📅 Thu, 2:00 PM</div>
-        <div class="slot-pill" style="background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); color:#fff; padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="promptSpecialistDetails('${name}', '${service}', '${slug}', 'Friday at 11:00 AM')">📅 Fri, 11:00 AM</div>
-      </div>
-      <div style="margin-top: 10px; font-size: 0.78rem; color: var(--text-dim);">Step 1 of 2: Click an available time slot above.</div>
-    </div>
-  `;
-}
-
-// Step 2: Intake Details (Full Name, Business Email, Phone)
-function promptSpecialistDetails(name, service, slug, slot) {
-  const box = document.getElementById('specialist-live-sandbox');
-  if (!box) return;
-
-  box.innerHTML = `
-    <div style="background: rgba(18,28,42,0.9); border: 1px solid var(--border); border-radius: 8px; padding: 18px; font-size: 0.88rem; color: #fff;">
-      <div style="font-size: 0.84rem; color: var(--cyan); margin-bottom: 6px;">
-        📝 <strong>Step 2: Caller Intake & Verification</strong>
-      </div>
-      <p style="margin-bottom: 12px;">You selected <strong>${slot}</strong> for <strong>${service}</strong> with <strong>${name}</strong>.</p>
-      
-      <div style="display: flex; flex-direction: column; gap: 10px; max-width: 420px; margin-bottom: 14px;">
-        <input type="text" id="spec-client-name" placeholder="Full Name (e.g. Sarah Jenkins)" style="background: rgba(5,8,11,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 0.88rem; outline: none;">
-        <input type="email" id="spec-client-email" placeholder="Business Email (e.g. sarah@example.com)" style="background: rgba(5,8,11,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 0.88rem; outline: none;">
-        <input type="tel" id="spec-client-phone" placeholder="Phone Number (e.g. +1 415 555 0199)" style="background: rgba(5,8,11,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 0.88rem; outline: none;">
-      </div>
-
-      <div style="display: flex; gap: 10px; align-items: center;">
-        <button class="btn btn-primary btn-glow" style="padding: 8px 18px; font-size: 0.84rem;" onclick="submitSpecialistBooking('${name}', '${service}', '${slug}', '${slot}')">
-          Confirm Appointment with ${name.split(' ')[0]} →
-        </button>
-        <button class="btn btn-secondary" style="padding: 8px 14px; font-size: 0.8rem;" onclick="simulateSpecialistRouting('${name}', '${service}', '${slug}', '45 mins')">
-          ← Back to Slots
-        </button>
-      </div>
-    </div>
-  `;
-}
-
-// Step 3: Final Execution & Live Confirmation
-function submitSpecialistBooking(name, service, slug, slot) {
-  const box = document.getElementById('specialist-live-sandbox');
-  if (!box) return;
-
-  const clientName = (document.getElementById('spec-client-name')?.value.trim()) || 'Sarah Jenkins';
-  const clientEmail = (document.getElementById('spec-client-email')?.value.trim()) || 'sarah.j@example.com';
-  const clientPhone = (document.getElementById('spec-client-phone')?.value.trim()) || '+1 (415) 555-0199';
-
-  // Dispatch Specialist Lead to Google Sheets & Formspree
-  const leadPayload = {
-    full_name: clientName,
-    business_name: `Specialist Booking: ${name} (${service})`,
-    industry_niche: 'Multi-Staff Router Demo',
-    business_email: clientEmail,
-    phone_number: clientPhone,
-    special_requests: `Booked slot: ${slot} with ${name}`,
-    submitted_at: new Date().toLocaleString()
-  };
-
-  fetch(GOOGLE_SHEETS_ENDPOINT, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(leadPayload)
-  }).catch(e => console.error(e));
-
-  fetch(FORMSPREE_ENDPOINT, {
-    method: 'POST',
-    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-    body: JSON.stringify(leadPayload)
-  }).catch(e => console.error(e));
-
-  box.innerHTML = `
-    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 8px; padding: 18px; font-size: 0.88rem; color: #fff;">
-      <div style="font-weight: 700; color: var(--emerald); font-size: 1rem; margin-bottom: 8px;">
-        ✅ Appointment Confirmed & Synced!
-      </div>
-      ⚙️ <em>Executed tool: <code>createCalComSpecialistMeeting(specialist="${slug}", name="${clientName}", email="${clientEmail}", phone="${clientPhone}", time="${slot}")</code></em><br><br>
-      
-      <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; margin: 12px 0; line-height: 1.65;">
-        • 👤 <strong>Patient / Client:</strong> ${clientName}<br>
-        • 👨‍⚕️ <strong>Assigned Specialist:</strong> ${name} (<em>${service}</em>)<br>
-        • 🕒 <strong>Confirmed Time:</strong> ${slot}<br><br>
-        <span style="color: var(--cyan); font-weight: 600;">📬 Multi-Channel Dispatch Actions:</span><br>
-        • ✉️ <strong>Email Invite:</strong> Google Calendar invite & video link sent to <code>${clientEmail}</code><br>
-        • 📱 <strong>SMS Text Alert:</strong> Instant confirmation SMS + automated 24-hour reminder queued for <code>${clientPhone}</code><br>
-        • 🔄 <strong>CRM Sync:</strong> Contact deal card created in pipeline with 0 manual data entry!<br><br>
-        <a href="https://cal.com/nomena-khan-l63gmb/15min" target="_blank" style="background:#00f0ff; color:#030708; font-weight:700; padding:8px 16px; border-radius:6px; text-decoration:none; display:inline-block;">📅 View on Live Cal.com Calendar →</a>
-      </div>
-
-      <button class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; margin-top: 6px;" onclick="selectRoutingNiche('medspa')">⟳ Test Another Specialist or Practice</button>
-    </div>
-  `;
-}
-
-// 4. Interactive Speed-to-Lead Live Battle Simulator
-let nexaInterval = null;
-let tradInterval = null;
-
+// ================= 6. LIVE SHOWDOWN SPEED SIMULATOR =================
+let isSpeedRunning = false;
 function runSpeedSimulation() {
-  const telemetry = document.getElementById('sim-telemetry');
-  const btn = document.getElementById('btn-run-sim');
-  const nexaTimer = document.getElementById('sim-nexa-timer');
-  const tradTimer = document.getElementById('sim-trad-timer');
-  if (!telemetry || !btn) return;
+  if (isSpeedRunning) return;
+  isSpeedRunning = true;
 
-  if (nexaInterval) clearInterval(nexaInterval);
-  if (tradInterval) clearInterval(tradInterval);
+  const btn = document.getElementById('btn-start-speed-test');
+  const aiStatus = document.getElementById('speed-ai-status');
+  const humanStatus = document.getElementById('speed-human-status');
+  const aiTimer = document.getElementById('speed-ai-timer');
+  const humanTimer = document.getElementById('speed-human-timer');
+
+  if (btn) btn.disabled = true;
+  if (aiStatus) aiStatus.innerHTML = '⚡ Dialing inbound line...';
+  if (humanStatus) humanStatus.innerHTML = '📞 Ringing front desk phone...';
 
   playPhoneChime();
 
-  btn.disabled = true;
-  btn.innerHTML = '<span>⚡ Simulating Inbound Call Across Systems...</span>';
-  telemetry.style.display = 'grid';
+  // AI answers on Ring 1 (< 500ms)
+  setTimeout(() => {
+    if (aiStatus) {
+      aiStatus.innerHTML = '🟢 <strong>Connected in 420ms!</strong> Elena answers: <em>"Thanks for calling! How can I help you today?"</em>';
+      aiStatus.style.color = '#22c55e';
+    }
+    if (aiTimer) aiTimer.textContent = '0.42s (Instant Answer)';
+  }, 420);
 
-  // Animate Nexa Logic AI Timer (0.00s -> 0.42s)
-  let nexaMs = 0;
-  if (nexaTimer) nexaTimer.innerText = '0.00s';
-  nexaInterval = setInterval(() => {
-    nexaMs += 35;
-    if (nexaMs >= 420) {
-      clearInterval(nexaInterval);
-      if (nexaTimer) nexaTimer.innerText = '0.42s ⚡ (Answered & Booked!)';
+  // Human front desk simulation: Ring 1 (2s), Ring 2 (5s), Ring 3 (8s) -> Voicemail (12s)
+  setTimeout(() => {
+    if (humanStatus) humanStatus.innerHTML = '🔔 Ringing... (No answer yet)';
+  }, 2000);
+
+  setTimeout(() => {
+    if (humanStatus) humanStatus.innerHTML = '🔔 Staff busy with in-clinic patient...';
+  }, 5000);
+
+  setTimeout(() => {
+    if (humanStatus) {
+      humanStatus.innerHTML = '❌ <strong>Hit Voicemail after 12 seconds:</strong> <em>"Sorry we missed your call. Please leave a message..."</em> (Lead Lost to Competitor)';
+      humanStatus.style.color = '#ef4444';
+    }
+    if (humanTimer) humanTimer.textContent = '12.4s (Voicemail)';
+    if (btn) {
       btn.disabled = false;
-      btn.innerHTML = '<span>⚡ Re-Run Live Simulation</span>';
-    } else {
-      if (nexaTimer) nexaTimer.innerText = (nexaMs / 1000).toFixed(2) + 's';
+      btn.textContent = '⚡ Re-Test Inbound Speed Showdown';
     }
-  }, 30);
-
-  // Animate Traditional Timer (Counting up to 42 minutes)
-  let tradMin = 0;
-  let tradSec = 0;
-  if (tradTimer) tradTimer.innerText = '0m 00s';
-  tradInterval = setInterval(() => {
-    tradMin += 3;
-    tradSec = Math.floor(Math.random() * 59);
-    if (tradMin >= 42) {
-      clearInterval(tradInterval);
-      if (tradTimer) tradTimer.innerText = '42m 18s ❌ (Missed / Voicemail)';
-    } else {
-      if (tradTimer) tradTimer.innerText = `${tradMin}m ${tradSec < 10 ? '0' + tradSec : tradSec}s`;
-    }
-  }, 45);
+    isSpeedRunning = false;
+  }, 8000);
 }
 
-window.runSpeedSimulation = runSpeedSimulation;
 
-// ================= 5. FLOATING AI ASSISTANT (CONVERSATIONAL INTELLIGENCE & LEAD ENGINE) =================
+// ================= 7. FLOATING 24/7 AI CHAT DRAWER =================
+let isDrawerOpen = false;
 let visitorData = {
   name: '',
   email: '',
-  source: 'Nexa Website Floating AI Agent'
+  phone: '',
+  niche: ''
 };
 
 function toggleFloatingAgent() {
   const drawer = document.getElementById('ai-chat-drawer');
   if (!drawer) return;
-  if (drawer.style.display === 'none' || drawer.style.display === '') {
+
+  isDrawerOpen = !isDrawerOpen;
+  if (isDrawerOpen) {
     drawer.style.display = 'flex';
-    document.getElementById('drawer-input')?.focus();
+    const input = document.getElementById('drawer-input');
+    if (input) setTimeout(() => input.focus(), 200);
   } else {
     drawer.style.display = 'none';
   }
@@ -1202,13 +1039,7 @@ function sendDrawerMessage() {
         We integrate natively with <strong>Cal.com, Google Calendar, GoHighLevel, HubSpot, Salesforce, Airtable, Notion, Make.com, and Zapier</strong>.<br><br>
         All call transcripts, caller recordings, qualified lead cards, and confirmed appointments sync in real time with zero manual data entry.`;
     }
-    // 10. Intelligent Name Capture ("my name is X" / "I am X")
-    else if (lower.startsWith('my name is ') || lower.startsWith('i am ') || lower.startsWith("i'm ")) {
-      const parts = text.split(/is|am|'m/i);
-      visitorData.name = parts[1]?.trim() || text;
-      botBubble.innerHTML = `Great to meet you, <strong>${visitorData.name}</strong>! 🤝 What is your business name or what questions can I answer about our AI workforce for you?`;
-    }
-    // 11. Conversational Fallback with Helpful Guidance
+    // 10. Conversational Fallback with Helpful Guidance
     else {
       botBubble.innerHTML = `Thanks for asking! Nexa Logic engineers custom 24/7 Autonomous AI Workforces (Voice, WhatsApp, Instagram & CRM automation) with &lt;7 day turnaround and sub-500ms voice speed.<br><br>
         You can:<br>
@@ -1232,124 +1063,53 @@ function sendQuickChip(questionText) {
   }
 }
 
-// Initialize on DOM load
+// ================= 8. GLOBAL EVENT LISTENERS & INITIALIZATION =================
 document.addEventListener('DOMContentLoaded', () => {
-  // Ready
-});
+  // Bind click handlers directly to all 5 simulation lab tab buttons
+  const tabMapping = {
+    'tab-btn-voice': 'voice',
+    'tab-btn-whatsapp': 'whatsapp',
+    'tab-btn-instagram': 'instagram',
+    'tab-btn-chatkit': 'chatkit',
+    'tab-btn-cloning': 'cloning'
+  };
 
-// ======================================================================
-// NEXA LOGIC ENTERPRISE ANTI-INSPECTION & SOURCE PROTECTION SHIELD
-// ======================================================================
-(function initAntiTheftShield() {
-  // 1. Toast Notification Creator
-  let toastTimer = null;
-  function showSecurityToast(msg) {
-    let toast = document.getElementById('nexa-security-toast');
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.id = 'nexa-security-toast';
-      toast.style.cssText = `
-        position: fixed;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%) translateY(20px);
-        background: rgba(15, 23, 42, 0.95);
-        border: 1px solid rgba(6, 182, 212, 0.4);
-        color: #f8fafc;
-        padding: 12px 24px;
-        border-radius: 9999px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        font-size: 0.85rem;
-        font-weight: 600;
-        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(6, 182, 212, 0.25);
-        backdrop-filter: blur(12px);
-        z-index: 9999999;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        opacity: 0;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        pointer-events: none;
-      `;
-      document.body.appendChild(toast);
+  Object.keys(tabMapping).forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchDemo(tabMapping[id]);
+      });
     }
-    toast.innerHTML = `<span style="color:#38bdf8;">🔒</span> ${msg}`;
-    toast.style.opacity = '1';
-    toast.style.transform = 'translateX(-50%) translateY(0)';
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => {
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateX(-50%) translateY(20px)';
-    }, 2800);
+  });
+
+  // Touch Swipe Support for Mobile Showroom Card
+  const swipeCard = document.getElementById('demo-swipe-card');
+  if (swipeCard) {
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    swipeCard.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    swipeCard.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 45) {
+        if (diff < 0) {
+          // Swipe Left -> Next Tab
+          currentDemoIndex = (currentDemoIndex + 1) % DEMO_ORDER.length;
+        } else {
+          // Swipe Right -> Prev Tab
+          currentDemoIndex = (currentDemoIndex - 1 + DEMO_ORDER.length) % DEMO_ORDER.length;
+        }
+        switchDemo(DEMO_ORDER[currentDemoIndex]);
+      }
+    }, { passive: true });
   }
 
-  // 2. Disable Right-Click (Context Menu)
-  document.addEventListener('contextmenu', (e) => {
-    if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
-    e.preventDefault();
-    showSecurityToast('Protected: Source code & design are copyrighted by Nexa Logic.');
-    return false;
-  }, { passive: false });
-
-  // 3. Block Developer & Inspect Keyboard Shortcuts
-  document.addEventListener('keydown', (e) => {
-    // F12 (DevTools)
-    if (e.keyCode === 123) {
-      e.preventDefault();
-      showSecurityToast('Developer inspection is restricted.');
-      return false;
-    }
-    // Ctrl+Shift+I / Cmd+Option+I (Inspect)
-    if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {
-      e.preventDefault();
-      showSecurityToast('Developer inspection is restricted.');
-      return false;
-    }
-    // Ctrl+Shift+J / Cmd+Option+J (Console)
-    if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {
-      e.preventDefault();
-      return false;
-    }
-    // Ctrl+Shift+C / Cmd+Option+C (Element Picker)
-    if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && (e.key === 'C' || e.key === 'c' || e.keyCode === 67)) {
-      e.preventDefault();
-      return false;
-    }
-    // Ctrl+U / Cmd+Option+U (View Source)
-    if ((e.ctrlKey || e.metaKey) && (e.key === 'u' || e.key === 'U' || e.keyCode === 85)) {
-      e.preventDefault();
-      showSecurityToast('Source code is proprietary.');
-      return false;
-    }
-    // Ctrl+S / Cmd+S (Save Page)
-    if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.keyCode === 83)) {
-      e.preventDefault();
-      return false;
-    }
-  }, { passive: false });
-
-  // 4. Disable Dragging of Images & Visual Assets
-  document.addEventListener('dragstart', (e) => {
-    if (e.target.tagName === 'IMG' || e.target.closest('.hero-visual') || e.target.closest('.solution-card')) {
-      e.preventDefault();
-      return false;
-    }
-  }, { passive: false });
-
-  // 5. Console Warning Banner for Intruders
-  try {
-    console.clear();
-    console.log(
-      "%c🛑 STOP — NEXA LOGIC SECURE ENVIRONMENT",
-      "color: #ef4444; font-size: 20px; font-weight: 900; background: #0f172a; padding: 6px 12px; border-radius: 6px;"
-    );
-    console.log(
-      "%c⚠️ NOTICE: All code, autonomous AI architectures, visual assets, and proprietary designs on getnexalogic.com are protected intellectual property of Nexa Logic.",
-      "color: #f59e0b; font-size: 13px; font-weight: 600;"
-    );
-    console.log(
-      "%cUnauthorized scraping, code reproduction, or reverse-engineering is monitored and prohibited under UAE Federal Decree-Law No. 34.",
-      "color: #94a3b8; font-size: 11px;"
-    );
-  } catch (err) {}
-})();
+  // Ensure initial Voice Lab tab is active and visible
+  switchDemo('voice');
+});
